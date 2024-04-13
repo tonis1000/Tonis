@@ -7,31 +7,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2>Channels</h2>
-        </div>
-        <div class="sidebar-content">
+    <div class="container">
+        <div class="info-panel">
+            <p>Tag: <span id="tag"></span></p>
+            <p>Datum: <span id="datum"></span></p>
+            <p>Uhrzeit: <span id="uhrzeit"></span></p>
+            <p>Temperatur: <span id="temperatur"></span></p>
             <button onclick="loadMyPlaylist()">My Playlist</button>
             <button onclick="loadExternalPlaylist()">Ext. Playlist</button>
-            <button onclick="loadSportChannels()">Sport</button>
-            <!-- Hier können weitere Buttons hinzugefügt werden -->
+            <button onclick="loadSportPlaylist()">Sport</button>
+        </div>
+        <div class="sidebar" id="sidebar">
+            <!-- Sidebar-Inhalt wird hier dynamisch aktualisiert -->
         </div>
     </div>
-    <div class="main-content">
-        <div class="container">
-            <h1>GitHub TV</h1>
-            <div class="data">
-                <p>Tag Datum Uhr Temperatur</p>
-            </div>
-            <div class="buttons">
-                <button>Button1</button>
-                <button>Button2</button>
-                <button>Button3</button>
-            </div>
-            <!-- Hier kannst du weitere Inhalte hinzufügen, wie z.B. den Video-Player -->
-        </div>
-    </div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
