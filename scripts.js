@@ -18,6 +18,19 @@ function loadSportPlaylist() {
 }
 
 function updateSidebar(data) {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.innerHTML = data;
+    const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.innerHTML = ''; // Sidebar leeren, um sicherzustellen, dass alte Einträge entfernt werden
+
+    const lines = data.split('\n');
+    lines.forEach(line => {
+        if (line.startsWith('#EXTINF')) {
+            const nameMatch = line.match(/tvg-name="([^"]+)"/); // Sender- oder Kanalname aus dem Attribut tvg-name extrahieren
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1];
+                const listItem = document.createElement('li');
+                listItem.textContent = name;
+                sidebarList.appendChild(listItem);
+            }
+        }
+    });
 }
