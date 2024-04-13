@@ -4,18 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub TV</title>
-    <!-- Hier fügst du den Link zu deiner CSS-Datei ein -->
-    <link rel="stylesheet" href="static/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>GitHub TV</h1>
-        <h2>EPG Informationen:</h2>
-        <pre>{{ epg_data }}</pre>
-        <h2>Playlist:</h2>
-        <pre>{{ playlist_data }}</pre>
-        <h2>Externe Inhalte:</h2>
-        <div>{{ external_content }}</div>
+        <div class="header">
+            <h1>GitHub TV</h1>
+            <div class="info">
+                Tag Datum Uhr Temperatur
+            </div>
+        </div>
+        <div class="buttons">
+            <button id="myPlaylistBtn">My Playlist</button>
+            <button id="externalPlaylistBtn">Ext. Playlist</button>
+            <button id="sportBtn">Sport</button>
+        </div>
+        <div class="sidebar" id="sidebar">
+            <!-- Hier werden die Kanäle dynamisch hinzugefügt -->
+        </div>
     </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
