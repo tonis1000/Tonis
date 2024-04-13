@@ -2,7 +2,7 @@
 
 function loadMyPlaylist() {
     // Hier wird die My Playlist geladen
-    fetch('/playlist.m3u')
+    fetch('/my_playlist')
         .then(response => response.text())
         .then(data => updateSidebar(data));
 }
@@ -16,8 +16,7 @@ function loadExternalPlaylist() {
 
 function loadSportPlaylist() {
     // Hier wird die Sport Playlist geladen
-    // Beispiel: Wenn die Sport Playlist in einer separaten Datei gespeichert ist
-    fetch('/sport_playlist.m3u')
+    fetch('/sport_playlist')
         .then(response => response.text())
         .then(data => updateSidebar(data));
 }
