@@ -4,11 +4,11 @@
     display: flex;
 }
 
-.info-panel {
-    width: 300px;
-    padding: 20px;
-    border-right: 1px solid #ccc;
-}
+        .info-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
 .sidebar {
     flex: 1;
