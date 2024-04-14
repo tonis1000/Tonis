@@ -107,7 +107,7 @@ function fetchEPGInfo(channelName) {
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
-// Aktualisieren der aktuellen Datum- und Uhrzeitinformationen
+        // Aktualisieren der aktuellen Datum- und Uhrzeitinformationen
         function updateDateTime() {
             const now = new Date();
             document.getElementById('tag').textContent = now.toLocaleDateString('de-DE', { weekday: 'long' });
@@ -128,10 +128,8 @@ function fetchEPGInfo(channelName) {
                 });
         }
 
-        // Aktualisieren der Datum- und Uhrzeitinformationen beim Laden der Seite
+        // Aktualisieren der Datum- und Uhrzeitinformationen und Temperatur alle Sekunde
         window.onload = function() {
-            updateDateTime();
-            loadTemperature();
-            // Aktualisiere alle 10 Sekunden
-            setInterval(updateDateTime, 10000);
+            setInterval(updateDateTime, 1000);
+            setInterval(loadTemperature, 1000);
         };
