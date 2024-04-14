@@ -3,31 +3,31 @@
 #EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/nMHKG3A.png", ERT1
 https://cbd537474fbad4634b64787657ff6456.msvdn.net/ert1/ert_ev1_main/mainabr/playlist_dvr.m3u8
 
-#EXTINF:-1 tvg-id="ERT1.gr" tvg-logo="https://i.imgur.com/nMHKG3A.png", ERT1
+#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/nMHKG3A.png", ERT1
 http://88.99.254.101/ert1/mono.m3u8
 
-#EXTINF:-1 tvg-id="ERT2.gr" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/5/50/%CE%95%CE%A1%CE%A42.png", ERT2
+#EXTINF:-1 tvg-id="ert2" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/5/50/%CE%95%CE%A1%CE%A42.png", ERT2
 https://cbd537474fbad4634b64787657ff6456.msvdn.net/ert2/ert_ev2_main/mainabr/playlist_dvr.m3u8
 
-#EXTINF:-1 tvg-id="ERT3.gr" tvg-logo="https://i.imgur.com/f2l9bDR.png", ERT3
+#EXTINF:-1 tvg-id="ert3" tvg-logo="https://i.imgur.com/f2l9bDR.png", ERT3
 http://cbd537474fbad4634b64787657ff6456.msvdn.net/ert3/ert_ev3_main/mainabr/playlist_dvr.m3u8
 
-#EXTINF:-1 tvg-id="ERTNews.gr" tvg-logo="https://upload.wikimedia.org/wikipedia/el/thumb/9/91/ErtNews-Logo.png/512px-ErtNews-Logo.png", ERT News
+#EXTINF:-1 tvg-id="ertnews" tvg-logo="https://upload.wikimedia.org/wikipedia/el/thumb/9/91/ErtNews-Logo.png/512px-ErtNews-Logo.png", ERT News
 https://telmacosa.s.llnwi.net/osO/ERTNews/default/ERTNews-audio_104621_und=104400-video=5000000.m3u8
 
 #EXTINF:-1 tvg-id="ant1" tvg-logo="https://i.imgur.com/g0jPOcC.png", Ant1
 https://d1nfykbwa3n98t.cloudfront.net/out/v1/6e5667da5a6843899a337dea72adb61b/antenna.m3u8
 
-#EXTINF:-1 tvg-id="alphatv" tvg-logo="https://i.imgur.com/6twzd38.png", AlphaTV
+#EXTINF:-1 tvg-id="alfa" tvg-logo="https://i.imgur.com/6twzd38.png", AlphaTV
 https://alphatvlive.siliconweb.com/1/Y2Rsd1lUcUVoajcv/UVdCN25h/hls/live/playlist.m3u8
 
-#EXTINF:-1 tvg-id="SkaiTV.gr" tvg-logo="https://i.imgur.com/mrKRFnf.png", Skai
+#EXTINF:-1 tvg-id="skai" tvg-logo="https://i.imgur.com/mrKRFnf.png", Skai
 http://skai-live.siliconweb.com/media/cambria4/index.m3u8
 
-#EXTINF:-1 tvg-id="SkaiTV.gr" tvg-logo="https://i.imgur.com/mrKRFnf.png", Skai
+#EXTINF:-1 tvg-id="skai" tvg-logo="https://i.imgur.com/mrKRFnf.png", Skai
 https://skai-live-back.siliconweb.com/media/cambria4/index.m3u8
 
-#EXTINF:-1 tvg-id="OpenTV.gr" tvg-logo="https://i.imgur.com/M6XG03v.png", Open TV
+#EXTINF:-1 tvg-id="open" tvg-logo="https://i.imgur.com/M6XG03v.png", Open TV
 https://liveopencloud.siliconweb.com/1/ZlRza2R6L2tFRnFJ/eWVLSlQx/hls/live/playlist.m3u8
 
 #EXTINF:-1 tvg-id="OpenSport1.gr", Open Sport1
@@ -36,34 +36,34 @@ https://opentvlive1.siliconweb.com/opentvliveabr/openlatin/opentvlive/openlatin/
 #EXTINF:-1 tvg-id="OpenSport2.gr", Open Sport2
 https://opentvlive1.siliconweb.com/opentvliveabr/openlatin2/opentvlive/openlatin2/chunks.m3u8
 
-#EXTINF:-1 tvg-id="MEGATV.gr" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV
+#EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV
 http://streamcdnb7-c98db5952cb54b358365984178fb898a.msvdn.net/live/S86713049/gonOwuUacAxM/playlist.m3u8
 
-#EXTINF:-1 tvg-id="MEGATV.gr" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV
+#EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV
 https://streamcdnh3-c98db5952cb54b358365984178fb898a.msvdn.net/live/S86713049/gonOwuUacAxM/chunklist_b3710976.m3u8
 
-#EXTINF:-1 tvg-id="MEGATV.gr" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV
+#EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV
 https://c98db5952cb54b358365984178fb898a.msvdn.net/live/S86713049/gonOwuUacAxM/playlist.m3u8
 
-#EXTINF:-1 tvg-id="MEGATV1.gr", MEGA TV1
+#EXTINF:-1 tvg-id="mega", MEGA TV1
 https://s2.cystream.net/galanos/open/chunks.m3u8?nimblesessionid=792681&wmsAuthSign=c2VydmVyX3RpbWU9MTEvMjEvMjAyMyA3OjA3OjI2IFBNJmhhc2hfdmFsdWU9R2JkcnhiZ1NudUZkbnRrZEdobTdiUT09JnZhbGlkbWludXRlcz0yMA==
 
-#EXTINF:-1 tvg-id="StarChannel.gr" tvg-logo="https://i.imgur.com/6NUpxhr.png", Star TV
+#EXTINF:-1 tvg-id="star" tvg-logo="https://i.imgur.com/6NUpxhr.png", Star TV
 https://livestar.siliconweb.com/media/star1/star1mediumhd.m3u8
 
-#EXTINF:-1 tvg-id="StarChannel.gr" tvg-logo="https://i.imgur.com/6NUpxhr.png", Star TV1
+#EXTINF:-1 tvg-id="Sstar" tvg-logo="https://i.imgur.com/6NUpxhr.png", Star TV1
 https://livestar.siliconweb.com/media/star1/star1.m3u8
 
-#EXTINF:-1 tvg-id="StarChannel.gr" tvg-logo="https://i.imgur.com/6NUpxhr.png", Star TV2
+#EXTINF:-1 tvg-id="star" tvg-logo="https://i.imgur.com/6NUpxhr.png", Star TV2
 https://s2.cystream.net/galanos/star/chunks.m3u8?nimblesessionid=783489&wmsAuthSign=c2VydmVyX3RpbWU9MTEvMjAvMjAyMyAxMDoyNTozOCBQTSZoYXNoX3ZhbHVlPWNrMUg2TjRVWlZGR0t4V1k2QXVhWFE9PSZ2YWxpZG1pbnV0ZXM9MjA=
 
-#EXTINF:-1 tvg-id="Action24.gr" tvg-logo="https://i.imgur.com/Fsnz8GK.png", Action 24
+#EXTINF:-1 tvg-id="action24" tvg-logo="https://i.imgur.com/Fsnz8GK.png", Action 24
 http://actionlive.siliconweb.com/actionabr/actiontv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="KontraChannel.gr" tvg-logo="https://i.imgur.com/ZqEovqx.png", Kontra
+#EXTINF:-1 tvg-id="kontra" tvg-logo="https://i.imgur.com/ZqEovqx.png", Kontra
 https://kontralive.siliconweb.com/live/kontratv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TV100.gr" tvg-logo="https://i.imgur.com/fh6ZaGP.png", TV 100
+#EXTINF:-1 tvg-id="tv100" tvg-logo="https://i.imgur.com/fh6ZaGP.png", TV 100
 https://live.fm100.gr/hls/tv100/1_2/index.m3u8
 
 #EXTINF:-1 tvg-id="GroovyTV.gr" tvg-logo="https://i.imgur.com/5kAPGz5.png", Groovy TV
