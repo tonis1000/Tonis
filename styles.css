@@ -22,6 +22,14 @@ button {
 .sidebar img {
     margin-right: 10px; /* Abstand zwischen Bild und Text */
 }
+#sidebar-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#sidebar-list li {
+    margin-bottom: 5px;
+}
 
 @media screen and (min-device-pixel-ratio: 2) {
   /* Deine CSS-Regeln für Geräte mit hoher Pixeldichte */
