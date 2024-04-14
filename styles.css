@@ -9,11 +9,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #f2f2f2; /* Graue Hintergrundfarbe für das Info-Panel */
+    padding: 10px; /* Innenabstand hinzufügen */
 }
 
 .sidebar {
     flex: 1;
     overflow-y: scroll;
+    background-color: #f2f2f2; /* Graue Hintergrundfarbe für die Sidebar */
+    padding: 10px; /* Innenabstand hinzufügen */
 }
 
 .button-row {
