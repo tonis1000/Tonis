@@ -16,19 +16,14 @@
             <button onclick="loadMyPlaylist()">My Playlist</button>
             <button onclick="loadExternalPlaylist()">Ext. Playlist</button>
             <button onclick="loadSportPlaylist()">Sport</button>
-                        <!-- Neuer Button zum manuellen Laden des EPG -->
+            <!-- Neuer Button zum manuellen Laden des EPG -->
             <button onclick="loadEPG()">EPG load</button>
         </div>
         <div class="sidebar" id="sidebar">
-                <h2>Senderliste</h2>
-                            <ul id="sidebar-list">
-                {% for program in programs %}
-                    <li>{{ program[0] }} - {{ program[1] }}</li>
-                {% endfor %}
-            </ul>
+            <h2>Senderliste</h2>
+            <ul id="sidebar-list"></ul>
         </div>
     </div>
     <script src="scripts.js"></script>
-
 </body>
 </html>
