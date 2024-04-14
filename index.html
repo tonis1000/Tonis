@@ -20,7 +20,10 @@
         <div class="sidebar" id="sidebar">
                 <h2>Senderliste</h2>
                 <ul id="sidebar-list">
-                <!-- Hier werden die Sender- oder Kanalnamen eingefügt -->
+                 <!-- Hier werden die Senderprogramme eingefügt -->
+                {% for program in programs %}
+                    <li>{{ program[0] }} - {{ program[1] }}</li>
+                {% endfor %}
                </ul>
         </div>
     </div>
