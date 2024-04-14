@@ -21,17 +21,15 @@ function loadSportPlaylist() {
 
 // Laden der EPG-Daten und Aktualisieren der Sidebar
 function loadEPG() {
-    fetch('download_xml.py')
+    fetch('/reload-epg') // Aufrufen der Flask-Route zum Neuladen der EPG-Daten
         .then(response => {
             if (!response.ok) {
-                throw new Error('Fehler beim Laden des EPG');
+                throw new Error('Fehler beim Laden der EPG-Daten');
             }
             return response.text();
         })
         .then(data => {
-            console.log('EPG-Daten erfolgreich heruntergeladen und aktualisiert.');
-            // Optional: Aktualisieren der Sidebar nach dem Herunterladen der EPG-Daten
-            fetchEPGInfo();
+            updateSidebarFromXML(data); // Aktualisieren der Sidebar mit den neuen EPG-Daten
         })
         .catch(error => {
             console.error('Fehler beim Laden der EPG-Daten:', error);
