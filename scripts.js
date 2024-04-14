@@ -24,7 +24,7 @@ function updateSidebar(data) {
     const lines = data.split('\n');
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
-            const nameMatch = line.match(/tvg-name="([^"]+)"/); // Sender- oder Kanalname aus dem Attribut tvg-name extrahieren
+            const nameMatch = line.match(/tvg-id="([^"]+)"/); // Sender- oder Kanalname aus dem Attribut tvg-id extrahieren
             if (nameMatch && nameMatch.length > 1) {
                 const name = nameMatch[1];
                 const listItem = document.createElement('li');
@@ -34,3 +34,4 @@ function updateSidebar(data) {
         }
     });
 }
+
