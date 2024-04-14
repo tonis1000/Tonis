@@ -24,24 +24,30 @@ function updateSidebar(data) {
     const lines = data.split('\n');
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
-            const commaIndex = line.lastIndexOf(','); // Index des letzten Kommas in der Zeile finden
-            if (commaIndex !== -1) {
-                const displayName = line.substring(commaIndex + 1).trim(); // Anzeigenamen extrahieren
-                const logoUrlMatch = line.match(/tvg-logo="([^"]+)"/); // Logo-URL aus der Zeile extrahieren
-                if (logoUrlMatch && logoUrlMatch.length > 1) {
-                    const logoUrl = logoUrlMatch[1]; // Logo-URL extrahieren
+            const nameMatch = line.match(/,(.*)$/); // Sendername aus dem Text nach dem letzten Komma extrahieren
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/); // URL des Senderlogos extrahieren
+                if (imgMatch && imgMatch.length > 1) {
+                    const imgURL = imgMatch[1];
                     const listItem = document.createElement('li');
                     const img = document.createElement('img');
-                    img.src = logoUrl;
-                    img.alt = displayName;
-                    img.style.width = '50px'; // Breite des Bildes anpassen
+                    img.src = imgURL;
+                    img.alt = name + ' Logo';
+                    img.width = 50; // Breite des Bildes
+                    img.height = 50; // Höhe des Bildes
                     listItem.appendChild(img);
-                    listItem.appendChild(document.createTextNode(displayName));
+                    listItem.appendChild(document.createTextNode(name));
+                    sidebarList.appendChild(listItem);
+                } else {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = name;
                     sidebarList.appendChild(listItem);
                 }
             }
         }
     });
 }
+
 
 
