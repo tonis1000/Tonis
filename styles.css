@@ -11,6 +11,8 @@
     align-items: center;
     background-color: #f2f2f2; /* Graue Hintergrundfarbe für das Info-Panel */
     padding: 10px; /* Innenabstand hinzufügen */
+    width: 200px;
+    height: 100px; 
 }
 
 .sidebar {
@@ -18,6 +20,8 @@
     overflow-y: scroll;
     background-color: #f2f2f2; /* Graue Hintergrundfarbe für die Sidebar */
     padding: 10px; /* Innenabstand hinzufügen */
+    width: 200px;
+    height: 600px; 
 }
 
 .button-row {
