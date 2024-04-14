@@ -1,6 +1,6 @@
 #EXTM3U
 
-#EXTINF:-1 tvg-id="ERT1.gr" tvg-logo="https://i.imgur.com/nMHKG3A.png", ERT1
+#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/nMHKG3A.png", ERT1
 https://cbd537474fbad4634b64787657ff6456.msvdn.net/ert1/ert_ev1_main/mainabr/playlist_dvr.m3u8
 
 #EXTINF:-1 tvg-id="ERT1.gr" tvg-logo="https://i.imgur.com/nMHKG3A.png", ERT1
@@ -15,7 +15,7 @@ http://cbd537474fbad4634b64787657ff6456.msvdn.net/ert3/ert_ev3_main/mainabr/play
 #EXTINF:-1 tvg-id="ERTNews.gr" tvg-logo="https://upload.wikimedia.org/wikipedia/el/thumb/9/91/ErtNews-Logo.png/512px-ErtNews-Logo.png", ERT News
 https://telmacosa.s.llnwi.net/osO/ERTNews/default/ERTNews-audio_104621_und=104400-video=5000000.m3u8
 
-#EXTINF:-1 tvg-id="Ant1.gr" tvg-logo="https://i.imgur.com/g0jPOcC.png", Ant1
+#EXTINF:-1 tvg-id="ant1" tvg-logo="https://i.imgur.com/g0jPOcC.png", Ant1
 https://d1nfykbwa3n98t.cloudfront.net/out/v1/6e5667da5a6843899a337dea72adb61b/antenna.m3u8
 
 #EXTINF:-1 tvg-id="AlphaTV.gr" tvg-logo="https://i.imgur.com/6twzd38.png", AlphaTV
