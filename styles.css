@@ -31,8 +31,6 @@
 }
 
 button {
-    display: block;
-    margin-bottom: 10px;
     background-color: #007bff; /* Hintergrundfarbe */
     color: #fff; /* Textfarbe */
     padding: 10px 20px; /* Innenabstand */
@@ -44,7 +42,6 @@ button {
 button:hover {
     background-color: #0056b3; /* Hintergrundfarbe beim Überfahren */
 }
-
 .sidebar img {
     margin-right: 10px; /* Abstand zwischen Bild und Text */
 }
