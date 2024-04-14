@@ -78,26 +78,48 @@ function updateSidebarFromM3U(data) {
     });
 }
 
-// Funktion zum Abrufen der aktuellen EPG-Informationen für einen bestimmten Sender
-function fetchEPGInfo(channelName) {
-    return fetch('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml')
+function fetchEPGInfo() {
+    fetch('data/epg.xml') // Pfadeinstellung zur lokalen EPG-Datei
         .then(response => {
             if (!response.ok) {
-                throw new Error('Fehler beim Laden des EPG');
+                throw new Error('Fehler beim Laden der EPG-Daten');
             }
             return response.text();
         })
         .then(data => {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(data, 'text/xml');
-            const programs = xmlDoc.getElementsByTagName('programme');
-            for (let i = 0; i < programs.length; i++) {
-                const program = programs[i];
-                const titleNode = program.getElementsByTagName('title')[0];
-                if (titleNode && titleNode.textContent.includes(channelName)) {
-                    return titleNode.textContent;
-                }
-            }
-            return 'Keine aktuellen EPG-Informationen verfügbar';
+            updateSidebarFromXML(data); // Aufrufen der Funktion zum Aktualisieren der Sidebar mit den EPG-Daten
+        })
+        .catch(error => {
+            console.error(error);
         });
+}
+
+function updateSidebarFromXML(data) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(data, 'text/xml');
+    const channels = xmlDoc.getElementsByTagName('channel');
+
+    for (let i = 0; i < channels.length; i++) {
+        const channel = channels[i];
+        const channelName = channel.getElementsByTagName('display-name')[0].textContent;
+
+        const currentProgram = getCurrentProgram(xmlDoc, channelName);
+        const sidebarList = document.getElementById('sidebar-list');
+
+        const listItem = document.createElement('li');
+        listItem.textContent = `${channelName} - ${currentProgram}`;
+        sidebarList.appendChild(listItem);
+    }
+}
+
+function getCurrentProgram(xmlDoc, channelName) {
+    const programs = xmlDoc.getElementsByTagName('programme');
+    for (let i = 0; i < programs.length; i++) {
+        const program = programs[i];
+        const titleNode = program.getElementsByTagName('title')[0];
+        if (titleNode && titleNode.textContent.includes(channelName)) {
+            return titleNode.textContent;
+        }
+    }
+    return 'Kein Programm gefunden';
 }
