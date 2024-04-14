@@ -7,10 +7,12 @@ app = Flask(__name__)
 def parse_epg(xml_data):
     programs = []
     root = ET.fromstring(xml_data)
-    for channel in root.findall('.//channel'):
-        channel_name = channel.find('display-name').text
-        program_name = channel.find('.//programme/title').text
-        programs.append((channel_name, program_name))
+    channels = {channel.get('id'): channel.find('display-name').text for channel in root.findall('.//channel')}
+    for programme in root.findall('.//programme'):
+        channel_id = programme.get('channel')
+        channel_name = channels.get(channel_id, 'Unknown Channel')
+        program_title = programme.find('title').text
+        programs.append((channel_name, program_title))
     return programs
 
 @app.route('/')
