@@ -1,6 +1,8 @@
+# app.py
+
 from flask import Flask, render_template, send_from_directory, request
-import requests
 import xml.etree.ElementTree as ET
+from download_xml import download_xml
 
 app = Flask(__name__)
 
@@ -17,7 +19,10 @@ def parse_epg(xml_data):
 
 @app.route('/')
 def index():
-    epg_data = requests.get('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml').text
+    # Heruntergeladene XML-Datei verwenden
+    download_xml('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml', 'data/epg.xml')
+    with open('data/epg.xml', 'r') as f:
+        epg_data = f.read()
     playlist_data = requests.get('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u').text
     external_content = requests.get('https://foothubhd.xyz/').text
     programs = parse_epg(epg_data)
