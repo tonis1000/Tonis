@@ -19,5 +19,6 @@ def download_xml(url, local_path):
     else:
         print("Fehler beim Herunterladen der XML-Datei.")
 
-# Funktion aufrufen, um die XML-Datei herunterzuladen und zu speichern
-download_xml(url, local_path)
+if __name__ == '__main__':
+    # Funktion aufrufen, um die XML-Datei herunterzuladen und zu speichern
+    download_xml(url, local_path)
