@@ -18,18 +18,19 @@ function loadSportPlaylist() {
 }
 
 function loadEPG() {
-    fetch('/load-epg')
-        .then(response => {
-            if (response.ok) {
-                console.log('EPG erfolgreich geladen');
-                return response.text();
-            } else {
-                console.error('Fehler beim Laden des EPG');
-                throw new Error('Fehler beim Laden des EPG');
-            }
-        })
-        .then(data => updateSidebar(data))
-        .catch(error => console.error('Fehler beim Laden des EPG:', error));
+    // Führen Sie eine AJAX-Anfrage aus, um das EPG herunterzuladen
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'download_xml.py', true); // Ändern Sie den Pfad entsprechend, wenn download_xml.py in einem anderen Verzeichnis liegt
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            // Erfolgreich heruntergeladen, aktualisieren Sie die Seite oder führen Sie andere Aktionen aus
+            location.reload(); // Aktualisieren Sie die Seite, um das aktualisierte EPG anzuzeigen
+        } else {
+            // Fehler beim Herunterladen des EPG
+            console.error('Fehler beim Laden des EPG');
+        }
+    };
+    xhr.send();
 }
 
 function updateSidebar(data) {
