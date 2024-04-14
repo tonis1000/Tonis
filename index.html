@@ -21,12 +21,11 @@
         </div>
         <div class="sidebar" id="sidebar">
                 <h2>Senderliste</h2>
-                <ul id="sidebar-list">
-                 <!-- Hier werden die Senderprogramme eingefügt -->
+                            <ul id="sidebar-list">
                 {% for program in programs %}
                     <li>{{ program[0] }} - {{ program[1] }}</li>
                 {% endfor %}
-               </ul>
+            </ul>
         </div>
     </div>
     <script src="scripts.js"></script>
