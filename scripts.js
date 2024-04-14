@@ -21,7 +21,7 @@ function loadSportPlaylist() {
 
 // Laden der EPG-Daten und Aktualisieren der Sidebar
 function loadEPG() {
-    fetch('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml')
+    fetch('data/epg.xml') // Pfad zur lokalen EPG-Datei anpassen
         .then(response => {
             if (!response.ok) {
                 throw new Error('Fehler beim Laden des EPG');
@@ -78,8 +78,8 @@ function updateSidebarFromM3U(data) {
     });
 }
 
-function fetchEPGInfo() {
-    fetch('data/epg.xml') // Pfadeinstellung zur lokalen EPG-Datei
+function fetchEPGInfo(channelName) {
+    return fetch('data/epg.xml') // Pfadeinstellung zur lokalen EPG-Datei
         .then(response => {
             if (!response.ok) {
                 throw new Error('Fehler beim Laden der EPG-Daten');
@@ -87,10 +87,11 @@ function fetchEPGInfo() {
             return response.text();
         })
         .then(data => {
-            updateSidebarFromXML(data); // Aufrufen der Funktion zum Aktualisieren der Sidebar mit den EPG-Daten
+            return getCurrentProgram(data, channelName); // Aktuelle Programminformationen für den Kanal abrufen
         })
         .catch(error => {
             console.error(error);
+            return 'Keine EPG-Informationen verfügbar';
         });
 }
 
@@ -103,7 +104,7 @@ function updateSidebarFromXML(data) {
         const channel = channels[i];
         const channelName = channel.getElementsByTagName('display-name')[0].textContent;
 
-        const currentProgram = getCurrentProgram(xmlDoc, channelName);
+        const currentProgram = getCurrentProgram(data, channelName);
         const sidebarList = document.getElementById('sidebar-list');
 
         const listItem = document.createElement('li');
@@ -112,7 +113,9 @@ function updateSidebarFromXML(data) {
     }
 }
 
-function getCurrentProgram(xmlDoc, channelName) {
+function getCurrentProgram(xmlData, channelName) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlData, 'text/xml');
     const programs = xmlDoc.getElementsByTagName('programme');
     for (let i = 0; i < programs.length; i++) {
         const program = programs[i];
