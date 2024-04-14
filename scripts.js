@@ -21,15 +21,21 @@ function loadSportPlaylist() {
 
 // Laden der EPG-Daten und Aktualisieren der Sidebar
 function loadEPG() {
-    fetch('data/epg.xml') // Pfad zur lokalen EPG-Datei anpassen
+    fetch('download_xml.py')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Fehler beim Laden des EPG');
             }
             return response.text();
         })
-        .then(data => updateSidebarFromXML(data))
-        .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
+        .then(data => {
+            console.log('EPG-Daten erfolgreich heruntergeladen und aktualisiert.');
+            // Optional: Aktualisieren der Sidebar nach dem Herunterladen der EPG-Daten
+            fetchEPGInfo();
+        })
+        .catch(error => {
+            console.error('Fehler beim Laden der EPG-Daten:', error);
+        });
 }
 
 // Aktualisieren der Sidebar mit Daten aus der Playlist.m3u
