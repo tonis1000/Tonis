@@ -16,7 +16,7 @@
     overflow-y: scroll;
 }
 
-.button-group {
+.button-row {
     display: flex;
     gap: 10px; /* Fügen Sie einen kleinen Abstand zwischen den Schaltflächen hinzu */
 }
