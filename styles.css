@@ -19,6 +19,10 @@ button {
     display: block;
     margin-bottom: 10px;
 }
+.sidebar img {
+    margin-right: 10px; /* Abstand zwischen Bild und Text */
+}
+
 @media screen and (min-device-pixel-ratio: 2) {
   /* Deine CSS-Regeln für Geräte mit hoher Pixeldichte */
 }
