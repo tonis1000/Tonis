@@ -1,8 +1,21 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, jsonify
 import xml.etree.ElementTree as ET
-from download_xml import download_xml
+import requests
 
 app = Flask(__name__)
+
+def download_xml(url, local_path):
+    # Herunterladen der XML-Datei
+    response = requests.get(url)
+
+    # Überprüfen, ob der Download erfolgreich war
+    if response.status_code == 200:
+        # Speichern der XML-Datei im lokalen Ordner
+        with open(local_path, 'wb') as f:
+            f.write(response.content)
+        print("XML-Datei erfolgreich heruntergeladen und gespeichert.")
+    else:
+        print("Fehler beim Herunterladen der XML-Datei.")
 
 def parse_epg(xml_data):
     programs = []
@@ -30,8 +43,7 @@ def reload_epg():
     download_xml('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml', 'data/epg.xml')
     with open('data/epg.xml', 'r') as f:
         epg_data = f.read()
-    programs = parse_epg(epg_data)
-    # Rückgabe der aktualisierten EPG-Daten im XML-Format
+    # Rückgabe der EPG-Daten im XML-Format
     return epg_data
 
 if __name__ == '__main__':
