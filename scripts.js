@@ -49,5 +49,23 @@ function updateSidebar(data) {
     });
 }
 
+// Dieses Skript blockiert gemischte Inhalte, indem es die Ressourcen in einer sicheren Umgebung lädt
+document.addEventListener('DOMContentLoaded', function() {
+    var elements = document.querySelectorAll('img[src^="http://"], video[src^="http://"]');
+    elements.forEach(function(element) {
+        var secureSrc = 'https://' + element.src.split('//')[1]; // Ersetze http durch https
+        var proxyURL = 'https://cors-anywhere.herokuapp.com/' + secureSrc; // Verwende einen CORS-Proxy für den Zugriff auf HTTP-Ressourcen von einer HTTPS-Seite
+        element.src = proxyURL;
+    });
+
+    var playlists = document.querySelectorAll('source[src^="http://"]');
+    playlists.forEach(function(playlist) {
+        var secureSrc = 'https://' + playlist.src.split('//')[1]; // Ersetze http durch https
+        var proxyURL = 'https://cors-anywhere.herokuapp.com/' + secureSrc; // Verwende einen CORS-Proxy für den Zugriff auf HTTP-Ressourcen von einer HTTPS-Seite
+        playlist.src = proxyURL;
+    });
+});
+
+
 
 
