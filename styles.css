@@ -8,6 +8,8 @@
 .info-panel {
     display: flex;
     flex-wrap: wrap; /* Erlauben, dass Elemente umgebrochen werden */
+    width: 250px;
+    height: 200px; 
 }
 
 .info-group {
@@ -18,8 +20,8 @@
     overflow-y: scroll;
     background-color: #333; /* Graue Hintergrundfarbe für die Sidebar */
     padding: 10px; /* Innenabstand hinzufügen */
-    width: 450px;
-    height: 600px; 
+    width: 250px;
+    height: 400px; 
 }
 
 
