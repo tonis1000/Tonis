@@ -59,8 +59,8 @@ function updateSidebarFromM3U(data) {
                 const img = document.createElement('img');
                 img.src = imgURL;
                 img.alt = name + ' Logo';
-                img.width = 50;
-                img.height = 50;
+                img.width = 30;
+                img.height = 20;
                 listItem.appendChild(img);
 
                 // Hinzufügen des Sendernamens
