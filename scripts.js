@@ -1,7 +1,7 @@
 // scripts.js
 
 function loadMyPlaylist() {
-    fetch('/playlist.m3u') // Pfad zur Playlist-Datei anpassen
+    fetch('playlist.m3u') // Pfad zur Playlist-Datei anpassen
         .then(response => response.text())
         .then(data => updateSidebar(data));
 }
