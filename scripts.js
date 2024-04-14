@@ -36,15 +36,33 @@ function loadEPG() {
 
 // Funktion zum Aktualisieren der Seitenleiste aus einer M3U/M3U8-Datei
 function updateSidebarFromM3U(data) {
-    const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.innerHTML = '';
+const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.innerHTML = ''; // Sidebar leeren, um sicherzustellen, dass alte Einträge entfernt werden
 
     const lines = data.split('\n');
     lines.forEach(line => {
-        if (!line.startsWith('#')) { // Ignoriere Kommentare
-            const listItem = document.createElement('li');
-            listItem.textContent = line.trim(); // Füge den Sender direkt zur Liste hinzu
-            sidebarList.appendChild(listItem);
+        if (line.startsWith('#EXTINF')) {
+            const nameMatch = line.match(/,(.*)$/); // Sendername aus dem Text nach dem letzten Komma extrahieren
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/); // URL des Senderlogos extrahieren
+                if (imgMatch && imgMatch.length > 1) {
+                    const imgURL = imgMatch[1];
+                    const listItem = document.createElement('li');
+                    const img = document.createElement('img');
+                    img.src = imgURL;
+                    img.alt = name + ' Logo';
+                    img.width = 50; // Breite des Bildes
+                    img.height = 50; // Höhe des Bildes
+                    listItem.appendChild(img);
+                    listItem.appendChild(document.createTextNode(name));
+                    sidebarList.appendChild(listItem);
+                } else {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = name;
+                    sidebarList.appendChild(listItem);
+                }
+            }
         }
     });
 }
