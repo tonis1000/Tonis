@@ -1,0 +1,48 @@
+/* styles.css */
+
+.container {
+    display: flex;
+}
+
+.info-panel {
+    width: 300px;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+}
+
+.sidebar {
+    flex: 1;
+    overflow-y: scroll;
+}
+
+button {
+    display: block;
+    margin-bottom: 10px;
+    background-color: #007bff; /* Hintergrundfarbe */
+    color: #fff; /* Textfarbe */
+    padding: 10px 20px; /* Innenabstand */
+    border: none; /* Kein Rand */
+    border-radius: 5px; /* Abgerundete Ecken */
+    cursor: pointer; /* Zeiger beim Überfahren */
+}
+
+button:hover {
+    background-color: #0056b3; /* Hintergrundfarbe beim Überfahren */
+}
+
+.sidebar img {
+    margin-right: 10px; /* Abstand zwischen Bild und Text */
+}
+
+#sidebar-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#sidebar-list li {
+    margin-bottom: 5px;
+}
+
+@media screen and (min-device-pixel-ratio: 2) {
+  /* Deine CSS-Regeln für Geräte mit hoher Pixeldichte */
+}
