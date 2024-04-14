@@ -21,15 +21,16 @@ function loadSportPlaylist() {
 
 // Laden der EPG-Daten und Aktualisieren der Sidebar
 function loadEPG() {
-    fetch('/reload-epg') // Aufrufen der Flask-Route zum Neuladen der EPG-Daten
+    fetch('/reload-epg')
         .then(response => {
             if (!response.ok) {
-                throw new Error('Fehler beim Laden der EPG-Daten');
+                throw new Error('Fehler beim Laden des EPG');
             }
             return response.text();
         })
         .then(data => {
-            updateSidebarFromXML(data); // Aktualisieren der Sidebar mit den neuen EPG-Daten
+            console.log('EPG erfolgreich aktualisiert');
+            updateSidebarFromXML(data);
         })
         .catch(error => {
             console.error('Fehler beim Laden der EPG-Daten:', error);
@@ -58,8 +59,8 @@ function updateSidebarFromM3U(data) {
                 const img = document.createElement('img');
                 img.src = imgURL;
                 img.alt = name + ' Logo';
-                img.width = 30;
-                img.height = 20;
+                img.width = 50;
+                img.height = 50;
                 listItem.appendChild(img);
 
                 // Hinzufügen des Sendernamens
@@ -82,8 +83,9 @@ function updateSidebarFromM3U(data) {
     });
 }
 
+// Funktion zum Abrufen der EPG-Informationen für einen bestimmten Sender
 function fetchEPGInfo(channelName) {
-    return fetch('data/epg.xml') // Pfadeinstellung zur lokalen EPG-Datei
+    return fetch('data/epg.xml') // Pfad zur lokalen EPG-Datei
         .then(response => {
             if (!response.ok) {
                 throw new Error('Fehler beim Laden der EPG-Daten');
@@ -91,42 +93,17 @@ function fetchEPGInfo(channelName) {
             return response.text();
         })
         .then(data => {
-            return getCurrentProgram(data, channelName); // Aktuelle Programminformationen für den Kanal abrufen
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(data, 'text/xml');
+            const programs = xmlDoc.getElementsByTagName('programme');
+            for (let i = 0; i < programs.length; i++) {
+                const program = programs[i];
+                const titleNode = program.getElementsByTagName('title')[0];
+                if (titleNode && titleNode.textContent.includes(channelName)) {
+                    return titleNode.textContent;
+                }
+            }
+            return 'Kein Programm gefunden';
         })
-        .catch(error => {
-            console.error(error);
-            return 'Keine EPG-Informationen verfügbar';
-        });
-}
-
-function updateSidebarFromXML(data) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(data, 'text/xml');
-    const channels = xmlDoc.getElementsByTagName('channel');
-
-    for (let i = 0; i < channels.length; i++) {
-        const channel = channels[i];
-        const channelName = channel.getElementsByTagName('display-name')[0].textContent;
-
-        const currentProgram = getCurrentProgram(data, channelName);
-        const sidebarList = document.getElementById('sidebar-list');
-
-        const listItem = document.createElement('li');
-        listItem.textContent = `${channelName} - ${currentProgram}`;
-        sidebarList.appendChild(listItem);
-    }
-}
-
-function getCurrentProgram(xmlData, channelName) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlData, 'text/xml');
-    const programs = xmlDoc.getElementsByTagName('programme');
-    for (let i = 0; i < programs.length; i++) {
-        const program = programs[i];
-        const titleNode = program.getElementsByTagName('title')[0];
-        if (titleNode && titleNode.textContent.includes(channelName)) {
-            return titleNode.textContent;
-        }
-    }
-    return 'Kein Programm gefunden';
+        .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
