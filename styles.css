@@ -9,18 +9,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f0f0f0; /* Graue Hintergrundfarbe für das Info-Panel */
+    background-color: #333333; /* Graue Hintergrundfarbe für das Info-Panel */
     padding: 20px; /* Innenabstand hinzufügen */
-    width: 200px;
+    width: 350px;
     height: 100px; 
 }
 
 .sidebar {
     flex: 1;
     overflow-y: scroll;
-    background-color: #f0f0f0; /* Graue Hintergrundfarbe für die Sidebar */
+    background-color: #333333; /* Graue Hintergrundfarbe für die Sidebar */
     padding: 10px; /* Innenabstand hinzufügen */
-    width: 200px;
+    width: 350px;
     height: 600px; 
 }
 
