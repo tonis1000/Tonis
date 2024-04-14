@@ -28,6 +28,7 @@
 .button-row {
     display: flex;
     gap: 10px; /* Fügen Sie einen kleinen Abstand zwischen den Schaltflächen hinzu */
+    margin-top: 10px; /* Abstand zum Info-Panel */
 }
 
 button {
