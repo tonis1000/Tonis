@@ -7,14 +7,12 @@
 
 .info-panel {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333; /* Graue Hintergrundfarbe für das Info-Panel */
-    padding: 20px; /* Innenabstand hinzufügen */
-    width: 450px;
-    height: 100px; 
+    flex-wrap: wrap; /* Erlauben, dass Elemente umgebrochen werden */
 }
 
+.info-group {
+    margin-right: 20px; /* Abstand zwischen den Info-Gruppen */
+}
 .sidebar {
     flex: 1;
     overflow-y: scroll;
