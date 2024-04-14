@@ -26,10 +26,14 @@ function updateSidebar(data) {
         if (line.startsWith('#EXTINF')) {
             const nameMatch = line.match(/tvg-id="([^"]+)"/); // Sender- oder Kanalname aus dem Attribut tvg-id extrahieren
             if (nameMatch && nameMatch.length > 1) {
-                const name = nameMatch[1];
-                const listItem = document.createElement('li');
-                listItem.textContent = name;
-                sidebarList.appendChild(listItem);
+                const name = nameMatch[1]; // Der Name des Senders oder Kanals
+                const commaIndex = line.indexOf(',', line.indexOf(',') + 1); // Index des zweiten Kommas in der Zeile finden
+                if (commaIndex !== -1) {
+                    const displayName = line.substring(commaIndex + 1).trim(); // Anzeigenamen extrahieren
+                    const listItem = document.createElement('li');
+                    listItem.textContent = displayName;
+                    sidebarList.appendChild(listItem);
+                }
             }
         }
     });
