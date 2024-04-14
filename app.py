@@ -1,6 +1,4 @@
-# app.py
-
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 import xml.etree.ElementTree as ET
 from download_xml import download_xml
 
@@ -25,6 +23,16 @@ def index():
         epg_data = f.read()
     programs = parse_epg(epg_data)
     return render_template('index.html', programs=programs)
+
+@app.route('/reload-epg')
+def reload_epg():
+    # Herunterladen und Parsen der XML-Datei
+    download_xml('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml', 'data/epg.xml')
+    with open('data/epg.xml', 'r') as f:
+        epg_data = f.read()
+    programs = parse_epg(epg_data)
+    # Rückgabe der aktualisierten EPG-Daten im XML-Format
+    return epg_data
 
 if __name__ == '__main__':
     app.run(debug=True)
