@@ -17,6 +17,21 @@ function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
+function loadEPG() {
+    fetch('/load-epg')
+        .then(response => {
+            if (response.ok) {
+                console.log('EPG erfolgreich geladen');
+                return response.text();
+            } else {
+                console.error('Fehler beim Laden des EPG');
+                throw new Error('Fehler beim Laden des EPG');
+            }
+        })
+        .then(data => updateSidebar(data))
+        .catch(error => console.error('Fehler beim Laden des EPG:', error));
+}
+
 function updateSidebar(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = ''; // Sidebar leeren, um sicherzustellen, dass alte Einträge entfernt werden
@@ -65,7 +80,3 @@ document.addEventListener('DOMContentLoaded', function() {
         playlist.src = proxyURL;
     });
 });
-
-
-
-
