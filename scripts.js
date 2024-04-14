@@ -108,24 +108,19 @@ function fetchEPGInfo(channelName) {
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
 
-// Funktion zum Abrufen der aktuellen Uhrzeit von einem NTP-Server
-        function fetchTime() {
-            fetch('https://worldtimeapi.org/api/ip')
-                .then(response => response.json())
-                .then(data => {
-                    const dateTime = new Date(data.utc_datetime);
-                    document.getElementById('uhrzeit').textContent = dateTime.toLocaleTimeString('de-DE');
-                })
-                .catch(error => {
-                    console.error('Fehler beim Laden der Uhrzeit:', error);
-                    // Fallback: Verwenden der lokalen Systemzeit
-                    const now = new Date();
-                    document.getElementById('uhrzeit').textContent = now.toLocaleTimeString('de-DE');
-                });
+// Funktion zum Abrufen der aktuellen Uhrzeit
+        function updateClock() {
+            const now = new Date();
+            const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
+            const datum = now.toLocaleDateString('de-DE');
+            const uhrzeit = now.toLocaleTimeString('de-DE', { hour12: false });
+            document.getElementById('tag').textContent = tag;
+            document.getElementById('datum').textContent = datum;
+            document.getElementById('uhrzeit').textContent = uhrzeit;
         }
 
-        // Funktion zum Aktualisieren der Datum- und Uhrzeitinformationen alle Sekunde
-        window.onload = function() {
-            fetchTime();
-            setInterval(fetchTime, 1000);
-        };
+        // Uhrzeit beim Laden der Seite aktualisieren
+        updateClock();
+
+        // Uhrzeit alle Sekunde aktualisieren
+        setInterval(updateClock, 1000);
