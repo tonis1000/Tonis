@@ -107,3 +107,31 @@ function fetchEPGInfo(channelName) {
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
+// Aktualisieren der aktuellen Datum- und Uhrzeitinformationen
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('tag').textContent = now.toLocaleDateString('de-DE', { weekday: 'long' });
+            document.getElementById('datum').textContent = now.toLocaleDateString('de-DE');
+            document.getElementById('uhrzeit').textContent = now.toLocaleTimeString('de-DE');
+        }
+
+        // Laden der aktuellen Temperatur in München von OpenWeatherMap API
+        function loadTemperature() {
+            fetch('https://api.openweathermap.org/data/2.5/weather?q=Munich,de&appid=YOUR_API_KEY&units=metric')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('temperatur').textContent = data.main.temp + '°C';
+                })
+                .catch(error => {
+                    console.error('Fehler beim Laden der Temperatur:', error);
+                    document.getElementById('temperatur').textContent = 'N/A';
+                });
+        }
+
+        // Aktualisieren der Datum- und Uhrzeitinformationen beim Laden der Seite
+        window.onload = function() {
+            updateDateTime();
+            loadTemperature();
+            // Aktualisiere alle 10 Sekunden
+            setInterval(updateDateTime, 10000);
+        };
