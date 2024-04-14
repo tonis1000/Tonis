@@ -18,54 +18,42 @@ function loadSportPlaylist() {
 }
 
 function loadEPG() {
-    // Führen Sie eine Fetch-Anfrage aus, um das EPG herunterzuladen
-    fetch('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml')
+    fetch('data/epg.xml') // Pfad zur epg.xml-Datei anpassen
         .then(response => {
             if (!response.ok) {
                 throw new Error('Fehler beim Laden des EPG');
             }
-            return response.text(); // Hier könnte auch response.json() verwendet werden, wenn die Datei im JSON-Format vorliegt
+            return response.text();
         })
         .then(data => {
-            // Hier können Sie den heruntergeladenen Inhalt verarbeiten oder weitere Aktionen ausführen
-            location.reload(); // Aktualisieren Sie die Seite, um das aktualisierte EPG anzuzeigen
+            updateSidebar(data);
         })
         .catch(error => {
             console.error(error);
         });
 }
 
-
 function updateSidebar(data) {
     const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.innerHTML = ''; // Sidebar leeren, um sicherzustellen, dass alte Einträge entfernt werden
+    sidebarList.innerHTML = '';
 
-    const lines = data.split('\n');
-    lines.forEach(line => {
-        if (line.startsWith('#EXTINF')) {
-            const nameMatch = line.match(/,(.*)$/); // Sendername aus dem Text nach dem letzten Komma extrahieren
-            if (nameMatch && nameMatch.length > 1) {
-                const name = nameMatch[1].trim();
-                const imgMatch = line.match(/tvg-logo="([^"]+)"/); // URL des Senderlogos extrahieren
-                if (imgMatch && imgMatch.length > 1) {
-                    const imgURL = imgMatch[1];
-                    const listItem = document.createElement('li');
-                    const img = document.createElement('img');
-                    img.src = imgURL;
-                    img.alt = name + ' Logo';
-                    img.width = 50; // Breite des Bildes
-                    img.height = 50; // Höhe des Bildes
-                    listItem.appendChild(img);
-                    listItem.appendChild(document.createTextNode(name));
-                    sidebarList.appendChild(listItem);
-                } else {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = name;
-                    sidebarList.appendChild(listItem);
-                }
-            }
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(data, 'text/xml');
+    const channels = xmlDoc.getElementsByTagName('channel');
+
+    for (let i = 0; i < channels.length; i++) {
+        const channel = channels[i];
+        const channelName = channel.getElementsByTagName('display-name')[0].textContent;
+
+        const programs = channel.getElementsByTagName('programme');
+        for (let j = 0; j < programs.length; j++) {
+            const program = programs[j];
+            const title = program.getElementsByTagName('title')[0].textContent;
+            const listItem = document.createElement('li');
+            listItem.textContent = channelName + ' - ' + title;
+            sidebarList.appendChild(listItem);
         }
-    });
+    }
 }
 
 // Dieses Skript blockiert gemischte Inhalte, indem es die Ressourcen in einer sicheren Umgebung lädt
