@@ -8,20 +8,17 @@
 </head>
 <body>
     <div class="container">
-        <div class="info-panel">
+        
+<div class="info-panel">
+    <p>Tag: <span id="tag"></span></p>
+    <p>Datum: <span id="datum"></span></p>
+    <div class="button-row">
+        <button onclick="loadMyPlaylist()">My Playlist</button>
+        <button onclick="loadExternalPlaylist()">Ext. Playlist</button>
+        <button onclick="loadSportPlaylist()">Sport</button>
+    </div>
+</div>
 
-         <div>
-                <span id="tag"></span>
-                <span id="datum"></span>
-                <span id="uhrzeit"></span>
-            </div>
-        </div>
-        <div class="button-row">
-            <button onclick="loadMyPlaylist()">My Playlist</button>
-            <button onclick="loadExternalPlaylist()">Ext. Playlist</button>
-            <button onclick="loadSportPlaylist()">Sport</button>  
-        </div>
-            
         <div class="sidebar" id="sidebar">
             <h2>Senderliste</h2>
             <ul id="sidebar-list"></ul>
