@@ -19,7 +19,7 @@ function loadSportPlaylist() {
 
 function loadEPG() {
     // Führen Sie eine Fetch-Anfrage aus, um das EPG herunterzuladen
-    fetch('download_xml.py')
+    fetch('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Fehler beim Laden des EPG');
