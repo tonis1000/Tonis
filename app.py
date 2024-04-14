@@ -1,17 +1,10 @@
 # app.py
 
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory, request
 import xml.etree.ElementTree as ET
-import requests
+from download_xml import download_xml
 
 app = Flask(__name__)
-
-def download_xml(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.text
-    else:
-        return None
 
 def parse_epg(xml_data):
     programs = []
@@ -26,10 +19,18 @@ def parse_epg(xml_data):
 
 @app.route('/')
 def index():
-    epg_url = 'https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml'
-    epg_data = download_xml(epg_url)
-    if epg_data:
-        programs = parse_epg(epg_data)
-    else:
-        programs = []
-    return render_template('index.html', programs=programs)
+    # Heruntergeladene XML-Datei verwenden
+    download_xml('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml', 'data/epg.xml')
+    with open('data/epg.xml', 'r') as f:
+        epg_data = f.read()
+    playlist_data = requests.get('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u').text
+    external_content = requests.get('https://foothubhd.xyz/').text
+    programs = parse_epg(epg_data)
+    return render_template('index.html', epg_data=epg_data, playlist_data=playlist_data, external_content=external_content, programs=programs)
+
+@app.route('/playlist.m3u')
+def serve_playlist():
+    return send_from_directory('static', 'playlist.m3u')
+
+if __name__ == '__main__':
+    app.run(debug=True)
