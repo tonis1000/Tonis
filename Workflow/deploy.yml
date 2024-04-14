@@ -1,6 +1,9 @@
 name: Deployment
 
 on:
+  schedule:
+    - cron: '0 3 * * *'
+
   push:
     branches:
       - main
@@ -21,6 +24,14 @@ jobs:
         run: |
           pip install flask requests
 
-      - name: Build and deploy
+      - name: Run Python script
+        run: python3 download_xml.py
+
+      - name: Commit and push changes
+        if: github.event_name == 'schedule'
         run: |
-          # Hier Code zum Deployment einfügen
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update XML file"
+          git push
