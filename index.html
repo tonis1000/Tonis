@@ -8,38 +8,30 @@
 </head>
 <body>
     <div class="container">
-        
+        <div class="info-panel">
+            <div class="info-group">
+                <span id="tag"></span>
+            </div>
+            <div class="info-group">
+                <span id="datum"></span>
+            </div>
+            <div class="info-group">
+                <span id="uhrzeit"></span>
+            </div>
+        </div>
 
-<div class="info-panel">
-    <div
-    <div class="info-group">
-        <p>Tag: <span id="tag"></span></p>
-    </div>
-    <div class="info-group">
-        <p>Datum: <span id="datum"></span></p>
-    </div>
-    <div class="info-group">
-        <p>Uhrzeit: <span id="uhrzeit"></span></p>
-    </div>
-     </div>
-
- <div
-<div class="button-row">
-    <button onclick="loadMyPlaylist()">My Playlist</button>
-    <button onclick="loadExternalPlaylist()">Ext. Playlist</button>
-    <button onclick="loadSportPlaylist()">Sport</button>
-</div>
-     </div>
-    </div>
-
-
-
-
-        <div class="sidebar" id="sidebar">
-            <h2>Senderliste</h2>
-            <ul id="sidebar-list"></ul>
+        <div class="button-row">
+            <button onclick="loadMyPlaylist()">My Playlist</button>
+            <button onclick="loadExternalPlaylist()">Ext. Playlist</button>
+            <button onclick="loadSportPlaylist()">Sport</button>
         </div>
     </div>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Senderliste</h2>
+        <ul id="sidebar-list"></ul>
+    </div>
+
     <script src="scripts.js"></script>
 </body>
 </html>
