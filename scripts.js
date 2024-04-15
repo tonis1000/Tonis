@@ -50,6 +50,15 @@ function updateSidebarFromM3U(data) {
                 nameNode.textContent = name;
                 listItem.appendChild(nameNode);
 
+                // Hinzufügen der aktuellen EPG-Informationen
+                fetchEPGInfo(name)
+                    .then(epgInfo => {
+                        const epgInfoNode = document.createElement('span');
+                        epgInfoNode.textContent = epgInfo;
+                        listItem.appendChild(epgInfoNode);
+                    })
+                    .catch(error => console.error('Fehler beim Laden der EPG-Informationen:', error));
+
                 sidebarList.appendChild(listItem);
             }
         }
@@ -82,18 +91,18 @@ function fetchEPGInfo(channelName) {
 }
 
 // Funktion zum Abrufen der aktuellen Uhrzeit
-        function updateClock() {
-            const now = new Date();
-            const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
-            const datum = now.toLocaleDateString('de-DE');
-            const uhrzeit = now.toLocaleTimeString('de-DE', { hour12: false });
-            document.getElementById('tag').textContent = tag;
-            document.getElementById('datum').textContent = datum;
-            document.getElementById('uhrzeit').textContent = uhrzeit;
-        }
+function updateClock() {
+    const now = new Date();
+    const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
+    const datum = now.toLocaleDateString('de-DE');
+    const uhrzeit = now.toLocaleTimeString('de-DE', { hour12: false });
+    document.getElementById('tag').textContent = tag;
+    document.getElementById('datum').textContent = datum;
+    document.getElementById('uhrzeit').textContent = uhrzeit;
+}
 
-        // Uhrzeit beim Laden der Seite aktualisieren
-        updateClock();
+// Uhrzeit beim Laden der Seite aktualisieren
+updateClock();
 
-        // Uhrzeit alle Sekunde aktualisieren
-        setInterval(updateClock, 1000);
+// Uhrzeit alle Sekunde aktualisieren
+setInterval(updateClock, 1000);
