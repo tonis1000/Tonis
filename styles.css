@@ -3,8 +3,7 @@
 .container {
     display: flex;
     flex-direction: column; /* Ändern Sie die Hauptachse auf Spaltenrichtung */
-    width: 250px;
-    height: 80px; 
+    width: 300px;
     background-color: #333; /
 }
 
@@ -23,7 +22,7 @@
     overflow-y: scroll;
     background-color: #333; /* Graue Hintergrundfarbe für die Sidebar */
     padding: 10px; /* Innenabstand hinzufügen */
-    width: 250px;
+    width: 300px;
     height: 500px; 
     margin-top: 10px; /* Abstand zum Info-Panel */
 }
