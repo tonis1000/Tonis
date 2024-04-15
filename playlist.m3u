@@ -84,13 +84,13 @@ https://websuit.onlinehdhls.ru/est1/cdn/mono60/playlist.m3u8
 #EXTINF:-1 tvg-id="Cosmote Sport 5" tvg-logo="https://assets.stickpng.com/images/594191c45eb5d45f10e35b29.png", Cosmote Sport 5
 https://websuit.onlinehdhls.ru/est1/cdn/mono65/tracks-v1a1/mono.m3u8
 
-#EXTINF:-1 tvg-id="Κανάλι 1" tvg-logo="https://assets.stickpng.com/images/594191c45eb5d45f10e35b29.png", Κανάλι 1
+#EXTINF:-1 tvg-id="Κανάλι 1" tvg-logo="", Κανάλι 1
 https://danos.xtiposini.online/rohalia/familia/index.m3u8
 
-#EXTINF:-1 tvg-id="Κανάλι 2" tvg-logo="https://assets.stickpng.com/images/594191c45eb5d45f10e35b29.png", Κανάλι 2
+#EXTINF:-1 tvg-id="Κανάλι 2" tvg-logo="", Κανάλι 2
 https://koulis.kaklapelomas.site:443/familia2/tracks-v1a1/mono.m3u8
 
-#EXTINF:-1 tvg-id="Κανάλι 3" tvg-logo="https://assets.stickpng.com/images/594191c45eb5d45f10e35b29.png", Κανάλι 3
+#EXTINF:-1 tvg-id="Κανάλι 3" tvg-logo="", Κανάλι 3
 https://danos.xtiposini.online/rohalia/familia3/index.m3u8
 
 #EXTINF:-1 tvg-id="Κανάλι 4" tvg-logo="https://assets.stickpng.com/images/594191c45eb5d45f10e35b29.png", Κανάλι 4
