@@ -1,4 +1,3 @@
-User
 // Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
