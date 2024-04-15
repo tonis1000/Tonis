@@ -65,6 +65,7 @@ function updateSidebarFromM3U(data) {
     });
 }
 
+
 // Funktion zum Abrufen der EPG-Informationen für einen bestimmten Sender
 function fetchEPGInfo(channelName) {
     return fetch('data/epg.xml') // Pfad zur lokalen EPG-Datei
@@ -82,13 +83,21 @@ function fetchEPGInfo(channelName) {
                 const program = programs[i];
                 const titleNode = program.getElementsByTagName('title')[0];
                 if (titleNode && titleNode.textContent.includes(channelName)) {
-                    return titleNode.textContent;
+                    const startTime = program.getAttribute('start');
+                    const endTime = program.getAttribute('stop');
+                    const startTimeObj = new Date(startTime);
+                    const endTimeObj = new Date(endTime);
+                    const now = new Date();
+                    if (now >= startTimeObj && now <= endTimeObj) {
+                        return titleNode.textContent;
+                    }
                 }
             }
             return 'Kein Programm gefunden';
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
+
 
 // Funktion zum Abrufen der aktuellen Uhrzeit
 function updateClock() {
