@@ -15,7 +15,7 @@
 .info-panel {
     display: flex;
     flex-wrap: wrap; /* Erlauben, dass Elemente umgebrochen werden */
-    width: 250px;
+    width: 310px;
     height: 40px; 
 }
 
