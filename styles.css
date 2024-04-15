@@ -20,6 +20,7 @@
     font-size: 21px;
     font-style: italic;
     font-weight: 500;
+    padding-left: 15px;
 }
 
 .info-group {
@@ -40,6 +41,8 @@
     display: flex;
     gap: 10px; /* Fügen Sie einen kleinen Abstand zwischen den Schaltflächen hinzu */
     margin-top: 10px; /* Abstand zum Info-Panel */
+    padding-bottom: 10px;
+    padding-left: 15px;
 }
 
 button {
