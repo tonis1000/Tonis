@@ -24,7 +24,8 @@
     background-color: #333; /* Graue Hintergrundfarbe für die Sidebar */
     padding: 10px; /* Innenabstand hinzufügen */
     width: 250px;
-    height: 400px; 
+    height: 500px; 
+    margin-top: 10px; /* Abstand zum Info-Panel */
 }
 
 
