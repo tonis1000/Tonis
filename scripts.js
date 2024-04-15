@@ -1,3 +1,4 @@
+User
 // Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
@@ -54,25 +55,18 @@ function updateSidebarFromM3U(data) {
                     imgURL = imgMatch[1];
                 }
                 const listItem = document.createElement('li');
-                listItem.classList.add('channel-item');
 
-                // Erstellen des Image-Tags für das Logo, wenn ein Logo vorhanden ist
-                if (imgURL) {
-                    const img = document.createElement('img');
-                    img.src = imgURL;
-                    img.alt = name + ' Logo';
-                    img.width = 30;
-                    img.height = 20;
-                    listItem.appendChild(img);
-                }
+                // Erstellen des Image-Tags für das Logo
+                const img = document.createElement('img');
+                img.src = imgURL;
+                img.alt = name + ' Logo';
+                img.width = 30;
+                img.height = 20;
+                listItem.appendChild(img);
 
                 // Hinzufügen des Sendernamens
                 const nameNode = document.createElement('span');
                 nameNode.textContent = name;
-                if (/* Bedingung für Stream-Verfügbarkeit */) {
-                    nameNode.style.fontWeight = 'bold';
-                    nameNode.style.color = 'green';
-                }
                 listItem.appendChild(nameNode);
 
                 sidebarList.appendChild(listItem);
@@ -80,7 +74,6 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
-
 
 // Funktion zum Abrufen der EPG-Informationen für einen bestimmten Sender
 function fetchEPGInfo(channelName) {
