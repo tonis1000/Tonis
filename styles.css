@@ -3,24 +3,20 @@
 .container {
     display: flex;
     flex-direction: column; /* Ändern Sie die Hauptachse auf Spaltenrichtung */
-    width: 300px;
-    background-color: #333; /
+    width: 320px;
+    background-color: #333; /* Dunkelgrauer Hintergrund */
     padding-bottom: 10px;
     font-size: 16px;
-    width: 320px;
     border-top-width: 10px;
     border-top-style: solid;
 }
 
 .info-panel {
     display: flex;
-    flex-wrap: wrap; /* Erlauben, dass Elemente umgebrochen werden */
-    height: 40px; 
-    width: 310px;
-    font-size: 21px;
-    font-style: italic;
-    font-weight: 500;
-    padding-left: 15px;
+    justify-content: space-between; /* Platzieren Sie die Info-Gruppen nebeneinander */
+    align-items: center; /* Zentrieren Sie die Elemente vertikal */
+    width: 100%; /* Volle Breite */
+    padding: 0 15px; /* Innenabstand hinzufügen */
 }
 
 .info-group {
@@ -31,8 +27,7 @@
     display: flex;
     gap: 10px; /* Fügen Sie einen kleinen Abstand zwischen den Schaltflächen hinzu */
     margin-top: 10px; /* Abstand zum Info-Panel */
-    padding-bottom: 10px;
-    padding-left: 15px;
+    padding: 0 15px; /* Innenabstand hinzufügen */
 }
 
 button {
@@ -53,15 +48,16 @@ button:hover {
     overflow-y: scroll;
     background-color: #333; /* Graue Hintergrundfarbe für die Sidebar */
     padding: 10px; /* Innenabstand hinzufügen */
-    width: 300px;
+    width: 100%; /* Volle Breite */
     height: 670px; 
     margin-top: 10px; /* Abstand zum Info-Panel */
 }
-   /* Setze die Schriftfarbe in .info-group und .sidebar auf Weiß */
 
+/* Setze die Schriftfarbe in .info-group und .sidebar auf Weiß */
 .info-group, .sidebar {
     color: #ffffff; /* Weiß */
 }
+
 .sidebar li {
     display: flex;
     align-items: center;
