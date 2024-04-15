@@ -15,8 +15,11 @@
 .info-panel {
     display: flex;
     flex-wrap: wrap; /* Erlauben, dass Elemente umgebrochen werden */
-    width: 310px;
     height: 40px; 
+    width: 310px;
+    font-size: 21px;
+    font-style: italic;
+    font-weight: 500;
 }
 
 .info-group {
