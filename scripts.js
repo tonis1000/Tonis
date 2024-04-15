@@ -19,24 +19,6 @@ function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
-// Laden der EPG-Daten und Aktualisieren der Sidebar
-function loadEPG() {
-    fetch('/reload-epg')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Fehler beim Laden des EPG');
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log('EPG erfolgreich aktualisiert');
-            updateSidebarFromXML(data);
-        })
-        .catch(error => {
-            console.error('Fehler beim Laden der EPG-Daten:', error);
-        });
-}
-
 // Aktualisieren der Sidebar mit Daten aus der Playlist.m3u
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
