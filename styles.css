@@ -35,6 +35,10 @@
     height: 500px; 
     margin-top: 10px; /* Abstand zum Info-Panel */
 }
+   /* Setze die Schriftfarbe in .info-group und .sidebar auf Weiß */
+.info-group, .sidebar {
+    color: #ffffff; /* Weiß */
+}
 
 
 .button-row {
