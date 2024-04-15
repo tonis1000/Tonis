@@ -65,7 +65,6 @@ function updateSidebarFromM3U(data) {
     });
 }
 
-
 // Funktion zum Abrufen der EPG-Informationen für einen bestimmten Sender
 function fetchEPGInfo(channelName) {
     return fetch('data/epg.xml') // Pfad zur lokalen EPG-Datei
@@ -97,7 +96,6 @@ function fetchEPGInfo(channelName) {
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
-
 
 // Funktion zum Abrufen der aktuellen Uhrzeit
 function updateClock() {
