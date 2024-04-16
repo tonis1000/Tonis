@@ -26,7 +26,13 @@
             <button onclick="loadSportPlaylist()">Sport</button>
         </div>
     </div>
+    
+    <!-- Video-Container -->
+    <div id="player-container">
+        <video id="player" playsinline controls></video>
+    </div>
 
+    
     <div class="sidebar" id="sidebar">
         <h2>Senderliste</h2>
         <ul id="sidebar-list" class="sidebar">
@@ -40,6 +46,10 @@
             <!-- Weitere <li> Elemente hier einfügen -->
         </ul>
     </div>
+
+        <!-- Skripte für HLS.js und Plyr -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
 
     <script src="scripts.js"></script>
 </body>
