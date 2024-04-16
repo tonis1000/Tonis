@@ -1,16 +1,3 @@
-<!-- Video-Container -->
-<div id="player-container">
-    <video id="player" playsinline controls></video>
-</div>
-
-<!-- Sidebar -->
-<ul id="sidebar-list"></ul>
-
-<!-- Skripte für HLS.js und Plyr -->
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
-
-<script>
     document.addEventListener('DOMContentLoaded', () => {
         const videoElement = document.getElementById('player');
         const player = new Plyr(videoElement);
