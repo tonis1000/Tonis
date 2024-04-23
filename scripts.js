@@ -59,23 +59,14 @@ function updateSidebarFromM3U(data) {
                 const img = document.createElement('img');
                 img.src = imgURL;
                 img.alt = name + ' Logo';
-                img.width = 50;
-                img.height = 50;
+                img.width = 30;
+                img.height = 20;
                 listItem.appendChild(img);
 
                 // Hinzufügen des Sendernamens
                 const nameNode = document.createElement('span');
                 nameNode.textContent = name;
                 listItem.appendChild(nameNode);
-
-                // Hinzufügen der aktuellen EPG-Informationen
-                fetchEPGInfo(name)
-                    .then(epgInfo => {
-                        const epgInfoNode = document.createElement('span');
-                        epgInfoNode.textContent = epgInfo;
-                        listItem.appendChild(epgInfoNode);
-                    })
-                    .catch(error => console.error('Fehler beim Laden der EPG-Informationen:', error));
 
                 sidebarList.appendChild(listItem);
             }
