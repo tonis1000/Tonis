@@ -27,21 +27,6 @@
 .info-group {
     margin-right: 20px; /* Abstand zwischen den Info-Gruppen */
 }
-.sidebar {
-    flex: 1;
-    overflow-y: scroll;
-    background-color: #333; /* Graue Hintergrundfarbe für die Sidebar */
-    padding: 10px; /* Innenabstand hinzufügen */
-    width: 300px;
-    height: 670px; 
-    margin-top: 2px;
-    margin-bottom: 5px;
-}
-   /* Setze die Schriftfarbe in .info-group und .sidebar auf Weiß */
-.info-group, .sidebar {
-    color: #ffffff; /* Weiß */
-}
-
 
 .button-row {
     display: flex;
@@ -63,6 +48,23 @@ button {
 button:hover {
     background-color: #0056b3; /* Hintergrundfarbe beim Überfahren */
 }
+
+.sidebar {
+    flex: 1;
+    overflow-y: auto; /* Änderung zu 'auto' für bedarfsorientiertes Scrolling */
+    background-color: #333; /* Graue Hintergrundfarbe für die Sidebar */
+    padding: 10px; /* Innenabstand hinzufügen */
+    width: 300px;
+    height: 670px; 
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+/* Setze die Schriftfarbe in .info-group und .sidebar auf Weiß */
+.info-group, .sidebar {
+    color: #ffffff; /* Weiß */
+}
+
 .sidebar img {
     margin-right: 10px; /* Abstand zwischen Bild und Text */
 }
@@ -70,13 +72,14 @@ button:hover {
 #sidebar-list {
     list-style-type: none;
     padding: 0;
-    height: 610px;
+    height: 610px; /* Überprüfen Sie, ob diese Höhe notwendig ist */
 }
 
 #sidebar-list li {
     margin-bottom: 5px;
     padding-left: 5px;
 }
+
 
 @media screen and (min-device-pixel-ratio: 2) {
   /* Deine CSS-Regeln für Geräte mit hoher Pixeldichte */
