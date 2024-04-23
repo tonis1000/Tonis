@@ -11,6 +11,8 @@
     border-top: 10px;
     border-top-width: 0px;
     border-top-style: solid;
+    height: 90px;
+    padding-top: 10px;
 }
 
 .info-panel {
