@@ -14,8 +14,8 @@
 
 .info-panel {
     display: flex;
-    flex-wrap: wrap; /* Erlauben, dass Elemente umgebrochen werden */
-    height: 40px; 
+    #flex-wrap: wrap; /* Erlauben, dass Elemente umgebrochen werden */
+    #height: 40px; 
     width: 310px;
     font-size: 21px;
     font-style: italic;
