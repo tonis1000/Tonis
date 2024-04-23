@@ -32,23 +32,25 @@
         }
 
         function updateSidebarFromM3U(data) {
-            const sidebarList = document.getElementById('sidebar-list');
-            sidebarList.innerHTML = '';
+    console.log("Updating sidebar from M3U data...");
+    const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.innerHTML = ''; // Stellen Sie sicher, dass das Sidebar-Listenelement geleert wird.
 
-            const lines = data.split('\n');
-            let currentChannelName = '';
-            lines.forEach(line => {
-                if (line.startsWith('#EXTINF')) {
-                    const nameMatch = line.match(/,(.*)$/);
-                    if (nameMatch && nameMatch.length > 1) {
-                        currentChannelName = nameMatch[1].trim();
-                    }
-                } else if (line.trim() !== '') {
-                    const listItem = createSidebarListItem(currentChannelName, line.trim());
-                    sidebarList.appendChild(listItem);
-                }
-            });
+    const lines = data.split('\n');
+    let currentChannelName = '';
+    lines.forEach(line => {
+        if (line.startsWith('#EXTINF')) {
+            const nameMatch = line.match(/,(.*)$/);
+            if (nameMatch && nameMatch.length > 1) {
+                currentChannelName = nameMatch[1].trim();
+            }
+        } else if (line.trim() !== '' && currentChannelName) {
+            const listItem = createSidebarListItem(currentChannelName, line.trim());
+            sidebarList.appendChild(listItem);
         }
+    });
+}
+
 
         function createSidebarListItem(channelName, streamURL) {
             const listItem = document.createElement('li');
