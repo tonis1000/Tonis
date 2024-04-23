@@ -1,5 +1,4 @@
-/* styles.css */
-
+/* Hauptcontainer und Layoutdefinitionen */
 .container {
     display: flex;
     flex-direction: column;
@@ -12,11 +11,9 @@
     height: 90px;
 }
 
-
+/* Style für die Info-Panels im Container */
 .info-panel {
     display: flex;
-    #flex-wrap: wrap; /* Erlauben, dass Elemente umgebrochen werden */
-    #height: 40px; 
     width: 310px;
     font-size: 21px;
     font-style: italic;
@@ -28,6 +25,7 @@
     margin-right: 20px; /* Abstand zwischen den Info-Gruppen */
 }
 
+/* Button-Reihe im Container */
 .button-row {
     display: flex;
     gap: 10px; /* Fügen Sie einen kleinen Abstand zwischen den Schaltflächen hinzu */
@@ -49,6 +47,7 @@ button:hover {
     background-color: #0056b3; /* Hintergrundfarbe beim Überfahren */
 }
 
+/* Sidebar-Stildefinitionen */
 .sidebar {
     flex: 1;
     overflow-y: auto; /* Änderung zu 'auto' für bedarfsorientiertes Scrolling */
@@ -60,9 +59,8 @@ button:hover {
     margin-bottom: 5px;
 }
 
-/* Setze die Schriftfarbe in .info-group und .sidebar auf Weiß */
 .info-group, .sidebar {
-    color: #ffffff; /* Weiß */
+    color: #ffffff; /* Setzt die Schriftfarbe auf Weiß */
 }
 
 .sidebar img {
@@ -72,7 +70,7 @@ button:hover {
 #sidebar-list {
     list-style-type: none;
     padding: 0;
-    height: 610px; /* Überprüfen Sie, ob diese Höhe notwendig ist */
+    height: 610px;
 }
 
 #sidebar-list li {
@@ -80,7 +78,22 @@ button:hover {
     padding-left: 5px;
 }
 
+/* Stile für Senderinformationen in der Sidebar */
+.channel-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+}
 
+.sender-name, .epg-channel {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Media Queries für hohe Pixeldichte */
 @media screen and (min-device-pixel-ratio: 2) {
-  /* Deine CSS-Regeln für Geräte mit hoher Pixeldichte */
+    /* Anpassungen für Retina-Displays hier einfügen */
 }
