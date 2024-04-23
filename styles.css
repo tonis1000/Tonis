@@ -69,6 +69,7 @@ button:hover {
 #sidebar-list {
     list-style-type: none;
     padding: 0;
+    height: 580px;
 }
 
 #sidebar-list li {
