@@ -2,22 +2,54 @@
 
 .container {
     display: flex;
+    flex-direction: column; /* Ändern Sie die Hauptachse auf Spaltenrichtung */
+    width: 300px;
+    background-color: #333; /
+    padding-bottom: 10px;
+    font-size: 16px;
+    width: 320px;
+    border-top-width: 10px;
+    border-top-style: solid;
 }
 
-        .info-panel {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.info-panel {
+    display: flex;
+    flex-wrap: wrap; /* Erlauben, dass Elemente umgebrochen werden */
+    height: 40px; 
+    width: 310px;
+    font-size: 21px;
+    font-style: italic;
+    font-weight: 500;
+    padding-left: 15px;
+}
 
+.info-group {
+    margin-right: 20px; /* Abstand zwischen den Info-Gruppen */
+}
 .sidebar {
     flex: 1;
     overflow-y: scroll;
+    background-color: #333; /* Graue Hintergrundfarbe für die Sidebar */
+    padding: 10px; /* Innenabstand hinzufügen */
+    width: 300px;
+    height: 670px; 
+    margin-top: 10px; /* Abstand zum Info-Panel */
+}
+   /* Setze die Schriftfarbe in .info-group und .sidebar auf Weiß */
+.info-group, .sidebar {
+    color: #ffffff; /* Weiß */
+}
+
+
+.button-row {
+    display: flex;
+    gap: 10px; /* Fügen Sie einen kleinen Abstand zwischen den Schaltflächen hinzu */
+    margin-top: 10px; /* Abstand zum Info-Panel */
+    padding-bottom: 10px;
+    padding-left: 15px;
 }
 
 button {
-    display: block;
-    margin-bottom: 10px;
     background-color: #007bff; /* Hintergrundfarbe */
     color: #fff; /* Textfarbe */
     padding: 10px 20px; /* Innenabstand */
@@ -29,7 +61,6 @@ button {
 button:hover {
     background-color: #0056b3; /* Hintergrundfarbe beim Überfahren */
 }
-
 .sidebar img {
     margin-right: 10px; /* Abstand zwischen Bild und Text */
 }
