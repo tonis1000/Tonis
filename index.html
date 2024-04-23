@@ -9,41 +9,22 @@
 <body>
     <div class="container">
         <div class="info-panel">
-            <div class="info-group">
+            <div>
                 <span id="tag"></span>
-            </div>
-            <div class="info-group">
                 <span id="datum"></span>
-            </div>
-            <div class="info-group">
                 <span id="uhrzeit"></span>
             </div>
-        </div>
-        <div class="button-row">
             <button onclick="loadMyPlaylist()">My Playlist</button>
             <button onclick="loadExternalPlaylist()">Ext. Playlist</button>
             <button onclick="loadSportPlaylist()">Sport</button>
+            <!-- Neuer Button zum manuellen Laden des EPG -->
+            <button onclick="loadEPG()">EPG load</button>
+        </div>
+        <div class="sidebar" id="sidebar">
+            <h2>Senderliste</h2>
+            <ul id="sidebar-list"></ul>
         </div>
     </div>
-    
-    <div class="sidebar" id="sidebar">
-        <h2>Senderliste</h2>
-        <ul id="sidebar-list">
-            <li class="channel-info">
-                <img src="" alt="Sender Logo" width="30" height="20">
-                <span class="sender-name">Sendername</span>
-                <span class="epg-channel">epg kanal</span>
-            </li>
-            <!-- Weitere <li> Elemente hier einfügen -->
-        </ul>
-    </div>
-
-    <div id="player-container">
-        <video id="player" playsinline controls></video>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
     <script src="scripts.js"></script>
 </body>
 </html>
