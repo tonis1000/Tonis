@@ -64,7 +64,10 @@ button:hover {
 }
 
 .sidebar img {
+    flex-shrink: 0; /* Verhindert, dass das Bild skaliert wird */
     margin-right: 10px; /* Abstand zwischen Bild und Text */
+    width: 30px; /* Breite des Bildes */
+    height: 20px; /* Höhe des Bildes */
 }
 
 #sidebar-list {
