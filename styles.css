@@ -89,7 +89,17 @@ button:hover {
     gap: 10px;
 }
 
-.sender-name, .epg-channel {
+/* Stil nur für den Sender-Namen anpassen */
+.sender-name {
+    font-size: 16px; /* Erhöhte Schriftgröße */
+    font-weight: bold; /* Dickere Schrift */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Stil für EPG-Kanal unverändert lassen */
+.epg-channel {
     font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
