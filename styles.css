@@ -91,7 +91,7 @@ button:hover {
 
 /* Stil nur für den Sender-Namen anpassen */
 .sender-name {
-    font-size: 16px; /* Erhöhte Schriftgröße */
+    font-size: 28px; /* Erhöhte Schriftgröße */
     font-weight: bold; /* Dickere Schrift */
     white-space: nowrap;
     overflow: hidden;
