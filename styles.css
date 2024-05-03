@@ -4,15 +4,17 @@
     flex-direction: column;
     width: 320px; /* Einheitliche Breite */
     background-color: #333;
-    padding: 10px 0; /* Vertikales Padding */
+    padding-bottom: 10px;
+    padding-top: 10px;
     font-size: 16px;
-    border-top: 10px solid transparent;
+    border-top: 10px solid transparent; /* Beispiel für einen sichtbaren Rand */
+    height: 90px;
 }
 
 /* Style für die Info-Panels im Container */
 .info-panel {
     display: flex;
-    width: 100%; /* Anpassung auf die volle Breite des Containers */
+    width: 310px;
     font-size: 21px;
     font-style: italic;
     font-weight: 500;
@@ -26,40 +28,52 @@
 /* Button-Reihe im Container */
 .button-row {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 10px; /* Fügen Sie einen kleinen Abstand zwischen den Schaltflächen hinzu */
+    margin-top: 10px; /* Abstand zum Info-Panel */
+    padding-bottom: 10px;
     padding-left: 15px;
 }
 
 button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    background-color: #007bff; /* Hintergrundfarbe */
+    color: #fff; /* Textfarbe */
+    padding: 10px 20px; /* Innenabstand */
+    border: none; /* Kein Rand */
+    border-radius: 5px; /* Abgerundete Ecken */
+    cursor: pointer; /* Zeiger beim Überfahren */
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Hintergrundfarbe beim Überfahren */
 }
 
 /* Sidebar-Stildefinitionen */
-.sidebar-container {
-    display: flex;
-    flex-direction: column;
-    background-color: #333;
-    padding: 10px;
+.sidebar {
+    flex: 1;
+    overflow-y: auto; /* Änderung zu 'auto' für bedarfsorientiertes Scrolling */
+    background-color: #333; /* Graue Hintergrundfarbe für die Sidebar */
+    padding: 10px; /* Innenabstand hinzufügen */
     width: 300px;
-    height: 740px;
-    overflow-y: auto;
+    height: 740px; 
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+.info-group, .sidebar {
+    color: #ffffff; /* Setzt die Schriftfarbe auf Weiß */
+}
+
+.sidebar img {
+    flex-shrink: 0; /* Verhindert, dass das Bild skaliert wird */
+    margin-right: 10px; /* Abstand zwischen Bild und Text */
+    width: 40px; /* Breite des Bildes */
+    height: 30px; /* Höhe des Bildes */
 }
 
 #sidebar-list {
     list-style-type: none;
     padding: 0;
-    margin-top: 2px;
-    margin-bottom: 5px;
+    height: 670px;
 }
 
 #sidebar-list li {
@@ -75,26 +89,14 @@ button:hover {
     gap: 10px;
 }
 
-.sender-name {
-    font-size: 20px; /* Leicht erhöhte Schriftgröße */
-    font-weight: bold; /* Dickere Schrift */
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.epg-channel {
+.sender-name, .epg-channel {
     font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #fff;
 }
 
 /* Media Queries für hohe Pixeldichte */
 @media screen and (min-device-pixel-ratio: 2) {
-    .sender-name {
-        font-size: 22px; /* Etwas größere Schrift für Retina Displays */
-    }
+    /* Anpassungen für Retina-Displays hier einfügen */
 }
