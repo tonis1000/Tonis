@@ -59,11 +59,11 @@ button:hover {
 }
 
 .sidebar img {
-    flex: 0 0 40px; /* Nicht flexibel in der Größe, feste Breite und Höhe */
-    width: 40px; /* Feste Breite des Bildes */
-    height: 30px; /* Feste Höhe des Bildes */
-    object-fit: contain; /* Stellt sicher, dass der Inhalt des Bildes vollständig in den Rahmen passt, ohne verzerrt zu werden */
-    overflow: hidden; /* Schneidet Teile des Bildes ab, die über die angegebenen Grenzen hinausgehen könnten */
+    flex: 0 0 60px; /* Feste Breite und kein Wachstum oder Schrumpfung */
+    width: 40px;
+    height: 30px;
+    object-fit: contain;
+    overflow: hidden;
 }
 
 #sidebar-list {
@@ -81,27 +81,27 @@ button:hover {
 .channel-info {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
+    gap: 10px; /* Abstand zwischen den Elementen */
+    padding: 5px; /* Innenabstand für bessere Darstellung */
+    background-color: #f0f0f0; /* Hintergrundfarbe für bessere Sichtbarkeit */
 }
 
 .sender-name {
-    font-size: 22px;
-    white-space: nowrap; /* Verhindert den Zeilenumbruch */
-    overflow: hidden; /* Versteckt überflüssigen Text */
-    text-overflow: ellipsis; /* Zeigt Ellipsen, wenn der Text abgeschnitten wird */
-    font-weight: 600;
-    color: #ffffff;
-    max-width: 150px; /* Maximale Breite, passen Sie nach Bedarf an */
-    flex-grow: 0; /* Verhindert, dass der Sendernamen wächst */
-    flex-shrink: 0; /* Verhindert, dass der Sendernamen schrumpft */
-}
-.epg-channel {
-    font-size: 14px;
+    flex: 0 0 180px; /* Feste Breite für den Sendernamen */
+    font-size: 26px; /* Etwas kleinere Schriftgröße für bessere Passform */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100px; /* Maximale Breite, passen Sie nach Bedarf an */
+    font-weight: 500;
+    color: #333; /* Dunklere Textfarbe für besseren Kontrast */
+}
+.epg-channel {
+    flex: 1 1 auto; /* Nimmt den verbleibenden Platz ein */
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #666; /* Leichtere Textfarbe */
 }
 /* Media Queries für hohe Pixeldichte (bei Bedarf weitere Stile hinzufügen) */
 @media screen and (min-device-pixel-ratio: 2) {
