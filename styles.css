@@ -71,7 +71,7 @@ button:hover {
 }
 
 .sidebar img {
-    flex: 0 0 40px; /* Flex-Basis ist 40px, aber das ist nur für den Container */
+    flex: 0 0 auto; /* Ersetzt die direkte Flex-Basis von 40px */
     width: 30px; /* Feste Breite des Bildes */
     height: 20px; /* Feste Höhe des Bildes */
     object-fit: contain; /* Stellt sicher, dass das Bild vollständig sichtbar ist und seine Proportionen beibehält */
@@ -81,7 +81,9 @@ button:hover {
     padding: 5px; /* Innenabstand innerhalb des flex Containers */
     border-radius: 4px; /* Abgerundete Ecken */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten für Tiefe */
+    box-sizing: border-box; /* Stellt sicher, dass Padding und Border innerhalb der festgelegten Breite und Höhe enthalten sind */
 }
+
 
 
 
