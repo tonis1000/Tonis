@@ -77,41 +77,46 @@ button:hover {
     padding-left: 5px;
 }
 
+/* Stile für Senderinformationen in der Sidebar */
 .channel-info {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
+    gap: 10px; /* Abstand zwischen Elementen */
+    padding: 5px; /* Innenabstand für jedes Element, um etwas Raum zu schaffen */
+    background-color: #444; /* leicht unterschiedlicher Hintergrund für visuelle Trennung */
+    margin-bottom: 2px; /* Abstand zwischen den Senderzeilen */
 }
 
 /* Einstellungen für das Senderlogo */
 .channel-info img {
     flex: 0 0 40px;  /* Nicht schrumpfen, nicht wachsen, feste Breite */
-    width: 40px;
-    height: 30px;
-    object-fit: contain; /* Sorgt dafür, dass das Bildverhältnis erhalten bleibt */
+    width: 40px;      /* Feste Breite */
+    height: 30px;     /* Feste Höhe */
+    object-fit: contain; /* Bild behält seine Proportionen */
+    margin-right: 10px; /* Rechter Rand zum nächsten Element */
 }
+
 /* Einstellungen für den Sendernamen */
 .sender-name {
-    flex: 1 0 180px; /* Kann wachsen, schrumpft nicht, Startbreite */
-    font-size: 22px;
+    flex: 1 0 150px; /* Flexibler wachsen, nicht schrumpfen, Ausgangsbreite */
+    font-size: 16px; /* Etwas kleinere Schriftgröße für bessere Anpassung */
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: 600;
-    color: #ffffff;
-    padding-right: 10px; /* Sicherstellen, dass etwas Platz auf der rechten Seite bleibt */
+    text-overflow: ellipsis; /* Überlaufenden Text mit '...' abschneiden */
+    color: #ffffff; /* Weiße Textfarbe */
+    margin-right: 10px; /* Rechter Rand zum nächsten Element */
 }
 
 /* Einstellungen für den EPG-Inhalt */
 .epg-channel {
-    flex: 1 0 100px; /* Kann wachsen, schrumpft nicht, Startbreite */
-    font-size: 14px;
+    flex: 1 0 120px; /* Flexibler wachsen, nicht schrumpfen, Ausgangsbreite */
+    font-size: 14px; /* Schriftgröße für EPG-Informationen */
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    color: #dddddd; /* Leicht abweichende Farbe für visuelle Trennung */
+    text-overflow: ellipsis; /* Überlaufenden Text mit '...' abschneiden */
+    color: #dddddd; /* Etwas dunklere Textfarbe für EPG-Informationen */
 }
+
 /* Media Queries für hohe Pixeldichte (bei Bedarf weitere Stile hinzufügen) */
 @media screen and (min-device-pixel-ratio: 2) {
     /* Beispielsweise Bildschärfe für Icons verbessern */
