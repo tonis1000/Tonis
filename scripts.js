@@ -53,8 +53,6 @@ function updateSidebarFromM3U(data) {
                 const img = document.createElement('img');
                 img.src = imgURL;
                 img.alt = name + ' Logo';
-                img.width = 40;
-                img.height = 30;
                 listItem.appendChild(img);
 
                 const nameNode = document.createElement('span');
