@@ -104,6 +104,19 @@ button:hover {
     padding: 5px; /* Innenabstand in jeder Zeile */
 }
 
+/* Container für das Logo */
+.channel-info img {
+    flex: 0 0 40px; /* Flex-Basis ist 40px, Logo wächst oder schrumpft nicht */
+    width: 40px; /* Feste Breite für den Container */
+    height: 30px; /* Feste Höhe für den Container */
+    object-fit: contain; /* Stellt sicher, dass das Bild vollständig sichtbar ist und seine Proportionen beibehält */
+    background-color: #f0f0f0; /* Hellgrauer Hintergrund */
+    padding: 5px; /* Innenabstand innerhalb des Containers */
+    border-radius: 4px; /* Abgerundete Ecken */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten für Tiefe */
+    box-sizing: border-box; /* Stellt sicher, dass Padding und Border innerhalb der festgelegten Breite und Höhe enthalten sind */
+}
+
 .sender-name {
     flex: 1 0 150px; /* Kann wachsen, schrumpft nicht, Startbreite 150px */
     font-size: 20px;
