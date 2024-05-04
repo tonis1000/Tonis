@@ -71,20 +71,18 @@ button:hover {
 }
 
 .sidebar img {
-    flex: 0 0 40px;  /* Keine Größenänderung, feste Breite und Höhe */
-    width: 30px;      /* Effektive Breite des Logos */
-    height: 20px;     /* Effektive Höhe des Logos */
-    object-fit: contain;
-    overflow: hidden;
-    margin-right: 10px;
+    flex: 0 0 40px; /* Flex-Basis ist 40px, aber das ist nur für den Container */
+    width: 30px; /* Feste Breite des Bildes */
+    height: 20px; /* Feste Höhe des Bildes */
+    object-fit: contain; /* Stellt sicher, dass das Bild vollständig sichtbar ist und seine Proportionen beibehält */
+    overflow: hidden; /* Verhindert, dass Inhalte aus ihrem Container herausfließen */
+    margin-right: 10px; /* Abstand zum nächsten Element */
     background-color: #f0f0f0; /* Hellgrauer Hintergrund */
-    padding: 5px;  /* 5px Polsterung auf allen Seiten */
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    /* Behält die äußeren Dimensionen des Elements bei 40x30px */
-    box-sizing: border-box; /* Include padding and border in the element's size */
+    padding: 5px; /* Innenabstand innerhalb des flex Containers */
+    border-radius: 4px; /* Abgerundete Ecken */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten für Tiefe */
 }
+
 
 
 #sidebar-list {
