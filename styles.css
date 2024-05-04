@@ -3,21 +3,30 @@
     display: flex;
     flex-direction: column;
     width: 320px;
-    background-color: #333;
+    height: 90px;
     padding: 10px 0; /* vereinfacht */
+    background-color: #333;
     font-size: 16px;
     border-top: 10px solid transparent;
-    height: 90px;
 }
 
-/* Style für die Info-Panels im Container */
-.info-panel {
+/* Style für die Info-Panels und Buttons im Container */
+.info-panel, .button-row {
     display: flex;
     width: 310px;
+    padding-left: 15px;
+}
+
+.info-panel {
     font-size: 21px;
     font-style: italic;
     font-weight: 500;
-    padding-left: 15px;
+}
+
+.button-row {
+    gap: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
 }
 
 .info-group {
@@ -25,15 +34,7 @@
     color: #ffffff; /* Schriftfarbe auf Weiß setzen */
 }
 
-/* Button-Reihe im Container */
-.button-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 15px;
-}
-
+/* Button Stile */
 button {
     background-color: #007bff;
     color: #fff;
@@ -47,42 +48,28 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Sidebar-Stildefinitionen */
+/* Sidebar und ihre Inhalte */
 .sidebar {
-    background-color: #333;
+    width: 300px;
+    height: 740px;
     padding: 10px;
-    width: 300px; /* Feste Breite der Sidebar */
-    height: 740px; /* Gesamthöhe der Sidebar */
+    background-color: #333;
     margin-top: 2px;
     margin-bottom: 5px;
 }
 
 .sidebar h2 {
-    color: #fff; /* Weißer Text für die Überschrift */
-    padding-bottom: 10px; /* Abstand unter der Überschrift */
+    color: #fff;
+    padding-bottom: 10px;
     margin-bottom: 1px;
     margin-top: 1px;
 }
 
 .sidebar-content {
-    overflow-y: auto; /* Ermöglicht das Scrollen innerhalb dieses Bereichs */
-    height: calc(100% - 40px); /* Berechnet die Höhe, abzüglich der Überschrift */
-    background-color: #444; /* Leicht unterschiedlicher Hintergrund zur Abgrenzung */
+    overflow-y: auto;
+    height: calc(100% - 40px);
+    background-color: #444;
 }
-
-/* Stile für Bilder in der Sidebar */
-.sidebar img {
-    width: 30px;  /* Feste Breite des Bildes */
-    height: 20px; /* Feste Höhe des Bildes */
-    object-fit: contain;
-    background-color: #f0f0f0;
-    padding: 5px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-right: 10px;
-    display: inline-block;
-}
-
 
 #sidebar-list {
     list-style-type: none;
@@ -99,44 +86,39 @@ button:hover {
 .channel-info {
     display: flex;
     align-items: center;
-    gap: 10px; /* Abstand zwischen den Elementen */
-    background-color: #444; /* Etwas hellerer Hintergrund für jede Zeile zur besseren Unterscheidung */
-    margin-bottom: 5px; /* Abstand zwischen den Zeilen */
-    padding: 5px; /* Innenabstand in jeder Zeile */
+    gap: 10px;
+    background-color: #444;
+    margin-bottom: 5px;
+    padding: 5px;
 }
 
-/* Container für das Logo */
-.channel-info img {
-    flex: 0 0 40px; /* Flex-Basis ist 40px, Logo wächst oder schrumpft nicht */
-    width: 40px; /* Feste Breite für den Container */
-    height: 30px; /* Feste Höhe für den Container */
-    object-fit: contain; /* Stellt sicher, dass das Bild vollständig sichtbar ist und seine Proportionen beibehält */
-    background-color: #f0f0f0; /* Hellgrauer Hintergrund */
-    padding: 5px; /* Innenabstand innerhalb des Containers */
-    border-radius: 4px; /* Abgerundete Ecken */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten für Tiefe */
-    box-sizing: border-box; /* Stellt sicher, dass Padding und Border innerhalb der festgelegten Breite und Höhe enthalten sind */
+.logo-container, .sender-name, .epg-channel {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.logo-container {
+    width: 50px;
+    height: 20px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 5px;
+    margin-right: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .sender-name {
-    flex: 1 0 150px; /* Kann wachsen, schrumpft nicht, Startbreite 150px */
+    flex: 1 0 150px;
     font-size: 20px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #ffffff; /* Weiße Textfarbe */
-    margin-right: 10px; /* Abstand zum nächsten Element */
+    color: #ffffff;
+    margin-right: 10px;
 }
 
 .epg-channel {
-    flex: 1 0 100px; /* Kann wachsen, schrumpft nicht, Startbreite 100px */
+    flex: 1 0 100px;
     font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #dddddd; /* Dunklere Textfarbe für visuelle Trennung */
-}
-/* Media Queries für hohe Pixeldichte (bei Bedarf weitere Stile hinzufügen) */
-@media screen and (min-device-pixel-ratio: 2) {
-    /* Beispielsweise Bildschärfe für Icons verbessern */
+    color: #dddddd;
 }
