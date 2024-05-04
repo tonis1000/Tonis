@@ -91,7 +91,7 @@ button:hover {
 
 .sender-name {
     flex: 1 0 150px; /* Kann wachsen, schrumpft nicht, Startbreite 150px */
-    font-size: 16px;
+    font-size: 20px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
