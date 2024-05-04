@@ -74,8 +74,6 @@ button:hover {
 #sidebar-list {
     list-style-type: none;
     padding: 0;
-    width: 40px;
-    height: 30px;
 }
 
 #sidebar-list li {
@@ -110,6 +108,18 @@ button:hover {
     margin-right: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+/* Container für das Logo */
+.logo-container img {
+    width: 40px; /* Feste Breite für das Logo */
+    height: 30px; /* Feste Höhe für das Logo */
+    object-fit: cover; /* Schneidet das Bild zu, um den Bereich vollständig zu füllen */
+    border-radius: 4px; /* Abgerundete Ecken */
+    background-color: #f0f0f0; /* Hellgrauer Hintergrund */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten für Tiefe */
+    display: block; /* Block-Display, um sicherzustellen, dass das Element die angegebenen Dimensionen annimmt */
+    overflow: hidden; /* Versteckt alles, was über die Grenzen des Containers hinausgeht */
+}
+
 
 .sender-name {
     flex: 1 0 150px;
