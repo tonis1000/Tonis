@@ -49,22 +49,32 @@ button:hover {
 
 /* Sidebar-Stildefinitionen */
 .sidebar {
-    overflow-y: auto; /* Ermöglicht das Scrollen, wenn der Inhalt die Höhe überschreitet */
-    background-color: #333; /* Dunkler Hintergrund für die Sidebar */
-    padding: 10px; /* Innenabstand */
+    background-color: #333;
+    padding: 10px;
     width: 300px; /* Feste Breite der Sidebar */
-    height: 740px; /* Feste Höhe der Sidebar */
-    margin-top: 2px; /* Oberer Abstand */
-    margin-bottom: 5px; /* Unterer Abstand */
+    height: 740px; /* Gesamthöhe der Sidebar */
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+.sidebar h2 {
+    color: #fff; /* Weißer Text für die Überschrift */
+    padding-bottom: 10px; /* Abstand unter der Überschrift */
+}
+
+.sidebar-content {
+    overflow-y: auto; /* Ermöglicht das Scrollen innerhalb dieses Bereichs */
+    height: calc(100% - 40px); /* Berechnet die Höhe, abzüglich der Überschrift */
+    background-color: #444; /* Leicht unterschiedlicher Hintergrund zur Abgrenzung */
 }
 
 .sidebar img {
-    flex: 0 0 40px; /* Das Bild wächst oder schrumpft nicht und behält eine Basisgröße von 40px */
-    width: 40px; /* Feste Breite für Bilder */
-    height: 30px; /* Feste Höhe für Bilder */
-    object-fit: contain; /* Stellt sicher, dass das Bild seine Proportionen behält */
-    overflow: hidden; /* Verhindert, dass Inhalte aus ihrem Container herausfließen */
-    margin-right: 10px; /* Rechter Abstand zum nächsten Element */
+    flex: 0 0 40px;
+    width: 40px;
+    height: 30px;
+    object-fit: contain;
+    overflow: hidden;
+    margin-right: 10px;
 }
 
 
