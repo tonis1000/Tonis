@@ -77,7 +77,12 @@ button:hover {
     object-fit: contain;
     overflow: hidden;
     margin-right: 10px;
+    background-color: #f0f0f0; /* Hellgrauer Hintergrund für das Logo */
+    padding: 5px; /* Kleiner Abstand um das Logo herum */
+    border-radius: 4px; /* Leicht abgerundete Ecken für das Logo */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtile Schatten für eine bessere Abhebung */
 }
+
 
 
 #sidebar-list {
