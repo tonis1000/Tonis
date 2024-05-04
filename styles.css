@@ -84,18 +84,21 @@ button:hover {
     gap: 10px;
 }
 
-.sender-name, .epg-channel {
-    font-size: 30px;
+.sender-name {
+    font-size: 28px; /* Vergrößerte Schrift für bessere Lesbarkeit */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-weight: 500;
+    color: #ffffff; /* Weißer Text für den Sendernamen */
 }
 
 .epg-channel {
     font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-
 /* Media Queries für hohe Pixeldichte (bei Bedarf weitere Stile hinzufügen) */
 @media screen and (min-device-pixel-ratio: 2) {
     /* Beispielsweise Bildschärfe für Icons verbessern */
