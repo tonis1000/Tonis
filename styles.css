@@ -85,7 +85,7 @@ button:hover {
 }
 
 .sender-name {
-    font-size: 28px; /* Vergrößerte Schrift für bessere Lesbarkeit */
+    font-size: 24px; /* Vergrößerte Schrift für bessere Lesbarkeit */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
