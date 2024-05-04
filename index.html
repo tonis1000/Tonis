@@ -27,21 +27,35 @@
         </div>
     </div>
 
-    <div class="sidebar">
-        <h2>Senderliste</h2> <!-- Bleibt immer sichtbar und scrollt nicht -->
+<div class="sidebar">
+    <h2>Senderliste</h2> <!-- Bleibt immer sichtbar und scrollt nicht -->
     <div class="sidebar-content"> <!-- Nur dieser Bereich wird scrollbar sein -->
         <ul id="sidebar-list">
             <li>
                 <div class="channel-info">
-                    <img src="" alt="Sender Logo">
+                    <!-- Logo-Container für Bild oder Text -->
+                    <div class="logo-container">
+                        <img src="logo.png" alt="Sender Logo"> <!-- Beispiel-Bild -->
+                    </div>
                     <span class="sender-name">Sendername</span>
                     <span class="epg-channel">epg kanal</span>
+                </div>
+            </li>
+            <li>
+                <div class="channel-info">
+                    <!-- Logo-Container für Bild oder Text -->
+                    <div class="logo-container">
+                        TXT <!-- Beispiel für ein Textlogo -->
+                    </div>
+                    <span class="sender-name">Anderer Sendername</span>
+                    <span class="epg-channel">anderer epg kanal</span>
                 </div>
             </li>
             <!-- Weitere <li> Elemente hier einfügen -->
         </ul>
     </div>
- </div>
+</div>
+
 
     <script src="scripts.js"></script>
 </body>
