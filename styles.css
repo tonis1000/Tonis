@@ -71,18 +71,20 @@ button:hover {
 }
 
 .sidebar img {
-    flex: 0 0 40px;
-    width: 40px;
-    height: 30px;
+    flex: 0 0 40px;  /* Keine Größenänderung, feste Breite und Höhe */
+    width: 30px;      /* Effektive Breite des Logos */
+    height: 20px;     /* Effektive Höhe des Logos */
     object-fit: contain;
     overflow: hidden;
     margin-right: 10px;
-    background-color: #f0f0f0; /* Hellgrauer Hintergrund für das Logo */
-    padding: 5px; /* Kleiner Abstand um das Logo herum */
-    border-radius: 4px; /* Leicht abgerundete Ecken für das Logo */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtile Schatten für eine bessere Abhebung */
-}
+    background-color: #f0f0f0; /* Hellgrauer Hintergrund */
+    padding: 5px;  /* 5px Polsterung auf allen Seiten */
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
+    /* Behält die äußeren Dimensionen des Elements bei 40x30px */
+    box-sizing: border-box; /* Include padding and border in the element's size */
+}
 
 
 #sidebar-list {
