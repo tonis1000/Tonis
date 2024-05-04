@@ -59,13 +59,12 @@ button:hover {
 }
 
 .sidebar img {
-    flex-shrink: 0;
-    margin-right: 10px;
-    width: 40px;
-    height: 30px;
+    flex-shrink: 0; /* Verhindert, dass das Bild skaliert wird */
+    margin-right: 10px; /* Abstand zwischen Bild und Text */
+    width: 40px; /* Feste Breite des Bildes */
+    height: 30px; /* Feste Höhe des Bildes */
     object-fit: contain; /* Stellt sicher, dass der Inhalt des Bildes vollständig in den Rahmen passt, ohne verzerrt zu werden */
     overflow: hidden; /* Schneidet Teile des Bildes ab, die über die angegebenen Grenzen hinausgehen könnten */
-    
 }
 
 #sidebar-list {
@@ -88,15 +87,16 @@ button:hover {
 }
 
 .sender-name {
-    font-size: 24px; /* Vergrößerte Schrift für bessere Lesbarkeit */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: 500;
-    color: #ffffff; /* Weißer Text für den Sendernamen */
+    font-size: 22px;
+    white-space: nowrap; /* Verhindert den Zeilenumbruch */
+    overflow: hidden; /* Versteckt überflüssigen Text */
+    text-overflow: ellipsis; /* Zeigt Ellipsen, wenn der Text abgeschnitten wird */
+    font-weight: 600;
+    color: #ffffff;
     max-width: 150px; /* Maximale Breite, passen Sie nach Bedarf an */
+    flex-grow: 0; /* Verhindert, dass der Sendernamen wächst */
+    flex-shrink: 0; /* Verhindert, dass der Sendernamen schrumpft */
 }
-
 .epg-channel {
     font-size: 14px;
     white-space: nowrap;
