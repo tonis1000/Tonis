@@ -49,22 +49,24 @@ button:hover {
 
 /* Sidebar-Stildefinitionen */
 .sidebar {
-    overflow-y: auto;
-    background-color: #333;
-    padding: 10px;
-    width: 300px;
-    height: 740px;
-    margin-top: 2px;
-    margin-bottom: 5px;
+    overflow-y: auto; /* Ermöglicht das Scrollen, wenn der Inhalt die Höhe überschreitet */
+    background-color: #333; /* Dunkler Hintergrund für die Sidebar */
+    padding: 10px; /* Innenabstand */
+    width: 300px; /* Feste Breite der Sidebar */
+    height: 740px; /* Feste Höhe der Sidebar */
+    margin-top: 2px; /* Oberer Abstand */
+    margin-bottom: 5px; /* Unterer Abstand */
 }
 
 .sidebar img {
-    flex: 0 0 60px; /* Feste Breite und kein Wachstum oder Schrumpfung */
-    width: 40px;
-    height: 30px;
-    object-fit: contain;
-    overflow: hidden;
+    flex: 0 0 40px; /* Das Bild wächst oder schrumpft nicht und behält eine Basisgröße von 40px */
+    width: 40px; /* Feste Breite für Bilder */
+    height: 30px; /* Feste Höhe für Bilder */
+    object-fit: contain; /* Stellt sicher, dass das Bild seine Proportionen behält */
+    overflow: hidden; /* Verhindert, dass Inhalte aus ihrem Container herausfließen */
+    margin-right: 10px; /* Rechter Abstand zum nächsten Element */
 }
+
 
 #sidebar-list {
     list-style-type: none;
@@ -81,42 +83,30 @@ button:hover {
 .channel-info {
     display: flex;
     align-items: center;
-    gap: 10px; /* Abstand zwischen Elementen */
-    padding: 5px; /* Innenabstand für jedes Element, um etwas Raum zu schaffen */
-    background-color: #444; /* leicht unterschiedlicher Hintergrund für visuelle Trennung */
-    margin-bottom: 2px; /* Abstand zwischen den Senderzeilen */
+    gap: 10px; /* Abstand zwischen den Elementen */
+    background-color: #444; /* Etwas hellerer Hintergrund für jede Zeile zur besseren Unterscheidung */
+    margin-bottom: 5px; /* Abstand zwischen den Zeilen */
+    padding: 5px; /* Innenabstand in jeder Zeile */
 }
 
-/* Einstellungen für das Senderlogo */
-.channel-info img {
-    flex: 0 0 40px;  /* Nicht schrumpfen, nicht wachsen, feste Breite */
-    width: 40px;      /* Feste Breite */
-    height: 30px;     /* Feste Höhe */
-    object-fit: contain; /* Bild behält seine Proportionen */
-    margin-right: 10px; /* Rechter Rand zum nächsten Element */
-}
-
-/* Einstellungen für den Sendernamen */
 .sender-name {
-    flex: 1 0 150px; /* Flexibler wachsen, nicht schrumpfen, Ausgangsbreite */
-    font-size: 16px; /* Etwas kleinere Schriftgröße für bessere Anpassung */
+    flex: 1 0 150px; /* Kann wachsen, schrumpft nicht, Startbreite 150px */
+    font-size: 16px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Überlaufenden Text mit '...' abschneiden */
+    text-overflow: ellipsis;
     color: #ffffff; /* Weiße Textfarbe */
-    margin-right: 10px; /* Rechter Rand zum nächsten Element */
+    margin-right: 10px; /* Abstand zum nächsten Element */
 }
 
-/* Einstellungen für den EPG-Inhalt */
 .epg-channel {
-    flex: 1 0 120px; /* Flexibler wachsen, nicht schrumpfen, Ausgangsbreite */
-    font-size: 14px; /* Schriftgröße für EPG-Informationen */
+    flex: 1 0 100px; /* Kann wachsen, schrumpft nicht, Startbreite 100px */
+    font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Überlaufenden Text mit '...' abschneiden */
-    color: #dddddd; /* Etwas dunklere Textfarbe für EPG-Informationen */
+    text-overflow: ellipsis;
+    color: #dddddd; /* Dunklere Textfarbe für visuelle Trennung */
 }
-
 /* Media Queries für hohe Pixeldichte (bei Bedarf weitere Stile hinzufügen) */
 @media screen and (min-device-pixel-ratio: 2) {
     /* Beispielsweise Bildschärfe für Icons verbessern */
