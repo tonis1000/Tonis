@@ -63,6 +63,9 @@ button:hover {
     margin-right: 10px;
     width: 40px;
     height: 30px;
+    object-fit: contain; /* Stellt sicher, dass der Inhalt des Bildes vollständig in den Rahmen passt, ohne verzerrt zu werden */
+    overflow: hidden; /* Schneidet Teile des Bildes ab, die über die angegebenen Grenzen hinausgehen könnten */
+    
 }
 
 #sidebar-list {
@@ -91,6 +94,7 @@ button:hover {
     text-overflow: ellipsis;
     font-weight: 500;
     color: #ffffff; /* Weißer Text für den Sendernamen */
+    max-width: 150px; /* Maximale Breite, passen Sie nach Bedarf an */
 }
 
 .epg-channel {
@@ -98,6 +102,7 @@ button:hover {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100px; /* Maximale Breite, passen Sie nach Bedarf an */
 }
 /* Media Queries für hohe Pixeldichte (bei Bedarf weitere Stile hinzufügen) */
 @media screen and (min-device-pixel-ratio: 2) {
