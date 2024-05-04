@@ -89,7 +89,15 @@ button:hover {
     gap: 10px;
 }
 
-.sender-name, .epg-channel {
+.sender-name {
+    font-size: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+}
+
+.epg-channel {
     font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
