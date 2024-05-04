@@ -59,8 +59,7 @@ button:hover {
 }
 
 .sidebar img {
-    flex-shrink: 0; /* Verhindert, dass das Bild skaliert wird */
-    margin-right: 10px; /* Abstand zwischen Bild und Text */
+    flex: 0 0 40px; /* Nicht flexibel in der Größe, feste Breite und Höhe */
     width: 40px; /* Feste Breite des Bildes */
     height: 30px; /* Feste Höhe des Bildes */
     object-fit: contain; /* Stellt sicher, dass der Inhalt des Bildes vollständig in den Rahmen passt, ohne verzerrt zu werden */
