@@ -41,7 +41,6 @@ function loadEPG() {
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
-
     const lines = data.split('\n');
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
@@ -49,25 +48,17 @@ function updateSidebarFromM3U(data) {
             if (nameMatch && nameMatch.length > 1) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
-                let imgURL = '';
-                if (imgMatch && imgMatch.length > 1) {
-                    imgURL = imgMatch[1];
-                }
+                let imgURL = imgMatch && imgMatch[1] || '';
                 const listItem = document.createElement('li');
-
-                // Erstellen des Image-Tags für das Logo
                 const img = document.createElement('img');
                 img.src = imgURL;
                 img.alt = name + ' Logo';
                 img.width = 30;
                 img.height = 20;
                 listItem.appendChild(img);
-
-                // Hinzufügen des Sendernamens
                 const nameNode = document.createElement('span');
                 nameNode.textContent = name;
                 listItem.appendChild(nameNode);
-
                 sidebarList.appendChild(listItem);
             }
         }
@@ -76,7 +67,7 @@ function updateSidebarFromM3U(data) {
 
 // Funktion zum Abrufen der EPG-Informationen für einen bestimmten Sender
 function fetchEPGInfo(channelName) {
-    return fetch('data/epg.xml') // Pfad zur lokalen EPG-Datei
+    return fetch('data/epg.xml')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Fehler beim Laden der EPG-Daten');
@@ -100,18 +91,25 @@ function fetchEPGInfo(channelName) {
 }
 
 // Funktion zum Abrufen der aktuellen Uhrzeit
-        function updateClock() {
-            const now = new Date();
-            const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
-            const datum = now.toLocaleDateString('de-DE');
-            const uhrzeit = now.toLocaleTimeString('de-DE', { hour12: false });
-            document.getElementById('tag').textContent = tag;
-            document.getElementById('datum').textContent = datum;
-            document.getElementById('uhrzeit').textContent = uhrzeit;
-        }
+function updateClock() {
+    const now = new Date();
+    const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
+    const datum = now.toLocaleDateString('de-DE');
+    const uhrzeit = now.toLocaleTimeString('de-DE', { hour12: false });
+    document.getElementById('tag').textContent = tag;
+    document.getElementById('datum').textContent = datum;
+    document.getElementById('uhrzeit').textContent = uhrzeit;
+}
 
-        // Uhrzeit beim Laden der Seite aktualisieren
-        updateClock();
+// Uhrzeit beim Laden der Seite aktualisieren
+updateClock();
 
-        // Uhrzeit alle Sekunde aktualisieren
-        setInterval(updateClock, 1000);
+// Uhrzeit jede Sekunde aktualisieren
+setInterval(updateClock, 1000);
+
+// Event Listener für die Buttons hinzufügen
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
+    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
+    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
+});
