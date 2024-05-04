@@ -77,31 +77,40 @@ button:hover {
     padding-left: 5px;
 }
 
-/* Stile für Senderinformationen in der Sidebar */
 .channel-info {
     display: flex;
     align-items: center;
-    gap: 10px; /* Abstand zwischen den Elementen */
-    padding: 5px; /* Innenabstand für bessere Darstellung */
-    background-color: #f0f0f0; /* Hintergrundfarbe für bessere Sichtbarkeit */
+    justify-content: flex-start;
+    gap: 10px;
 }
 
-.sender-name {
-    flex: 0 0 180px; /* Feste Breite für den Sendernamen */
-    font-size: 26px; /* Etwas kleinere Schriftgröße für bessere Passform */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: 500;
-    color: #333; /* Dunklere Textfarbe für besseren Kontrast */
+/* Einstellungen für das Senderlogo */
+.channel-info img {
+    flex: 0 0 40px;  /* Nicht schrumpfen, nicht wachsen, feste Breite */
+    width: 40px;
+    height: 30px;
+    object-fit: contain; /* Sorgt dafür, dass das Bildverhältnis erhalten bleibt */
 }
-.epg-channel {
-    flex: 1 1 auto; /* Nimmt den verbleibenden Platz ein */
-    font-size: 16px;
+/* Einstellungen für den Sendernamen */
+.sender-name {
+    flex: 1 0 180px; /* Kann wachsen, schrumpft nicht, Startbreite */
+    font-size: 22px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #666; /* Leichtere Textfarbe */
+    font-weight: 600;
+    color: #ffffff;
+    padding-right: 10px; /* Sicherstellen, dass etwas Platz auf der rechten Seite bleibt */
+}
+
+/* Einstellungen für den EPG-Inhalt */
+.epg-channel {
+    flex: 1 0 100px; /* Kann wachsen, schrumpft nicht, Startbreite */
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #dddddd; /* Leicht abweichende Farbe für visuelle Trennung */
 }
 /* Media Queries für hohe Pixeldichte (bei Bedarf weitere Stile hinzufügen) */
 @media screen and (min-device-pixel-ratio: 2) {
