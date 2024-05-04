@@ -84,6 +84,8 @@ button:hover {
 
 /* Stile für Senderinformationen in der Sidebar */
 .channel-info {
+    font-size: 30px; /* Erhöhte Schriftgröße */
+    font-weight: 500; /* Dickeres Schriftgewicht */
     display: flex;
     align-items: center;
     justify-content: flex-start;
