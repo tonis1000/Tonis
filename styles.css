@@ -60,6 +60,8 @@ button:hover {
 .sidebar h2 {
     color: #fff; /* Weißer Text für die Überschrift */
     padding-bottom: 10px; /* Abstand unter der Überschrift */
+    margin-bottom: 1px;
+    margin-top: 1px;
 }
 
 .sidebar-content {
