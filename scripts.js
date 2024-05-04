@@ -53,12 +53,15 @@ function updateSidebarFromM3U(data) {
                 const img = document.createElement('img');
                 img.src = imgURL;
                 img.alt = name + ' Logo';
-                img.width = 30;
-                img.height = 20;
+                img.width = 40;
+                img.height = 30;
                 listItem.appendChild(img);
+
                 const nameNode = document.createElement('span');
+                nameNode.className = 'sender-name';
                 nameNode.textContent = name;
                 listItem.appendChild(nameNode);
+
                 sidebarList.appendChild(listItem);
             }
         }
