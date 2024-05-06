@@ -74,6 +74,14 @@ button:hover {
 #sidebar-list {
     list-style-type: none;
     padding: 0;
+    
+
+#sidebar-list > li:nth-child(1) > img:nth-child(1) {
+  width: 40px;
+  height: 30px;
+  padding-right: 10px;
+}
+
 }
 
 #sidebar-list li {
