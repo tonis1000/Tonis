@@ -1,19 +1,28 @@
-/* Hauptcontainer und Layoutdefinitionen */
+/* Grundlegende Farben und Schriftgrößen als Wiederverwendbare Klassen */
+.base-background {
+    background-color: #333;  /* Dunkelgrauer Hintergrund für Container und Sidebar */
+}
+
+.text-white {
+    color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
+}
+
+/* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
 .container {
     display: flex;
     flex-direction: column;
     width: 320px;
     height: 90px;
-    padding: 10px 0; /* vereinfacht */
-    background-color: #333;
-    font-size: 16px;
+    padding: 10px 0;
     border-top: 10px solid transparent;
+    font-size: 16px;
+    background-color: #333;
 }
 
-/* Style für die Info-Panels und Buttons im Container */
+/* Styling für Informationen und Button-Reihen innerhalb des Containers */
 .info-panel, .button-row {
     display: flex;
-    width: 310px;
+    width: 310px;  /* Etwas schmaler als der Hauptcontainer für visuelle Trennung */
     padding-left: 15px;
 }
 
@@ -24,19 +33,20 @@
 }
 
 .button-row {
-    gap: 10px;
-    margin-top: 10px;
-    padding-bottom: 10px;
+    gap: 10px;  /* Abstand zwischen den Buttons */
+    margin-top: 10px;  /* Abstand von oberen Elementen */
+    padding-bottom: 10px;  /* Abstand zum unteren Rand */
 }
 
+/* Informationen in einer Gruppe mit Abständen und Farbe */
 .info-group {
     margin-right: 20px;
-    color: #ffffff; /* Schriftfarbe auf Weiß setzen */
+    color: #ffffff;
 }
 
-/* Button Stile */
+/* Einheitliche Button-Stile */
 button {
-    background-color: #007bff;
+    background-color: #007bff;  /* Blaue Farbe für Buttons */
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -45,10 +55,10 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3;  /* Dunklerer Blauton bei Hover */
 }
 
-/* Sidebar und ihre Inhalte */
+/* Sidebar-Styling mit spezifischen Maßen und Layout-Einstellungen */
 .sidebar {
     width: 300px;
     height: 740px;
@@ -68,9 +78,10 @@ button:hover {
 .sidebar-content {
     overflow-y: auto;
     height: calc(100% - 40px);
-    background-color: #444;
+    background-color: #444;  /* Etwas heller als die Sidebar für Kontrast */
 }
 
+/* Sidebar-Listenstil ohne Bullet Points */
 #sidebar-list {
     list-style-type: none;
     padding: 0;
@@ -81,7 +92,7 @@ button:hover {
     padding-left: 5px;
 }
 
-/* Stile für Senderinformationen in der Sidebar */
+/* Stile für Senderinformationen innerhalb der Sidebar */
 .channel-info {
     display: flex;
     align-items: center;
@@ -91,7 +102,7 @@ button:hover {
     padding: 5px;
 }
 
-/* Container für das Logo */
+/* Container für Senderlogos mit Zentrierung des Inhalts */
 .logo-container {
     width: 40px;
     height: 30px;
@@ -104,18 +115,18 @@ button:hover {
 .logo-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;  // Stellt sicher, dass das Bild den gesamten Container ausfüllt.
+    object-fit: cover;
 }
 
 .sender-name {
-    flex: 1 0 150px;
+    flex: 1 0 150px;  /* Flexibles Wachstum, kein Schrumpfen, Basisgröße */
     font-size: 20px;
-    color: #ffffff;
+    color: #ffffff;  /* Weißer Text */
     margin-right: 10px;
 }
 
 .epg-channel {
     flex: 1 0 100px;
     font-size: 14px;
-    color: #dddddd;
+    color: #dddddd;  /* Heller grauer Text für Kontrast */
 }
