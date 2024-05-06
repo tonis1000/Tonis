@@ -93,23 +93,18 @@ button:hover {
 
 /* Container für das Logo */
 .logo-container {
-    width: 40px; /* Korrigiert von 50px auf 40px */
-    height: 30px; /* Korrigiert von 20px auf 30px */
-    padding: 5px;
-    border-radius: 4px;
-    background-color: #f0f0f0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-right: 10px;
+    width: 40px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
-    box-sizing: border-box;
 }
 
 .logo-container img {
-    width: 100%; /* Füllt den gesamten verfügbaren Raum aus */
-    height: 100%; /* Füllt den gesamten verfügbaren Raum aus */
-    object-fit: cover; /* Schneidet das Bild zu, um den Bereich vollständig zu füllen */
-    border-radius: 4px;
-    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  // Stellt sicher, dass das Bild den gesamten Container ausfüllt.
 }
 
 .sender-name {
