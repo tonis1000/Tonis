@@ -50,9 +50,11 @@ function updateSidebarFromM3U(data) {
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || '';
                 const listItem = document.createElement('li');
+                
                 const img = document.createElement('img');
                 img.src = imgURL;
                 img.alt = name + ' Logo';
+                img.className = 'logo-img'; // Klasse für CSS-Styling hinzufügen
                 listItem.appendChild(img);
 
                 const nameNode = document.createElement('span');
