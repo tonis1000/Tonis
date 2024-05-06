@@ -71,20 +71,12 @@ button:hover {
     background-color: #444;
 }
 
-.sidebar-list {
+#sidebar-list {
     list-style-type: none;
     padding: 0;
-    
-
-.sidebar-list > li:nth-child(1) > img:nth-child(1) {
-  width: 40px;
-  height: 30px;
-  padding-right: 10px;
 }
 
-}
-
-.sidebar-list li {
+#sidebar-list li {
     margin-bottom: 5px;
     padding-left: 5px;
 }
@@ -99,35 +91,26 @@ button:hover {
     padding: 5px;
 }
 
-.logo-container, .sender-name, .epg-channel {
-    display: inline-block;
+/* Container für das Logo */
+.logo-container {
+    width: 40px; /* Korrigiert von 50px auf 40px */
+    height: 30px; /* Korrigiert von 20px auf 30px */
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     box-sizing: border-box;
 }
 
-.logo-container {
-    width: 50px;
-    height: 20px;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    padding: 5px;
-    margin-right: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-/* Container für das Logo */
 .logo-container img {
-    width: 40px; /* Feste Breite für das Logo */
-    height: 30px; /* Feste Höhe für das Logo */
+    width: 100%; /* Füllt den gesamten verfügbaren Raum aus */
+    height: 100%; /* Füllt den gesamten verfügbaren Raum aus */
     object-fit: cover; /* Schneidet das Bild zu, um den Bereich vollständig zu füllen */
-    border-radius: 4px; /* Abgerundete Ecken */
-    background-color: #f0f0f0; /* Hellgrauer Hintergrund */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten für Tiefe */
-    display: block; /* Block-Display, um sicherzustellen, dass das Element die angegebenen Dimensionen annimmt */
-    overflow: hidden; /* Versteckt alles, was über die Grenzen des Containers hinausgeht */
+    border-radius: 4px;
+    display: block;
 }
-
 
 .sender-name {
     flex: 1 0 150px;
