@@ -54,7 +54,7 @@ function updateSidebarFromM3U(data) {
                 const img = document.createElement('img');
                 img.src = imgURL;
                 img.alt = name + ' Logo';
-                img.className = 'logo-img'; // Klasse für CSS-Styling hinzufügen
+                img.className = 'logo-container img'; // Klasse für CSS-Styling hinzufügen
                 listItem.appendChild(img);
 
                 const nameNode = document.createElement('span');
