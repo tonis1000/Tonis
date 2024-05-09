@@ -11,10 +11,9 @@
 .container {
     display: flex;
     flex-direction: column;
-    width: 320px;
+    width: 340px;
     height: 90px;
-    padding: 10px 0;
-    border-top: 10px solid transparent;
+    border-top: 5px solid transparent;
     font-size: 16px;
     background-color: #333;
 }
@@ -60,7 +59,7 @@ button:hover {
 
 /* Sidebar-Styling mit spezifischen Maßen und Layout-Einstellungen */
 .sidebar {
-    width: 300px;
+    width: 330px;
     height: 740px;
     padding: 10px;
     margin-top: 2px;
@@ -68,7 +67,7 @@ button:hover {
 }
 
 .sidebar h2 {
-    color: #fff;
+    color: #f10d0d;
     padding-bottom: 10px;
     margin-bottom: 1px;
     margin-top: 1px;
