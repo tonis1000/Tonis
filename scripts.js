@@ -30,16 +30,16 @@ function loadEPGData() {
     fetch(corsProxy + encodeURIComponent(targetUrl))
         .then(response => response.text())
         .then(xmlString => {
-            console.log(xmlString);  // Log the XML string to see what is received
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+            const channels = xmlDoc.getElementsByTagName("channel");
             const programmes = xmlDoc.getElementsByTagName("programme");
 
             Array.from(programmes).forEach(prog => {
                 const channelId = prog.getAttribute("channel");
                 const title = prog.getElementsByTagName("title")[0]?.textContent;
-                epgData[channelId] = { title: title };  // Always update the title
-                console.log(channelId, title);  // Log each channel ID and title
+                // Speichern des Titels unter Verwendung der channel ID
+                epgData[channelId] = title;
             });
         })
         .catch(error => {
@@ -49,19 +49,17 @@ function loadEPGData() {
 
 
 
+
 function updateSidebarFromM3U(data) {
-    console.log(data);  // Log the raw M3U data
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
 
     const lines = data.split('\n');
     lines.forEach(line => {
-        console.log(line);  // Log each line to see what is being processed
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
-            const title = epgData[channelId] ? epgData[channelId].title : 'Keine aktuelle Sendung verfügbar';
-            console.log(channelId, title);  // Log the channel ID and title being set
+            const title = epgData[channelId] || 'Keine aktuelle Sendung verfügbar';
 
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
@@ -84,6 +82,7 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
 
 
 
