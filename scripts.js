@@ -37,61 +37,87 @@ function loadEPG() {
         });
 }
 
-// Aktualisieren der Sidebar mit Daten aus der Playlist.m3u
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.innerHTML = '';
+    sidebarList.innerHTML = '';  // Clear existing entries
+
     const lines = data.split('\n');
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
+            const channelId = idMatch && idMatch[1];
             const nameMatch = line.match(/,(.*)$/);
-            if (nameMatch && nameMatch.length > 1) {
-                const name = nameMatch[1].trim();
-                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
-                let imgURL = imgMatch && imgMatch[1] || '';
-                const listItem = document.createElement('li');
-                
-                const img = document.createElement('img');
-                img.src = imgURL;
-                img.alt = name + ' Logo';
-                img.className = 'logo-container img'; // Klasse für CSS-Styling hinzufügen
-                listItem.appendChild(img);
+            const imgMatch = line.match(/tvg-logo="([^"]+)"/);
 
-                const nameNode = document.createElement('span');
-                nameNode.className = 'sender-name';
-                nameNode.textContent = name;
-                listItem.appendChild(nameNode);
+            const name = nameMatch && nameMatch[1] ? nameMatch[1].trim() : 'Unbekannter Sender';
+            const imgURL = imgMatch && imgMatch[1] ? imgMatch[1] : 'default_logo.png';
 
-                sidebarList.appendChild(listItem);
-            }
+            // Extract current program title from epgData using channelId
+            const currentProgram = epgData[channelId] ? epgData[channelId].title : 'Keine aktuelle Sendung verfügbar';
+
+            // Create list item for each channel
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <div class="channel-info">
+                    <div class="logo-container">
+                        <img src="${imgURL}" alt="${name} Logo">
+                        <span class="sender-name">${name}</span>
+                        <span class="epg-channel">${currentProgram}</span>
+                    </div>
+                </div>
+            `;
+            sidebarList.appendChild(listItem);
         }
     });
 }
 
-// Funktion zum Abrufen der EPG-Informationen für einen bestimmten Sender
-function fetchEPGInfo(channelName) {
-    return fetch('data/epg.xml')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Fehler beim Laden der EPG-Daten');
-            }
-            return response.text();
-        })
-        .then(data => {
+function loadEPGData() {
+    const corsProxy = 'https://api.allorigins.win/raw?url=';
+    const targetUrl = 'https://ext.greektv.app/epg/epg.xml';
+
+    fetch(corsProxy + encodeURIComponent(targetUrl))
+        .then(response => response.text())
+        .then(xmlString => {
             const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(data, 'text/xml');
-            const programs = xmlDoc.getElementsByTagName('programme');
-            for (let i = 0; i < programs.length; i++) {
-                const program = programs[i];
-                const titleNode = program.getElementsByTagName('title')[0];
-                if (titleNode && titleNode.textContent.includes(channelName)) {
-                    return titleNode.textContent;
+            const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+            const programmes = xmlDoc.getElementsByTagName("programme");
+            const now = new Date();
+            
+            Array.from(programmes).forEach(prog => {
+                const channelId = prog.getAttribute("channel");
+                const start = prog.getAttribute("start");
+                const stop = prog.getAttribute("stop");
+                const title = prog.getElementsByTagName("title")[0]?.textContent;
+
+                // Convert EPG times
+                const startTime = parseEPGDate(start);
+                const stopTime = parseEPGDate(stop);
+
+                // Check if the current program is on air
+                if (startTime <= now && stopTime > now) {
+                    if (!epgData[channelId] || startTime > parseEPGDate(epgData[channelId].start)) {
+                        epgData[channelId] = { title, start, stop };
+                    }
                 }
-            }
-            return 'Kein Programm gefunden';
+            });
         })
-        .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
+        .catch(error => {
+            console.error('Fehler beim Laden der EPG-Daten:', error);
+        });
 }
+
+function parseEPGDate(epgDateString) {
+    // YYYYMMDDHHMMSS +0000
+    return new Date(
+        parseInt(epgDateString.substr(0, 4), 10),
+        parseInt(epgDateString.substr(4, 2), 10) - 1,
+        parseInt(epgDateString.substr(6, 2), 10),
+        parseInt(epgDateString.substr(8, 2), 10),
+        parseInt(epgDateString.substr(10, 2), 10),
+        parseInt(epgDateString.substr(12, 2), 10)
+    );
+}
+
 
 // Funktion zum Abrufen der aktuellen Uhrzeit
 function updateClock() {
