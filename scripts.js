@@ -73,7 +73,7 @@ function updateSidebarFromM3U(data) {
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                             <span class="sender-name">${name}</span>
-                            <span class="epg-channel" id="epg-${channelId}">${title}</span>
+                            <span class="epg-channel" id="{channelId}">${title}</span>
                         </div>
                     </div>
                 `;
