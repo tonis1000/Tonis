@@ -86,6 +86,8 @@ function updateSidebarFromM3U(data) {
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function () {
     loadEPGData(); // Laden der EPG-Daten beim Start
+    updateClock(); // Uhrzeit beim Laden der Seite aktualisieren
+    setInterval(updateClock, 1000); // Uhrzeit jede Sekunde aktualisieren
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
@@ -109,10 +111,3 @@ updateClock();
 
 // Uhrzeit jede Sekunde aktualisieren
 setInterval(updateClock, 1000);
-
-// Event Listener für die Buttons hinzufügen
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
-    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
-    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
-});
