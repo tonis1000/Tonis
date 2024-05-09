@@ -33,15 +33,14 @@ function loadEPGData() {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlString, "application/xml");
             const programmes = xmlDoc.getElementsByTagName("programme");
-            const now = new Date();
-            
+
             Array.from(programmes).forEach(prog => {
                 const channelId = prog.getAttribute("channel");
                 const title = prog.getElementsByTagName("title")[0]?.textContent;
 
-                // Speichern oder Aktualisieren der Titeldaten
+                // Nur hinzufügen, wenn noch kein Eintrag vorhanden ist
                 if (!epgData[channelId]) {
-                    epgData[channelId] = title;
+                    epgData[channelId] = { title: title };
                 }
             });
         })
@@ -49,6 +48,7 @@ function loadEPGData() {
             console.error('Fehler beim Laden der EPG-Daten:', error);
         });
 }
+
 
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
