@@ -106,8 +106,3 @@ function updateClock() {
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
 
-// Uhrzeit beim Laden der Seite aktualisieren
-updateClock();
-
-// Uhrzeit jede Sekunde aktualisieren
-setInterval(updateClock, 1000);
