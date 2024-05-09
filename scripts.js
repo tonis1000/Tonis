@@ -30,6 +30,7 @@ function loadEPGData() {
     fetch(corsProxy + encodeURIComponent(targetUrl))
         .then(response => response.text())
         .then(xmlString => {
+            console.log(xmlString);  // Log the XML string to see what is received
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlString, "application/xml");
             const programmes = xmlDoc.getElementsByTagName("programme");
@@ -37,11 +38,8 @@ function loadEPGData() {
             Array.from(programmes).forEach(prog => {
                 const channelId = prog.getAttribute("channel");
                 const title = prog.getElementsByTagName("title")[0]?.textContent;
-
-                // Nur hinzufügen, wenn noch kein Eintrag vorhanden ist
-                if (!epgData[channelId]) {
-                    epgData[channelId] = { title: title };
-                }
+                epgData[channelId] = { title: title };  // Always update the title
+                console.log(channelId, title);  // Log each channel ID and title
             });
         })
         .catch(error => {
@@ -50,15 +48,20 @@ function loadEPGData() {
 }
 
 
+
 function updateSidebarFromM3U(data) {
+    console.log(data);  // Log the raw M3U data
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
+
     const lines = data.split('\n');
     lines.forEach(line => {
+        console.log(line);  // Log each line to see what is being processed
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
             const title = epgData[channelId] ? epgData[channelId].title : 'Keine aktuelle Sendung verfügbar';
+            console.log(channelId, title);  // Log the channel ID and title being set
 
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
@@ -72,7 +75,7 @@ function updateSidebarFromM3U(data) {
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                             <span class="sender-name">${name}</span>
-                            <span class="epg-channel" id="${channelId}">${title}</span>
+                            <span class="epg-channel" id="epg-${channelId}">${title}</span>
                         </div>
                     </div>
                 `;
@@ -81,6 +84,7 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
 
 
 // Event Listeners
