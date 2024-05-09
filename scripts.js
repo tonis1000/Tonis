@@ -53,13 +53,12 @@ function loadEPGData() {
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
-
     const lines = data.split('\n');
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
-            const title = epgData[channelId] || 'Keine aktuelle Sendung verfügbar';
+            const title = epgData[channelId] ? epgData[channelId].title : 'Keine aktuelle Sendung verfügbar';
 
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
@@ -73,7 +72,7 @@ function updateSidebarFromM3U(data) {
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                             <span class="sender-name">${name}</span>
-                            <span class="epg-channel">${title}</span>
+                            <span class="epg-channel" id="${channelId}">${title}</span>
                         </div>
                     </div>
                 `;
@@ -82,6 +81,7 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function () {
