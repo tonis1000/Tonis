@@ -15,7 +15,7 @@ def download_xml(url, local_path):
 
 if __name__ == '__main__':
     # URL der XML-Datei
-    url = 'https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml'
+    url = 'https://ext.greektv.app/epg/epg.xml'
     # Pfad, unter dem die XML-Datei gespeichert werden soll
     local_path = 'data/epg.xml'
     # Funktion aufrufen, um die XML-Datei herunterzuladen und zu speichern
