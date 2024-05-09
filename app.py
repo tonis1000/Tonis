@@ -26,7 +26,7 @@ def index():
 @app.route('/reload-epg')
 def reload_epg():
     # Herunterladen und Speichern der XML-Datei
-    download_xml('https://github.com/GreekTVApp/epg-greece-cyprus/releases/download/EPG/epg.xml', 'data/epg.xml')
+    download_xml('https://ext.greektv.app/epg/epg.xml', 'data/epg.xml')
     return send_from_directory(os.path.join(app.root_path, 'data'), 'epg.xml')
 
 if __name__ == '__main__':
