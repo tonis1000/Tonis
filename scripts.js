@@ -19,6 +19,22 @@ function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
+function calculateProgress(start, stop) {
+    const startTime = parseEPGDate(start);
+    const stopTime = parseEPGDate(stop);
+    const now = new Date();
+
+    if (now < startTime) {
+        return 0;  // Programm hat noch nicht begonnen
+    } else if (now > stopTime) {
+        return 100;  // Programm ist bereits zu Ende
+    } else {
+        const totalDuration = stopTime - startTime;
+        const currentDuration = now - startTime;
+        return (currentDuration / totalDuration) * 100;
+    }
+}
+
 
 // Globale Definition von epgData
 let epgData = {};
@@ -88,7 +104,14 @@ function updateSidebarFromM3U(data) {
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
 
-                const title = programmeInfo ? programmeInfo.title : 'Keine aktuelle Sendung verfügbar';
+                let title = 'Keine aktuelle Sendung verfügbar';
+                let progressBar = '';
+                if (programmeInfo) {
+                    title = programmeInfo.title;
+                    const progress = calculateProgress(programmeInfo.start, programmeInfo.stop);
+                    progressBar = `<div class="progress-bar" style="width: ${progress}%"></div>`;
+                }
+
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
                     <div class="channel-info">
@@ -96,6 +119,7 @@ function updateSidebarFromM3U(data) {
                             <img src="${imgURL}" alt="${name} Logo">
                             <span class="sender-name">${name}</span>
                             <span class="epg-channel" id="{channelId}">${title}</span>
+                            ${progressBar}  <!-- Progress bar here -->
                         </div>
                     </div>
                 `;
@@ -104,6 +128,7 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
 
 
 
