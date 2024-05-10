@@ -7,6 +7,13 @@
     color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
 }
 
+.progress-bar {
+    height: 5px;
+    background-color: #4CAF50; /* Grüne Farbe */
+    margin-top: 5px;
+}
+
+
 /* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
 .container {
     display: flex;
