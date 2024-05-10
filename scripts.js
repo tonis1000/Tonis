@@ -1,5 +1,10 @@
 // Laden der Playlist.m3u und Aktualisieren der Sidebar
-
+function loadMyPlaylist() {
+    fetch('playlist.m3u')
+        .then(response => response.text())
+        .then(data => updateSidebarFromM3U(data))
+        .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+}
 
 // Laden der externen Playlist und Aktualisieren der Sidebar
 function loadExternalPlaylist() {
@@ -9,17 +14,13 @@ function loadExternalPlaylist() {
         .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
 }
 
-// Laden der Sport-Playlist und Aktualisieren der Sidebar
 function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
-
-
-// Globale Definition von epgData
 let epgData = {};
 
-function loadEPGData(callback) {
+function loadEPGData() {
     const corsProxy = 'https://api.allorigins.win/raw?url=';
     const targetUrl = 'https://ext.greektv.app/epg/epg.xml';
 
@@ -44,28 +45,11 @@ function loadEPGData(callback) {
                     epgData[channelId] = { title, start, stop };
                 }
             });
-
-            if (typeof callback === 'function') {
-                callback();
-            }
         })
-        .catch(error => {
-            console.error('Fehler beim Laden der EPG-Daten:', error);
-        });
+        .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
-
-function loadMyPlaylist() {
-    loadEPGData(() => {
-        fetch('playlist.m3u')
-            .then(response => response.text())
-            .then(data => updateSidebarFromM3U(data))
-            .catch(error => console.error('Fehler beim Laden der Playlist:', error));
-    });
-}
-
 
 function parseEPGDate(epgDateString) {
-    // EPG-Daten formatieren: YYYYMMDDHHMMSS +TZ
     return new Date(
         parseInt(epgDateString.substr(0, 4), 10),
         parseInt(epgDateString.substr(4, 2), 10) - 1,
@@ -75,6 +59,7 @@ function parseEPGDate(epgDateString) {
         parseInt(epgDateString.substr(12, 2), 10)
     );
 }
+
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
@@ -109,25 +94,15 @@ function updateSidebarFromM3U(data) {
     });
 }
 
-
-
-
-
-
-
-// Event Listeners
 document.addEventListener('DOMContentLoaded', function () {
-    loadEPGData(); // Laden der EPG-Daten beim Start
-    updateClock(); // Uhrzeit beim Laden der Seite aktualisieren
-    setInterval(updateClock, 1000); // Uhrzeit jede Sekunde aktualisieren
+    loadEPGData();
+    updateClock();
+    setInterval(updateClock, 1000);
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 });
 
-
-
-// Funktion zum Abrufen der aktuellen Uhrzeit
 function updateClock() {
     const now = new Date();
     const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
@@ -137,4 +112,3 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
-
