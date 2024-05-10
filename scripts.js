@@ -20,36 +20,30 @@ function loadSportPlaylist() {
 }
 
 
-// Globale Definition von epgData
+// Globales Objekt für EPG-Daten
 let epgData = {};
 
+// Laden und Parsen der EPG-Daten
 function loadEPGData() {
-    const corsProxy = 'https://api.allorigins.win/raw?url=';
-    const targetUrl = 'https://ext.greektv.app/epg/epg.xml';
-
-    fetch(corsProxy + encodeURIComponent(targetUrl))
+    fetch('https://ext.greektv.app/epg/epg.xml')
         .then(response => response.text())
-        .then(xmlString => {
+        .then(data => {
             const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xmlString, "application/xml");
-            const channels = xmlDoc.getElementsByTagName("channel");
-            const programmes = xmlDoc.getElementsByTagName("programme");
-
+            const xmlDoc = parser.parseFromString(data, "application/xml");
+            const programmes = xmlDoc.getElementsByTagName('programme');
             Array.from(programmes).forEach(prog => {
-                const channelId = prog.getAttribute("channel");
-                const title = prog.getElementsByTagName("title")[0]?.textContent;
-                // Speichern des Titels unter Verwendung der channel ID
-                epgData[channelId] = title;
+                const channelId = prog.getAttribute('channel');
+                const titleElement = prog.getElementsByTagName('title')[0];
+                if (titleElement) {
+                    const title = titleElement.textContent;
+                    epgData[channelId] = title;
+                }
             });
         })
-        .catch(error => {
-            console.error('Fehler beim Laden der EPG-Daten:', error);
-        });
+        .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
 
-
-
-
+// Aktualisieren der Sidebar anhand der Daten aus der M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
@@ -83,22 +77,17 @@ function updateSidebarFromM3U(data) {
     });
 }
 
-
-
-
-// Event Listeners
+// Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
-    loadEPGData(); // Laden der EPG-Daten beim Start
-    updateClock(); // Uhrzeit beim Laden der Seite aktualisieren
-    setInterval(updateClock, 1000); // Uhrzeit jede Sekunde aktualisieren
+    loadEPGData();
+    updateClock();
+    setInterval(updateClock, 1000);
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 });
 
-
-
-// Funktion zum Abrufen der aktuellen Uhrzeit
+// Aktualisierung der Uhrzeit
 function updateClock() {
     const now = new Date();
     const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
