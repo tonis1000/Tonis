@@ -26,72 +26,41 @@ let epgData = {};
 
 
 
-function fetchWithRetry(url, options = {}, retries = 3, backoff = 300) {
-    return fetch(url, options).then(response => {
-        if (response.ok) {
-            return response.text();  // oder response.json() je nach Antwortformat
+
+
+function updateSidebarFromM3U(data) {
+    const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.innerHTML = '';
+
+    const lines = data.split('\n');
+    lines.forEach(line => {
+        if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
+            const channelId = idMatch && idMatch[1];
+            const title = epgData[channelId] || 'Keine aktuelle Sendung verfügbar';
+
+            const nameMatch = line.match(/,(.*)$/);
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="channel-info">
+                        <div class="logo-container">
+                            <img src="${imgURL}" alt="${name} Logo">
+                            <span class="sender-name">${name}</span>
+                            <span class="epg-channel" id="epg-${channelId}">${title}</span>
+                        </div>
+                    </div>
+                `;
+                sidebarList.appendChild(listItem);
+            }
         }
-        if (retries > 0) {
-            console.log(`Warten auf ${backoff} ms, dann erneuter Versuch. Verbleibende Versuche: ${retries - 1}`);
-            return new Promise(resolve => setTimeout(resolve, backoff))
-                .then(() => fetchWithRetry(url, options, retries - 1, backoff * 2));
-        }
-        throw new Error(`HTTP error: ${response.statusText}`);
-    }).catch(error => {
-        if (retries > 0) {
-            console.log(`Warten auf ${backoff} ms, dann erneuter Versuch. Verbleibende Versuche: ${retries - 1}`);
-            return new Promise(resolve => setTimeout(resolve, backoff))
-                .then(() => fetchWithRetry(url, options, retries - 1, backoff * 2));
-        }
-        throw error;
     });
 }
 
-function loadEPGData() {
-    const corsProxy = 'https://api.allorigins.win/raw?url=';
-    const targetUrl = corsProxy + encodeURIComponent('https://ext.greektv.app/epg/epg.xml');
-
-    fetchWithRetry(targetUrl, {}, 3, 500)  // 3 Versuche mit einer anfänglichen Backoff-Zeit von 500ms
-        .then(xmlString => {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xmlString, "application/xml");
-            const programmes = xmlDoc.getElementsByTagName("programme");
-
-            epgData = {};  // Löschen der alten EPG-Daten bevor neue Daten gespeichert werden
-
-            Array.from(programmes).forEach(prog => {
-                const channelId = prog.getAttribute("channel");
-                const title = prog.getElementsByTagName("title")[0]?.textContent;
-                const start = prog.getAttribute("start");
-                const stop = prog.getAttribute("stop");
-
-                // Prüfen, ob das Programm aktuell läuft und speichern
-                const now = new Date();
-                const startTime = parseEPGDate(start);
-                const endTime = parseEPGDate(stop);
-
-                if (startTime <= now && endTime > now) {  // Programm läuft gerade
-                    epgData[channelId] = { title, startTime, endTime };
-                }
-            });
-            console.log("EPG-Daten erfolgreich geladen und aktualisiert.");
-        })
-        .catch(error => {
-            console.error('Fehler beim Laden der EPG-Daten nach mehreren Versuchen:', error);
-        });
-}
-
-function parseEPGDate(epgDateString) {
-    // YYYYMMDDHHMMSS +0000
-    return new Date(
-        parseInt(epgDateString.substr(0, 4), 10),
-        parseInt(epgDateString.substr(4, 2), 10) - 1,
-        parseInt(epgDateString.substr(6, 2), 10),
-        parseInt(epgDateString.substr(8, 2), 10),
-        parseInt(epgDateString.substr(10, 2), 10),
-        parseInt(epgDateString.substr(12, 2), 10)
-    );
-}
 
 
 
