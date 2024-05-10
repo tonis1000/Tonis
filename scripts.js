@@ -24,16 +24,40 @@ function loadSportPlaylist() {
 // Globale Definition von epgData
 let epgData = {};
 
+
+
+function fetchWithRetry(url, options = {}, retries = 3, backoff = 300) {
+    return fetch(url, options).then(response => {
+        if (response.ok) {
+            return response.text();  // oder response.json() je nach Antwortformat
+        }
+        if (retries > 0) {
+            console.log(`Warten auf ${backoff} ms, dann erneuter Versuch. Verbleibende Versuche: ${retries - 1}`);
+            return new Promise(resolve => setTimeout(resolve, backoff))
+                .then(() => fetchWithRetry(url, options, retries - 1, backoff * 2));
+        }
+        throw new Error(`HTTP error: ${response.statusText}`);
+    }).catch(error => {
+        if (retries > 0) {
+            console.log(`Warten auf ${backoff} ms, dann erneuter Versuch. Verbleibende Versuche: ${retries - 1}`);
+            return new Promise(resolve => setTimeout(resolve, backoff))
+                .then(() => fetchWithRetry(url, options, retries - 1, backoff * 2));
+        }
+        throw error;
+    });
+}
+
 function loadEPGData() {
     const corsProxy = 'https://api.allorigins.win/raw?url=';
-    const targetUrl = 'https://ext.greektv.app/epg/epg.xml';
+    const targetUrl = corsProxy + encodeURIComponent('https://ext.greektv.app/epg/epg.xml');
 
-    fetch(corsProxy + encodeURIComponent(targetUrl))
-        .then(response => response.text())
+    fetchWithRetry(targetUrl, {}, 3, 500)  // 3 Versuche mit einer anfänglichen Backoff-Zeit von 500ms
         .then(xmlString => {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlString, "application/xml");
             const programmes = xmlDoc.getElementsByTagName("programme");
+
+            epgData = {};  // Löschen der alten EPG-Daten bevor neue Daten gespeichert werden
 
             Array.from(programmes).forEach(prog => {
                 const channelId = prog.getAttribute("channel");
@@ -41,23 +65,24 @@ function loadEPGData() {
                 const start = prog.getAttribute("start");
                 const stop = prog.getAttribute("stop");
 
-                // Prüfen, ob das Programm zum aktuellen Zeitpunkt läuft
+                // Prüfen, ob das Programm aktuell läuft und speichern
                 const now = new Date();
                 const startTime = parseEPGDate(start);
                 const endTime = parseEPGDate(stop);
 
-                if (!epgData[channelId] || startTime <= now && endTime > now) {
-                    epgData[channelId] = { title, start, stop };
+                if (startTime <= now && endTime > now) {  // Programm läuft gerade
+                    epgData[channelId] = { title, startTime, endTime };
                 }
             });
+            console.log("EPG-Daten erfolgreich geladen und aktualisiert.");
         })
         .catch(error => {
-            console.error('Fehler beim Laden der EPG-Daten:', error);
+            console.error('Fehler beim Laden der EPG-Daten nach mehreren Versuchen:', error);
         });
 }
 
 function parseEPGDate(epgDateString) {
-    // EPG-Daten formatieren: YYYYMMDDHHMMSS +TZ
+    // YYYYMMDDHHMMSS +0000
     return new Date(
         parseInt(epgDateString.substr(0, 4), 10),
         parseInt(epgDateString.substr(4, 2), 10) - 1,
