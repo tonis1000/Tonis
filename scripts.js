@@ -23,7 +23,7 @@ function loadSportPlaylist() {
 // Globales Objekt für EPG-Daten
 let epgData = {};
 
-// Laden und Parsen der EPG-Daten
+// Laden und Parsen der EPG-Daten mit Zeitabgleich
 function loadEPGData() {
     fetch('https://ext.greektv.app/epg/epg.xml')
         .then(response => response.text())
@@ -33,17 +33,52 @@ function loadEPGData() {
             const programmes = xmlDoc.getElementsByTagName('programme');
             Array.from(programmes).forEach(prog => {
                 const channelId = prog.getAttribute('channel');
+                const start = prog.getAttribute('start');
+                const stop = prog.getAttribute('stop');
                 const titleElement = prog.getElementsByTagName('title')[0];
                 if (titleElement) {
                     const title = titleElement.textContent;
-                    epgData[channelId] = title;
+                    if (!epgData[channelId]) {
+                        epgData[channelId] = [];
+                    }
+                    epgData[channelId].push({
+                        start: parseDateTime(start),
+                        stop: parseDateTime(stop),
+                        title: title
+                    });
                 }
             });
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
 
-// Aktualisieren der Sidebar anhand der Daten aus der M3U-Datei
+// Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
+function parseDateTime(epgTime) {
+    // Format: YYYYMMDDHHMMSS ±ZZZZ
+    const year = parseInt(epgTime.substr(0, 4), 10);
+    const month = parseInt(epgTime.substr(4, 2), 10) - 1; // Monate sind 0-basiert in JavaScript
+    const day = parseInt(epgTime.substr(6, 2), 10);
+    const hour = parseInt(epgTime.substr(8, 2), 10);
+    const minute = parseInt(epgTime.substr(10, 2), 10);
+    const second = parseInt(epgTime.substr(12, 2), 10);
+    const tzHour = parseInt(epgTime.substr(15, 3), 10);
+    const tzMin = parseInt(epgTime.substr(18, 2), 10) * (epgTime[14] === '+' ? 1 : -1);
+
+    const date = new Date(Date.UTC(year, month, day, hour - tzHour, minute - tzMin, second));
+    return date;
+}
+
+// Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
+function getCurrentProgram(channelId) {
+    const now = new Date();
+    if (epgData[channelId]) {
+        const currentProgram = epgData[channelId].find(prog => now >= prog.start && now < prog.stop);
+        return currentProgram ? currentProgram.title : 'Keine aktuelle Sendung verfügbar';
+    }
+    return 'Keine EPG-Daten verfügbar';
+}
+
+// Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
@@ -53,7 +88,7 @@ function updateSidebarFromM3U(data) {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
-            const title = epgData[channelId] || 'Keine aktuelle Sendung verfügbar';
+            const title = getCurrentProgram(channelId);
 
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
@@ -76,6 +111,7 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
 
 // Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
