@@ -14,10 +14,13 @@ function loadExternalPlaylist() {
         .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
 }
 
+// Laden der Sport-Playlist und Aktualisieren der Sidebar
 function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
+
+// Globale Definition von epgData
 let epgData = {};
 
 function loadEPGData() {
@@ -37,19 +40,23 @@ function loadEPGData() {
                 const start = prog.getAttribute("start");
                 const stop = prog.getAttribute("stop");
 
+                // Prüfen, ob das Programm zum aktuellen Zeitpunkt läuft
                 const now = new Date();
                 const startTime = parseEPGDate(start);
                 const endTime = parseEPGDate(stop);
 
-                if (!epgData[channelId] || (startTime <= now && endTime > now)) {
+                if (!epgData[channelId] || startTime <= now && endTime > now) {
                     epgData[channelId] = { title, start, stop };
                 }
             });
         })
-        .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
+        .catch(error => {
+            console.error('Fehler beim Laden der EPG-Daten:', error);
+        });
 }
 
 function parseEPGDate(epgDateString) {
+    // EPG-Daten formatieren: YYYYMMDDHHMMSS +TZ
     return new Date(
         parseInt(epgDateString.substr(0, 4), 10),
         parseInt(epgDateString.substr(4, 2), 10) - 1,
@@ -59,6 +66,10 @@ function parseEPGDate(epgDateString) {
         parseInt(epgDateString.substr(12, 2), 10)
     );
 }
+
+
+
+
 
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
@@ -84,7 +95,7 @@ function updateSidebarFromM3U(data) {
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                             <span class="sender-name">${name}</span>
-                            <span class="epg-channel" id="epg-${channelId}">${title}</span>
+                            <span class="epg-channel" id="{channelId}">${title}</span>
                         </div>
                     </div>
                 `;
@@ -94,15 +105,22 @@ function updateSidebarFromM3U(data) {
     });
 }
 
+
+
+
+// Event Listeners
 document.addEventListener('DOMContentLoaded', function () {
-    loadEPGData();
-    updateClock();
-    setInterval(updateClock, 1000);
+    loadEPGData(); // Laden der EPG-Daten beim Start
+    updateClock(); // Uhrzeit beim Laden der Seite aktualisieren
+    setInterval(updateClock, 1000); // Uhrzeit jede Sekunde aktualisieren
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 });
 
+
+
+// Funktion zum Abrufen der aktuellen Uhrzeit
 function updateClock() {
     const now = new Date();
     const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
