@@ -1,10 +1,5 @@
 // Laden der Playlist.m3u und Aktualisieren der Sidebar
-function loadMyPlaylist() {
-    fetch('playlist.m3u')
-        .then(response => response.text())
-        .then(data => updateSidebarFromM3U(data))
-        .catch(error => console.error('Fehler beim Laden der Playlist:', error));
-}
+
 
 // Laden der externen Playlist und Aktualisieren der Sidebar
 function loadExternalPlaylist() {
@@ -24,7 +19,7 @@ function loadSportPlaylist() {
 // Globale Definition von epgData
 let epgData = {};
 
-function loadEPGData() {
+function loadEPGData(callback) {
     const corsProxy = 'https://api.allorigins.win/raw?url=';
     const targetUrl = 'https://ext.greektv.app/epg/epg.xml';
 
@@ -41,20 +36,33 @@ function loadEPGData() {
                 const start = prog.getAttribute("start");
                 const stop = prog.getAttribute("stop");
 
-                // Prüfen, ob das Programm zum aktuellen Zeitpunkt läuft
                 const now = new Date();
                 const startTime = parseEPGDate(start);
                 const endTime = parseEPGDate(stop);
 
-                if (!epgData[channelId] || startTime <= now && endTime > now) {
+                if (!epgData[channelId] || (startTime <= now && endTime > now)) {
                     epgData[channelId] = { title, start, stop };
                 }
             });
+
+            if (typeof callback === 'function') {
+                callback();
+            }
         })
         .catch(error => {
             console.error('Fehler beim Laden der EPG-Daten:', error);
         });
 }
+
+function loadMyPlaylist() {
+    loadEPGData(() => {
+        fetch('playlist.m3u')
+            .then(response => response.text())
+            .then(data => updateSidebarFromM3U(data))
+            .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+    });
+}
+
 
 function parseEPGDate(epgDateString) {
     // EPG-Daten formatieren: YYYYMMDDHHMMSS +TZ
