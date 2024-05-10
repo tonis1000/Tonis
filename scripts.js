@@ -32,41 +32,20 @@ function loadEPGData() {
         .then(xmlString => {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+            const channels = xmlDoc.getElementsByTagName("channel");
             const programmes = xmlDoc.getElementsByTagName("programme");
 
             Array.from(programmes).forEach(prog => {
                 const channelId = prog.getAttribute("channel");
                 const title = prog.getElementsByTagName("title")[0]?.textContent;
-                const start = prog.getAttribute("start");
-                const stop = prog.getAttribute("stop");
-
-                // Prüfen, ob das Programm zum aktuellen Zeitpunkt läuft
-                const now = new Date();
-                const startTime = parseEPGDate(start);
-                const endTime = parseEPGDate(stop);
-
-                if (!epgData[channelId] || startTime <= now && endTime > now) {
-                    epgData[channelId] = { title, start, stop };
-                }
+                // Speichern des Titels unter Verwendung der channel ID
+                epgData[channelId] = title;
             });
         })
         .catch(error => {
             console.error('Fehler beim Laden der EPG-Daten:', error);
         });
 }
-
-function parseEPGDate(epgDateString) {
-    // EPG-Daten formatieren: YYYYMMDDHHMMSS +TZ
-    return new Date(
-        parseInt(epgDateString.substr(0, 4), 10),
-        parseInt(epgDateString.substr(4, 2), 10) - 1,
-        parseInt(epgDateString.substr(6, 2), 10),
-        parseInt(epgDateString.substr(8, 2), 10),
-        parseInt(epgDateString.substr(10, 2), 10),
-        parseInt(epgDateString.substr(12, 2), 10)
-    );
-}
-
 
 
 
@@ -80,7 +59,7 @@ function updateSidebarFromM3U(data) {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
-            const programmeInfo = epgData[channelId];
+            const title = epgData[channelId] || 'Keine aktuelle Sendung verfügbar';
 
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
@@ -88,14 +67,13 @@ function updateSidebarFromM3U(data) {
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
 
-                const title = programmeInfo ? programmeInfo.title : 'Keine aktuelle Sendung verfügbar';
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
                     <div class="channel-info">
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                             <span class="sender-name">${name}</span>
-                            <span class="epg-channel" id="{channelId}">${title}</span>
+                            <span class="epg-channel" id="epg-${channelId}">${title}</span>
                         </div>
                     </div>
                 `;
