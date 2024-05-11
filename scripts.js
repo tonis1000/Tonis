@@ -162,34 +162,46 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-// Funktion zum Laden und Abspielen des Videos
+/ Funktion zum Laden und Abspielen des Videos mit dem Video.js Player
 function playVideo(videoUrl) {
-    if (videoUrl.endsWith(".mp4") || videoUrl.endsWith(".webm")) {
-        // Wenn die URL eine MP4- oder WEBM-Datei ist, verwenden wir den Plyr-Player
-        const plyrIframe = document.createElement('iframe');
-        plyrIframe.src = `plyr_player.html?videoUrl=${encodeURIComponent(videoUrl)}`;
-        plyrIframe.width = '640';
-        plyrIframe.height = '360';
-        plyrIframe.frameBorder = '0';
-        document.body.appendChild(plyrIframe);
-    } else if (videoUrl.endsWith(".m3u8")) {
-        // Wenn die URL eine HLS-Playlist ist, verwenden wir den Video.js-Player
-        const videojsIframe = document.createElement('iframe');
-        videojsIframe.src = `videojs_player.html?videoUrl=${encodeURIComponent(videoUrl)}`;
-        videojsIframe.width = '640';
-        videojsIframe.height = '360';
-        videojsIframe.frameBorder = '0';
-        document.body.appendChild(videojsIframe);
-    } else {
-        // Für andere Formate verwenden wir den Standard-HTML5-Video-Player
-        const html5Video = document.createElement('video');
-        const source = document.createElement('source');
-        source.src = videoUrl;
-        html5Video.appendChild(source);
-        html5Video.width = '640';
-        html5Video.height = '360';
-        html5Video.controls = true;
-        document.body.appendChild(html5Video);
-    }
+    // Wenn die URL eine HLS-Playlist ist, verwenden wir den Video.js-Player
+    const videojsIframe = document.createElement('iframe');
+    videojsIframe.src = `videojs_player.html?videoUrl=${encodeURIComponent(videoUrl)}`;
+    videojsIframe.width = '640';
+    videojsIframe.height = '360';
+    videojsIframe.frameBorder = '0';
+    document.body.appendChild(videojsIframe);
 }
 
+// Ereignisbehandler
+document.addEventListener('DOMContentLoaded', function () {
+    loadEPGData();
+    updateClock();
+    setInterval(updateClock, 1000);
+    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
+    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
+    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
+});
+
+// Aktualisierung der Uhrzeit
+function updateClock() {
+    const now = new Date();
+    const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
+    const datum = now.toLocaleDateString('de-DE');
+    const uhrzeit = now.toLocaleTimeString('de-DE', { hour12: false });
+    document.getElementById('tag').textContent = tag;
+    document.getElementById('datum').textContent = datum;
+    document.getElementById('uhrzeit').textContent = uhrzeit;
+}
+
+// Event-Listener für das Klicken auf Sender in der Sidebar
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.addEventListener('click', function(event) {
+        const target = event.target.closest('li[data-stream]');
+        if (target) {
+            const videoUrl = target.getAttribute('data-stream');
+            playVideo(videoUrl);
+        }
+    });
+});
