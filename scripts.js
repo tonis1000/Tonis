@@ -272,3 +272,25 @@ subtitleSelect.addEventListener('change', function() {
 
 // Weitere Funktionen für Untertitel, Qualitätswiedergabe, etc. hier hinzufügen
 
+
+
+// Automatisches Laden des Videos beim Klicken auf einen Sender in der Sidebar
+document.getElementById('sidebar-list').addEventListener('click', function(event) {
+    if (event.target.classList.contains('channel-info')) {
+        const videoURL = event.target.getAttribute('data-video-url');
+        const subtitleURL = event.target.getAttribute('data-subtitle-url');
+
+        loadVideo(videoURL);
+        if (subtitleURL) {
+            loadSubtitles(subtitleURL);
+        }
+    }
+});
+
+// Laden des Videos
+function loadVideo(videoURL) {
+    videoPlayer.src = videoURL;
+    videoPlayer.play();
+}
+
+
