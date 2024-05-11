@@ -150,3 +150,28 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
+document.addEventListener('DOMContentLoaded', function () {
+            // Event-Listener für das Klicken auf Sender in der Sidebar
+            const sidebarList = document.getElementById('sidebar-list');
+            sidebarList.addEventListener('click', function(event) {
+                const target = event.target.closest('li[data-stream]');
+                if (target) {
+                    const videoUrl = target.getAttribute('data-stream');
+                    playVideo(videoUrl);
+                }
+            });
+        });
+
+        // Funktion zum Laden und Abspielen des Videos
+        function playVideo(videoUrl) {
+            if (videoUrl.endsWith(".mp4") || videoUrl.endsWith(".webm")) {
+                // Wenn die URL eine MP4- oder WEBM-Datei ist, verwenden wir den Plyr-Player
+                // Hier den Code einfügen, um den Plyr-Player zu starten
+            } else if (videoUrl.endsWith(".m3u8")) {
+                // Wenn die URL eine HLS-Playlist ist, verwenden wir den Video.js-Player
+                // Hier den Code einfügen, um den Video.js-Player zu starten
+            } else {
+                // Für andere Formate verwenden wir den Standard-HTML5-Video-Player
+                // Hier den Code einfügen, um den HTML5-Video-Player zu starten
+            }
+        }
