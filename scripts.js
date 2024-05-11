@@ -101,9 +101,15 @@ function updateSidebarFromM3U(data) {
                     <div class="channel-info">
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
-                            <span class="sender-name">${name}</span>
-                            <span class="epg-channel" id="epg-${channelId}">${title}</span>
                         </div>
+                        <span class="sender-name">${name}</span>
+                        <span class="epg-channel">
+                            <span>${title}</span>
+                            <div class="epg-timeline">
+                                <div class="epg-past"></div>
+                                <div class="epg-future"></div>
+                            </div>
+                        </span>
                     </div>
                 `;
                 sidebarList.appendChild(listItem);
@@ -111,6 +117,7 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
 
 
 // Ereignisbehandler
