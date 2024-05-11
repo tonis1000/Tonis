@@ -162,16 +162,34 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // Funktion zum Laden und Abspielen des Videos
-        function playVideo(videoUrl) {
-            if (videoUrl.endsWith(".mp4") || videoUrl.endsWith(".webm")) {
-                // Wenn die URL eine MP4- oder WEBM-Datei ist, verwenden wir den Plyr-Player
-                // Hier den Code einfügen, um den Plyr-Player zu starten
-            } else if (videoUrl.endsWith(".m3u8")) {
-                // Wenn die URL eine HLS-Playlist ist, verwenden wir den Video.js-Player
-                // Hier den Code einfügen, um den Video.js-Player zu starten
-            } else {
-                // Für andere Formate verwenden wir den Standard-HTML5-Video-Player
-                // Hier den Code einfügen, um den HTML5-Video-Player zu starten
-            }
-        }
+// Funktion zum Laden und Abspielen des Videos
+function playVideo(videoUrl) {
+    if (videoUrl.endsWith(".mp4") || videoUrl.endsWith(".webm")) {
+        // Wenn die URL eine MP4- oder WEBM-Datei ist, verwenden wir den Plyr-Player
+        const plyrIframe = document.createElement('iframe');
+        plyrIframe.src = `plyr_player.html?videoUrl=${encodeURIComponent(videoUrl)}`;
+        plyrIframe.width = '640';
+        plyrIframe.height = '360';
+        plyrIframe.frameBorder = '0';
+        document.body.appendChild(plyrIframe);
+    } else if (videoUrl.endsWith(".m3u8")) {
+        // Wenn die URL eine HLS-Playlist ist, verwenden wir den Video.js-Player
+        const videojsIframe = document.createElement('iframe');
+        videojsIframe.src = `videojs_player.html?videoUrl=${encodeURIComponent(videoUrl)}`;
+        videojsIframe.width = '640';
+        videojsIframe.height = '360';
+        videojsIframe.frameBorder = '0';
+        document.body.appendChild(videojsIframe);
+    } else {
+        // Für andere Formate verwenden wir den Standard-HTML5-Video-Player
+        const html5Video = document.createElement('video');
+        const source = document.createElement('source');
+        source.src = videoUrl;
+        html5Video.appendChild(source);
+        html5Video.width = '640';
+        html5Video.height = '360';
+        html5Video.controls = true;
+        document.body.appendChild(html5Video);
+    }
+}
+
