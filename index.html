@@ -8,19 +8,7 @@
     <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet">
 </head>
 <body>
-<div class="main-container">
-      <div class="player-container">
-        <video id="videoPlayer" class="video-js" controls width="800" height="600">
-        <!-- Hier können Sie fallback Inhalte für ältere Browser oder wenn das Video nicht geladen werden kann einfügen -->
-        <p class="vjs-no-js">
-            Um das Video anzusehen, aktivieren Sie bitte JavaScript und erwägen Sie ein Upgrade auf einen Webbrowser, der HTML5-Video unterstützt.
-            <a href="https://videojs.com/html5-video-support/" target="_blank">Unterstützte Browser anzeigen</a>
-        </p>
-    </video>
- </div>
-
-    
-    <div class="container">
+<div class="container">
         <div class="info-panel">
             <div class="info-group">
                 <span id="tag"></span>
@@ -68,8 +56,13 @@
             </ul>
         </div>
     </div>
-    
-
+<video id="videoPlayer" class="video-js" controls width="800" height="600">
+        <!-- Hier können Sie fallback Inhalte für ältere Browser oder wenn das Video nicht geladen werden kann einfügen -->
+        <p class="vjs-no-js">
+            Um das Video anzusehen, aktivieren Sie bitte JavaScript und erwägen Sie ein Upgrade auf einen Webbrowser, der HTML5-Video unterstützt.
+            <a href="https://videojs.com/html5-video-support/" target="_blank">Unterstützte Browser anzeigen</a>
+        </p>
+    </video>
 
     <!-- Skript-Referenzen -->
     <script src="scripts.js"></script>
