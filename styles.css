@@ -94,20 +94,20 @@ button:hover {
     background-color: #333;
 }
 
-/* Stile für Senderinformationen innerhalb der Sidebar */
+/* Stil für die Senderinformationen innerhalb der Sidebar */
 .channel-info {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background-color: #444;
+    gap: 10px; /* Abstand zwischen den Elementen */
+    background-color: #444; /* Hintergrundfarbe für die Senderinformationen */
     margin-bottom: 5px;
     padding: 5px;
 }
 
-/* Container für Senderlogos mit Zentrierung des Inhalts */
+/* Container für Senderlogos mit spezifischen Abmessungen */
 .logo-container {
-    width: 40px;
-    height: 30px;
+    width: 60px; /* Breite des Logo-Containers */
+    height: 40px; /* Höhe des Logo-Containers */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -115,20 +115,44 @@ button:hover {
 }
 
 .logo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100%; /* Logo-Bild wird auf die Breite des Containers angepasst */
+    height: 100%; /* Logo-Bild wird auf die Höhe des Containers angepasst */
+    object-fit: cover; /* Das Bild wird proportional in den Container eingepasst */
 }
 
+/* Stil für den Sendername */
 .sender-name {
-    flex: 1 0 150px;  /* Flexibles Wachstum, kein Schrumpfen, Basisgröße */
-    font-size: 20px;
-    color: #ffffff;  /* Weißer Text */
-    margin-right: 10px;
+    font-size: 20px; /* Größe des Sendernamens */
+    color: #ffffff; /* Farbe des Sendernamens */
 }
 
+/* Stil für den Sendungstitel */
 .epg-channel {
-    flex: 1 0 100px;
-    font-size: 14px;
-    color: #dddddd;  /* Heller grauer Text für Kontrast */
+    font-size: 14px; /* Größe des Sendungstitels */
+    color: #dddddd; /* Farbe des Sendungstitels */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Zeitachse für das laufende Programm */
+.epg-timeline {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 5px; /* Höhe der Zeitachse */
+    background-color: #666; /* Hintergrundfarbe der Zeitachse */
+    border-radius: 2px; /* Abrundung der Ecken */
+    margin-top: 5px; /* Abstand nach oben */
+}
+
+/* Stil für den Abschnitt, der bereits gesendet wurde */
+.epg-past {
+    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
+    background-color: #ff0000; /* Farbe für bereits vergangene Zeit */
+}
+
+/* Stil für den Abschnitt, der noch gesendet wird */
+.epg-future {
+    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
+    background-color: #00ff00; /* Farbe für noch verbleibende Zeit */
 }
