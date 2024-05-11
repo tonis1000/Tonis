@@ -125,6 +125,14 @@ function updateSidebarFromM3U(data) {
                     </div>
                 `;
                 sidebarList.appendChild(listItem);
+                
+                // Füge einen Event-Handler hinzu, um das Video abzuspielen, wenn auf den Sender geklickt wird
+                listItem.addEventListener('click', function () {
+                    const videoPlayer = document.getElementById('videoPlayer');
+                    const sourceURL = `videos/${name}.mp4`; // Beispiel-URL, anpassen Sie dies entsprechend Ihrer Dateistruktur
+                    videoPlayer.src = sourceURL;
+                    videoPlayer.play();
+                });
             }
         }
     });
