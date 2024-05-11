@@ -88,7 +88,8 @@ function updateSidebarFromM3U(data) {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
-            const title = getCurrentProgram(channelId);
+            const currentProgram = getCurrentProgram(channelId); // Aktuelle Sendung abrufen
+            const epgTimeline = calculateEpgTimeline(channelId); // Zeitachse berechnen
 
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
@@ -104,10 +105,10 @@ function updateSidebarFromM3U(data) {
                         </div>
                         <span class="sender-name">${name}</span>
                         <span class="epg-channel">
-                            <span>${title}</span>
+                            <span>${currentProgram.title}</span>
                             <div class="epg-timeline">
-                                <div class="epg-past"></div>
-                                <div class="epg-future"></div>
+                                <div class="epg-past" style="width: ${epgTimeline.past}%"></div>
+                                <div class="epg-future" style="width: ${epgTimeline.future}%"></div>
                             </div>
                         </span>
                     </div>
@@ -117,6 +118,32 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
+// Funktion zum Berechnen der Zeitachse basierend auf den Start- und Stop-Zeiten der laufenden Sendung
+function calculateEpgTimeline(channelId) {
+    const now = new Date();
+    const currentProgram = getCurrentProgram(channelId);
+    const epgPrograms = epgData[channelId] || [];
+
+    // Standardwerte für die Länge der vergangenen und zukünftigen Segmente
+    let pastLength = 0;
+    let futureLength = 0;
+
+    // Suchen nach der laufenden Sendung und Berechnen der vergangenen und zukünftigen Längen
+    for (let i = 0; i < epgPrograms.length; i++) {
+        const program = epgPrograms[i];
+        if (program.title === currentProgram.title) {
+            // Berechnen der vergangenen Länge
+            pastLength = ((now - program.start) / (program.stop - program.start)) * 100;
+            // Berechnen der zukünftigen Länge
+            futureLength = ((program.stop - now) / (program.stop - program.start)) * 100;
+            break;
+        }
+    }
+
+    return { past: pastLength, future: futureLength };
+}
+
 
 
 
