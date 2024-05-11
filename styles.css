@@ -107,7 +107,7 @@ button:hover {
 /* Container für Senderlogos mit spezifischen Abmessungen */
 .logo-container {
     width: 60px; /* Breite des Logo-Containers */
-    height: 40px; /* Höhe des Logo-Containers */
+    #height: 40px; /* Höhe des Logo-Containers */
     display: flex;
     justify-content: center;
     align-items: center;
