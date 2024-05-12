@@ -53,6 +53,12 @@ function loadEPGData() {
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
+    // Überprüfen, ob epgTime vorhanden und nicht leer ist
+    if (!epgTime || epgTime.length < 19) {
+        console.error('Ungültige EPG-Zeitangabe:', epgTime);
+        return null;
+    }
+
     // Format: YYYYMMDDHHMMSS ±ZZZZ
     const year = parseInt(epgTime.substr(0, 4), 10);
     const month = parseInt(epgTime.substr(4, 2), 10) - 1; // Monate sind 0-basiert in JavaScript
@@ -63,9 +69,23 @@ function parseDateTime(epgTime) {
     const tzHour = parseInt(epgTime.substr(15, 3), 10);
     const tzMin = parseInt(epgTime.substr(18, 2), 10) * (epgTime[14] === '+' ? 1 : -1);
 
+    // Überprüfen, ob die geparsten Werte gültig sind
+    if (isNaN(year) || isNaN(month) || isNaN(day) || isNaN(hour) || isNaN(minute) || isNaN(second) || isNaN(tzHour) || isNaN(tzMin)) {
+        console.error('Ungültige EPG-Zeitangabe:', epgTime);
+        return null;
+    }
+
+    // Überprüfen, ob das Jahr, der Monat und der Tag im gültigen Bereich liegen
+    if (year < 0 || month < 0 || month > 11 || day < 1 || day > 31) {
+        console.error('Ungültige EPG-Zeitangabe:', epgTime);
+        return null;
+    }
+
+    // Erstellen und zurückgeben des Date-Objekts
     const date = new Date(Date.UTC(year, month, day, hour - tzHour, minute - tzMin, second));
     return date;
 }
+
 
 // Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
 function getCurrentProgram(channelId) {
