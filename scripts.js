@@ -52,6 +52,7 @@ function loadEPGData() {
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
 
+
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
     // Format: YYYYMMDDHHMMSS ±ZZZZ
