@@ -34,6 +34,7 @@ function loadEPGData() {
                 const channelId = prog.getAttribute('channel');
                 const start = prog.getAttribute('start');
                 const stop = prog.getAttribute('stop');
+                console.log('Start:', start, 'Stop:', stop); // Add this line
                 const titleElement = prog.getElementsByTagName('title')[0];
                 if (titleElement) {
                     const title = titleElement.textContent;
