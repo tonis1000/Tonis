@@ -19,19 +19,6 @@
     font-size: 16px;
     background-color: #333;
 }
-      .main-container {
-            display: flex;
-            justify-content: center; /* Horizontal zentrieren */
-            align-items: flex-start; /* Vertikal oben ausrichten */
-            height: 100vh;
-        }
-
-        /* CSS-Regeln für den Container des Players */
-        .player-container {
-            width: 800px;
-            height: 600px;
-            margin-top: 20px; /* Abstand nach oben */
-        }
 
 /* Styling für Informationen und Button-Reihen innerhalb des Containers */
 .info-panel, .button-row {
@@ -120,7 +107,7 @@ button:hover {
 /* Container für Senderlogos mit spezifischen Abmessungen */
 .logo-container {
     width: 60px; /* Breite des Logo-Containers */
-    #height: 40px; /* Höhe des Logo-Containers */
+    height: 40px; /* Höhe des Logo-Containers */
     display: flex;
     justify-content: center;
     align-items: center;
