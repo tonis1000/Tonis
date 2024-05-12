@@ -23,6 +23,7 @@ function loadSportPlaylist() {
 let epgData = {};
 
 // Laden und Parsen der EPG-Daten mit Zeitabgleich
+
 function loadEPGData() {
     fetch('https://ext.greektv.app/epg/epg.xml')
         .then(response => response.text())
@@ -51,6 +52,7 @@ function loadEPGData() {
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
+
 
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
