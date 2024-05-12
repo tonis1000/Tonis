@@ -19,63 +19,52 @@ function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
+
 // Globales Objekt für EPG-Daten
 let epgData = {};
 
 // Laden und Parsen der EPG-Daten mit Zeitabgleich
-
 function loadEPGData() {
     fetch('https://ext.greektv.app/epg/epg.xml')
         .then(response => response.text())
         .then(data => {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(data, "application/xml");
-            const programmes = xmlDoc.querySelectorAll('programme');
-            
-            programmes.forEach(prog => {
+            const programmes = xmlDoc.getElementsByTagName('programme');
+            Array.from(programmes).forEach(prog => {
                 const channelId = prog.getAttribute('channel');
                 const start = prog.getAttribute('start');
                 const stop = prog.getAttribute('stop');
-                const title = prog.querySelector('title').textContent;
-                const desc = prog.querySelector('desc').textContent;
-
-                if (!epgData[channelId]) {
-                    epgData[channelId] = [];
+                const titleElement = prog.getElementsByTagName('title')[0];
+                if (titleElement) {
+                    const title = titleElement.textContent;
+                    if (!epgData[channelId]) {
+                        epgData[channelId] = [];
+                    }
+                    epgData[channelId].push({
+                        start: parseDateTime(start),
+                        stop: parseDateTime(stop),
+                        title: title
+                    });
                 }
-
-                epgData[channelId].push({
-                    start: parseDateTime(start),
-                    stop: parseDateTime(stop),
-                    title: title,
-                    desc: desc
-                });
             });
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
 
-
-
-
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
-    // Split the epgTime string to separate date and time parts
-    const dateTimeParts = epgTime.split(' ');
-    const datePart = dateTimeParts[0]; // YYYYMMDD
-    const timePart = dateTimeParts[1]; // HHMMSS
+    // Format: YYYYMMDDHHMMSS ±ZZZZ
+    const year = parseInt(epgTime.substr(0, 4), 10);
+    const month = parseInt(epgTime.substr(4, 2), 10) - 1; // Monate sind 0-basiert in JavaScript
+    const day = parseInt(epgTime.substr(6, 2), 10);
+    const hour = parseInt(epgTime.substr(8, 2), 10);
+    const minute = parseInt(epgTime.substr(10, 2), 10);
+    const second = parseInt(epgTime.substr(12, 2), 10);
+    const tzHour = parseInt(epgTime.substr(15, 3), 10);
+    const tzMin = parseInt(epgTime.substr(18, 2), 10) * (epgTime[14] === '+' ? 1 : -1);
 
-    // Extract date components
-    const year = parseInt(datePart.substr(0, 4), 10);
-    const month = parseInt(datePart.substr(4, 2), 10) - 1; // Month is zero-based in JavaScript
-    const day = parseInt(datePart.substr(6, 2), 10);
-
-    // Extract time components
-    const hour = parseInt(timePart.substr(0, 2), 10);
-    const minute = parseInt(timePart.substr(2, 2), 10);
-    const second = parseInt(timePart.substr(4, 2), 10);
-
-    // Create a new Date object with UTC date and time components
-    const date = new Date(Date.UTC(year, month, day, hour, minute, second));
+    const date = new Date(Date.UTC(year, month, day, hour - tzHour, minute - tzMin, second));
     return date;
 }
 
@@ -84,22 +73,9 @@ function getCurrentProgram(channelId) {
     const now = new Date();
     if (epgData[channelId]) {
         const currentProgram = epgData[channelId].find(prog => now >= prog.start && now < prog.stop);
-        if (currentProgram) {
-            const pastTime = now - currentProgram.start;
-            const futureTime = currentProgram.stop - now;
-            const totalTime = currentProgram.stop - currentProgram.start;
-            const pastPercentage = (pastTime / totalTime) * 100;
-            const futurePercentage = (futureTime / totalTime) * 100;
-            return {
-                title: currentProgram.title,
-                pastPercentage: pastPercentage,
-                futurePercentage: futurePercentage
-            };
-        } else {
-            return { title: 'Keine aktuelle Sendung verfügbar', pastPercentage: 0, futurePercentage: 0 };
-        }
+        return currentProgram ? currentProgram.title : 'Keine aktuelle Sendung verfügbar';
     }
-    return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
+    return 'Keine EPG-Daten verfügbar';
 }
 
 // Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
@@ -112,7 +88,7 @@ function updateSidebarFromM3U(data) {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
-            const programInfo = getCurrentProgram(channelId);
+            const title = getCurrentProgram(channelId);
 
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
@@ -128,10 +104,10 @@ function updateSidebarFromM3U(data) {
                         </div>
                         <span class="sender-name">${name}</span>
                         <span class="epg-channel">
-                            <span>${programInfo.title}</span>
+                            <span>${title}</span>
                             <div class="epg-timeline">
-                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
-                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                                <div class="epg-past"></div>
+                                <div class="epg-future"></div>
                             </div>
                         </span>
                     </div>
@@ -141,6 +117,8 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
+
 
 // Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
