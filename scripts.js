@@ -30,28 +30,30 @@ function loadEPGData() {
         .then(data => {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(data, "application/xml");
-            const programmes = xmlDoc.getElementsByTagName('programme');
-            Array.from(programmes).forEach(prog => {
+            const programmes = xmlDoc.querySelectorAll('programme');
+            
+            programmes.forEach(prog => {
                 const channelId = prog.getAttribute('channel');
                 const start = prog.getAttribute('start');
                 const stop = prog.getAttribute('stop');
-                console.log('Start:', start, 'Stop:', stop); // Add this line
-                const titleElement = prog.getElementsByTagName('title')[0];
-                if (titleElement) {
-                    const title = titleElement.textContent;
-                    if (!epgData[channelId]) {
-                        epgData[channelId] = [];
-                    }
-                    epgData[channelId].push({
-                        start: parseDateTime(start),
-                        stop: parseDateTime(stop),
-                        title: title
-                    });
+                const title = prog.querySelector('title').textContent;
+                const desc = prog.querySelector('desc').textContent;
+
+                if (!epgData[channelId]) {
+                    epgData[channelId] = [];
                 }
+
+                epgData[channelId].push({
+                    start: parseDateTime(start),
+                    stop: parseDateTime(stop),
+                    title: title,
+                    desc: desc
+                });
             });
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
+
 
 
 
