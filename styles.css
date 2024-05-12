@@ -156,3 +156,15 @@ button:hover {
     flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
     background-color: #00ff00; /* Farbe für noch verbleibende Zeit */
 }
+/* Einfügen video player
+        .player-container {
+            float: right;
+            width: 60%; /* oder eine andere angemessene Breite */
+            /* Zusätzliche Stile für den Player, z.B. Hintergrundfarbe oder Rahmen */
+        }
+
+        /* Sie können diesen Stil anpassen, um den Player anzupassen */
+        #video-player {
+            width: 100%;
+            height: auto; /* Oder eine feste Höhe, je nach Bedarf */
+        }
