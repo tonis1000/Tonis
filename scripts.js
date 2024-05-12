@@ -19,7 +19,6 @@ function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
-
 // Globales Objekt für EPG-Daten
 let epgData = {};
 
@@ -73,9 +72,22 @@ function getCurrentProgram(channelId) {
     const now = new Date();
     if (epgData[channelId]) {
         const currentProgram = epgData[channelId].find(prog => now >= prog.start && now < prog.stop);
-        return currentProgram ? currentProgram.title : 'Keine aktuelle Sendung verfügbar';
+        if (currentProgram) {
+            const pastTime = now - currentProgram.start;
+            const futureTime = currentProgram.stop - now;
+            const totalTime = currentProgram.stop - currentProgram.start;
+            const pastPercentage = (pastTime / totalTime) * 100;
+            const futurePercentage = (futureTime / totalTime) * 100;
+            return {
+                title: currentProgram.title,
+                pastPercentage: pastPercentage,
+                futurePercentage: futurePercentage
+            };
+        } else {
+            return { title: 'Keine aktuelle Sendung verfügbar', pastPercentage: 0, futurePercentage: 0 };
+        }
     }
-    return 'Keine EPG-Daten verfügbar';
+    return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
 // Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
@@ -88,7 +100,7 @@ function updateSidebarFromM3U(data) {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
-            const title = getCurrentProgram(channelId);
+            const programInfo = getCurrentProgram(channelId);
 
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
@@ -104,10 +116,10 @@ function updateSidebarFromM3U(data) {
                         </div>
                         <span class="sender-name">${name}</span>
                         <span class="epg-channel">
-                            <span>${title}</span>
+                            <span>${programInfo.title}</span>
                             <div class="epg-timeline">
-                                <div class="epg-past"></div>
-                                <div class="epg-future"></div>
+                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
                             </div>
                         </span>
                     </div>
@@ -117,8 +129,6 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
-
-
 
 // Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
