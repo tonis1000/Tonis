@@ -57,17 +57,23 @@ function loadEPGData() {
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
-    // Format: YYYYMMDDHHMMSS ±ZZZZ
-    const year = parseInt(epgTime.substr(0, 4), 10);
-    const month = parseInt(epgTime.substr(4, 2), 10) - 1; // Monate sind 0-basiert in JavaScript
-    const day = parseInt(epgTime.substr(6, 2), 10);
-    const hour = parseInt(epgTime.substr(8, 2), 10);
-    const minute = parseInt(epgTime.substr(10, 2), 10);
-    const second = parseInt(epgTime.substr(12, 2), 10);
-    const tzHour = parseInt(epgTime.substr(15, 3), 10);
-    const tzMin = parseInt(epgTime.substr(18, 2), 10) * (epgTime[14] === '+' ? 1 : -1);
+    // Split the epgTime string to separate date and time parts
+    const dateTimeParts = epgTime.split(' ');
+    const datePart = dateTimeParts[0]; // YYYYMMDD
+    const timePart = dateTimeParts[1]; // HHMMSS
 
-    const date = new Date(Date.UTC(year, month, day, hour - tzHour, minute - tzMin, second));
+    // Extract date components
+    const year = parseInt(datePart.substr(0, 4), 10);
+    const month = parseInt(datePart.substr(4, 2), 10) - 1; // Month is zero-based in JavaScript
+    const day = parseInt(datePart.substr(6, 2), 10);
+
+    // Extract time components
+    const hour = parseInt(timePart.substr(0, 2), 10);
+    const minute = parseInt(timePart.substr(2, 2), 10);
+    const second = parseInt(timePart.substr(4, 2), 10);
+
+    // Create a new Date object with UTC date and time components
+    const date = new Date(Date.UTC(year, month, day, hour, minute, second));
     return date;
 }
 
