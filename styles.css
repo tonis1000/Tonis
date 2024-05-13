@@ -6,7 +6,10 @@
 .text-white {
     color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
 }
-
+.main-container {
+    display: flex;
+    justify-content: space-between;
+}
 
 
 /* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
