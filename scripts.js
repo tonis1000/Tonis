@@ -1,3 +1,5 @@
+// poli kalo
+
 // Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
@@ -110,51 +112,45 @@ function getCurrentProgram(channelId) {
     return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
+// Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
+function updateSidebarFromM3U(data) {
+    const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.innerHTML = '';
 
+    const lines = data.split('\n');
+    lines.forEach(line => {
+        if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
+            const channelId = idMatch && idMatch[1];
+            const programInfo = getCurrentProgram(channelId);
 
+            const nameMatch = line.match(/,(.*)$/);
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
 
-
-
-
-
-
-// Laden des Streams in den Video-Player
-function loadStream(streamURL) {
-    if (Hls.isSupported()) {
-        const videoPlayer = document.getElementById('video-player');
-        const hls = new Hls();
-        hls.loadSource(streamURL);
-        hls.attachMedia(videoPlayer);
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            videoPlayer.play();
-        });
-    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-        videoPlayer.src = streamURL;
-        videoPlayer.addEventListener('loadedmetadata', function () {
-            videoPlayer.play();
-        });
-    } else {
-        console.error('HLS wird in diesem Browser nicht unterstützt.');
-    }
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="channel-info">
+                        <div class="logo-container">
+                            <img src="${imgURL}" alt="${name} Logo">
+                        </div>
+                        <span class="sender-name">${name}</span>
+                        <span class="epg-channel">
+                            <span>${programInfo.title}</span>
+                            <div class="epg-timeline">
+                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                            </div>
+                        </span>
+                    </div>
+                `;
+                sidebarList.appendChild(listItem);
+            }
+        }
+    });
 }
-
-
-// Ereignisbehandler
-document.addEventListener('DOMContentLoaded', function () {
-    loadEPGData();
-    updateClock();
-    setInterval(updateClock, 1000);
-    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
-    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
-    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
-});
-
-
-
-
-
-
-
 
 // Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
