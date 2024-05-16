@@ -246,3 +246,66 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
+
+
+
+
+
+// Globales Objekt zum Speichern der Stream-Status
+let streamStatus = {};
+
+// Laden der Streams und Aktualisieren der Sidebar
+function loadStreamsAndUpdateSidebar() {
+    fetch('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u')
+        .then(response => response.text())
+        .then(data => {
+            updateSidebarFromM3U(data);
+            checkStreamStatus();
+        })
+        .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+}
+
+// Überprüfen des Status aller Streams
+function checkStreamStatus() {
+    const sidebarItems = document.querySelectorAll('.channel-info');
+    sidebarItems.forEach(item => {
+        const streamURL = item.getAttribute('data-stream');
+        if (streamURL) {
+            checkStreamAvailability(streamURL, item);
+        }
+    });
+}
+
+// Überprüfen der Verfügbarkeit eines Streams
+function checkStreamAvailability(streamURL, sidebarItem) {
+    fetch(streamURL, { method: 'HEAD' })
+        .then(response => {
+            if (response.ok) {
+                // Stream ist verfügbar
+                sidebarItem.querySelector('.sender-name').style.color = 'green';
+                streamStatus[sidebarItem.dataset.stream] = true;
+            } else {
+                // Stream ist nicht verfügbar
+                sidebarItem.querySelector('.sender-name').style.color = 'red';
+                streamStatus[sidebarItem.dataset.stream] = false;
+            }
+        })
+        .catch(error => {
+            console.error(`Fehler beim Überprüfen des Streams (${streamURL}):`, error);
+            streamStatus[streamURL] = false;
+        });
+}
+
+// Funktion zum regelmäßigen Aktualisieren des Stream-Status
+function updateStreamStatusPeriodically() {
+    setInterval(() => {
+        checkStreamStatus();
+    }, 60000); // alle 1 Minute überprüfen
+}
+
+// Ereignisbehandler beim Laden der Seite
+document.addEventListener('DOMContentLoaded', function () {
+    loadStreamsAndUpdateSidebar();
+    updateStreamStatusPeriodically();
+});
+
