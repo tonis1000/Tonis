@@ -115,48 +115,7 @@ function getCurrentProgram(channelId) {
 
 
 
-// Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
-function updateSidebarFromM3U(data) {
-    const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.innerHTML = '';
 
-    const lines = data.split('\n');
-    lines.forEach(line => {
-        if (line.startsWith('#EXTINF')) {
-            const idMatch = line.match(/tvg-id="([^"]+)"/);
-            const channelId = idMatch && idMatch[1];
-            const programInfo = getCurrentProgram(channelId);
-
-            const nameMatch = line.match(/,(.*)$/);
-            if (nameMatch && nameMatch.length > 1) {
-                const name = nameMatch[1].trim();
-                const streamMatch = lines.find(l => l.startsWith('http'));
-                const streamURL = streamMatch || '';
-
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <div class="channel-info">
-                        <div class="logo-container">
-                            <img src="logo.png" alt="${name} Logo">
-                        </div>
-                        <span class="sender-name">${name}</span>
-                        <span class="epg-channel">
-                            <span>${programInfo.title}</span>
-                            <div class="epg-timeline">
-                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
-                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
-                            </div>
-                        </span>
-                    </div>
-                `;
-                listItem.addEventListener('click', function() {
-                    loadStream(streamURL);
-                });
-                sidebarList.appendChild(listItem);
-            }
-        }
-    });
-}
 
 
 // Laden des Streams in den Video-Player
