@@ -172,3 +172,56 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
+
+
+
+
+// Funktion zum Laden und Abspielen des Streams
+function playStream(streamUrl) {
+    const videoPlayer = document.getElementById('video-player');
+    // Entfernen aller vorherigen Quellen
+    while (videoPlayer.firstChild) {
+        videoPlayer.removeChild(videoPlayer.firstChild);
+    }
+    // Hinzufügen der neuen Videoquelle
+    const source = document.createElement('source');
+    source.src = streamUrl;
+    videoPlayer.appendChild(source);
+    // Starten des Videos
+    videoPlayer.play();
+}
+
+// Ereignisbehandler für das Klicken auf einen Sender in der Sidebar
+document.addEventListener('click', function (event) {
+    const clickedElement = event.target;
+    // Überprüfen, ob der geklickte Bereich einen Sender repräsentiert
+    if (clickedElement.classList.contains('channel-info')) {
+        // Extrahieren der Stream-URL aus dem geklickten Element
+        const streamUrl = clickedElement.dataset.streamUrl;
+        if (streamUrl) {
+            // Abspielen des Streams
+            playStream(streamUrl);
+        }
+    }
+});
+
+// Ereignisbehandler für das Ändern des Mauszeigers beim Überfahren eines Senders
+document.addEventListener('mouseover', function (event) {
+    const hoveredElement = event.target;
+    // Überprüfen, ob der Mauszeiger über einen Sender fährt
+    if (hoveredElement.classList.contains('channel-info')) {
+        // Ändern des Mauszeigers in eine Hand
+        hoveredElement.style.cursor = 'pointer';
+    }
+});
+
+// Ereignisbehandler für das Zurücksetzen des Mauszeigers
+document.addEventListener('mouseout', function (event) {
+    const hoveredElement = event.target;
+    // Überprüfen, ob der Mauszeiger den Senderbereich verlässt
+    if (hoveredElement.classList.contains('channel-info')) {
+        // Zurücksetzen des Mauszeigers
+        hoveredElement.style.cursor = 'auto';
+    }
+});
+
