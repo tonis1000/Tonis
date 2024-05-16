@@ -160,12 +160,26 @@ function updateSidebarFromM3U(data) {
     });
 }
 
-// Laden des Streams in den Video-Player mit Video.js
+// Laden des Streams in den Video-Player
 function loadStream(streamURL) {
-    const videoPlayer = videojs('video-player');
-    videoPlayer.src({src: streamURL, type: 'video/mp4'});
-    videoPlayer.play();
+    if (Hls.isSupported()) {
+        const videoPlayer = document.getElementById('video-player');
+        const hls = new Hls();
+        hls.loadSource(streamURL);
+        hls.attachMedia(videoPlayer);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            videoPlayer.play();
+        });
+    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        videoPlayer.src = streamURL;
+        videoPlayer.addEventListener('loadedmetadata', function () {
+            videoPlayer.play();
+        });
+    } else {
+        console.error('HLS wird in diesem Browser nicht unterstützt.');
+    }
 }
+
 
 // Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
