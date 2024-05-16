@@ -283,18 +283,20 @@ function checkStreamAvailability(streamURL, sidebarItem) {
             if (response.ok) {
                 // Stream ist verfügbar
                 sidebarItem.querySelector('.sender-name').style.color = 'green';
-                streamStatus[sidebarItem.dataset.stream] = true;
+                sidebarItem.dataset.online = 'true';
             } else {
                 // Stream ist nicht verfügbar
-                sidebarItem.querySelector('.sender-name').style.color = 'red';
-                streamStatus[sidebarItem.dataset.stream] = false;
+                sidebarItem.querySelector('.sender-name').style.color = 'inherit';
+                sidebarItem.dataset.online = 'false';
             }
         })
         .catch(error => {
             console.error(`Fehler beim Überprüfen des Streams (${streamURL}):`, error);
-            streamStatus[streamURL] = false;
+            sidebarItem.querySelector('.sender-name').style.color = 'inherit';
+            sidebarItem.dataset.online = 'false';
         });
 }
+
 
 // Funktion zum regelmäßigen Aktualisieren des Stream-Status
 function updateStreamStatusPeriodically() {
