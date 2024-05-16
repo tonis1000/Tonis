@@ -130,16 +130,14 @@ function updateSidebarFromM3U(data) {
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
                 const name = nameMatch[1].trim();
-                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
-                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamMatch = line.match(/http.*$/); // Annahme: Stream-URL steht direkt nach #EXTINF
-                let streamURL = streamMatch && streamMatch[0] || '';
+                const streamMatch = lines.find(l => l.startsWith('http'));
+                const streamURL = streamMatch || '';
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
                     <div class="channel-info">
                         <div class="logo-container">
-                            <img src="${imgURL}" alt="${name} Logo">
+                            <img src="logo.png" alt="${name} Logo">
                         </div>
                         <span class="sender-name">${name}</span>
                         <span class="epg-channel">
@@ -159,6 +157,7 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
 
 // Laden des Streams in den Video-Player
 function loadStream(streamURL) {
