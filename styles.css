@@ -101,6 +101,7 @@ button:hover {
     background-color: #444; /* Hintergrundfarbe für die Senderinformationen */
     margin-bottom: 5px;
     padding: 5px;
+    cursor: pointer;
 }
 
 /* Container für Senderlogos mit spezifischen Abmessungen */
