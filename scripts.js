@@ -110,16 +110,10 @@ function getCurrentProgram(channelId) {
     return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
-// Funktion zum Starten des Streamings
-function startStreaming(streamURL) {
-    const videoPlayer = document.getElementById('video-player');
-    // Stoppen des aktuellen Videos, falls eines läuft
-    videoPlayer.pause();
-    // Setzen der neuen Videoquelle
-    videoPlayer.src = streamURL;
-    // Starten des Streams
-    videoPlayer.play();
-}
+
+
+
+
 
 // Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
 function updateSidebarFromM3U(data) {
@@ -138,8 +132,8 @@ function updateSidebarFromM3U(data) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamMatch = line.match(/,(http.+)$/); // Extrahiere den Stream-URL
-                const streamURL = streamMatch && streamMatch[1];
+                const streamMatch = line.match(/http.*$/); // Annahme: Stream-URL steht direkt nach #EXTINF
+                let streamURL = streamMatch && streamMatch[0] || '';
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
@@ -157,13 +151,37 @@ function updateSidebarFromM3U(data) {
                         </span>
                     </div>
                 `;
-                // Füge einen Event-Listener hinzu, um das Streaming zu starten
-                listItem.addEventListener('click', () => startStreaming(streamURL));
+                listItem.addEventListener('click', function() {
+                    loadStream(streamURL);
+                });
                 sidebarList.appendChild(listItem);
             }
         }
     });
 }
+
+// Laden des Streams in den Video-Player
+function loadStream(streamURL) {
+    const videoPlayer = document.getElementById('video-player');
+    videoPlayer.innerHTML = `<source src="${streamURL}" type="video/mp4">`;
+    videoPlayer.load();
+    videoPlayer.play();
+}
+
+// Ereignisbehandler
+document.addEventListener('DOMContentLoaded', function () {
+    loadEPGData();
+    updateClock();
+    setInterval(updateClock, 1000);
+    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
+    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
+    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
+});
+
+
+
+
+
 
 
 // Ereignisbehandler
