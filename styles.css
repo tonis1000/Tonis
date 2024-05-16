@@ -165,7 +165,6 @@ button:hover {
 
         /* Sie können diesen Stil anpassen, um den Player anzupassen */
         .video-player {
-            width: 640px;
-            #width: 100%;
-            #height: auto; /* Oder eine feste Höhe, je nach Bedarf */
+        width: 900px;
+        position: fixed;
         }
