@@ -160,11 +160,10 @@ function updateSidebarFromM3U(data) {
     });
 }
 
-// Laden des Streams in den Video-Player
+// Laden des Streams in den Video-Player mit Video.js
 function loadStream(streamURL) {
-    const videoPlayer = document.getElementById('video-player');
-    videoPlayer.innerHTML = `<source src="${streamURL}" type="video/mp4">`;
-    videoPlayer.load();
+    const videoPlayer = videojs('video-player');
+    videoPlayer.src({src: streamURL, type: 'video/mp4'});
     videoPlayer.play();
 }
 
@@ -177,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 });
+
 
 
 
