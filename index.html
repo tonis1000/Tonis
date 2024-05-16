@@ -33,27 +33,26 @@
         <div class="sidebar-content"> <!-- Bereich für scrollbar Inhalt -->
             <ul id="sidebar-list">
                 <!-- Platzhalter für Senderinformationen, die dynamisch hinzugefügt werden -->
-<li>
-    <div class="channel-info" data-stream-url="STREAM_URL_DES_SENDERS_HIER_EINFÜGEN">
-        <!-- Logo-Container für Bild oder Text -->
-        <div class="logo-container">
-            <img src="logo.png" alt="Sender Logo"> <!-- Beispiel-Bild -->
-        </div>
-        <span class="sender-name">Sendername</span> <!-- Name des Senders -->
-        <span class="epg-channel">
-            <span>Titel der Sendung</span> <!-- Sendungstitel -->
-            <!-- Zeitachse für das laufende Programm -->
-            <div class="epg-timeline">
-                <!-- Abschnitt, der bereits gesendet wurde -->
-                <div class="epg-past"></div>
-                <!-- Abschnitt, der noch gesendet wird -->
-                <div class="epg-future"></div>
-            </div>
-        </span>
-    </div>
-</li>
-<!-- Weitere <li> Elemente hier einfügen -->
-
+                <li>
+                    <div class="channel-info">
+                        <!-- Logo-Container für Bild oder Text -->
+                        <div class="logo-container">
+                            <img src="logo.png" alt="Sender Logo"> <!-- Beispiel-Bild -->
+                        </div>
+                        <span class="sender-name">Sendername</span> <!-- Name des Senders -->
+                        <span class="epg-channel">
+                            <span>Titel der Sendung</span> <!-- Sendungstitel -->
+                            <!-- Zeitachse für das laufende Programm -->
+                            <div class="epg-timeline">
+                                <!-- Abschnitt, der bereits gesendet wurde -->
+                                <div class="epg-past"></div>
+                                <!-- Abschnitt, der noch gesendet wird -->
+                                <div class="epg-future"></div>
+                            </div>
+                        </span>
+                    </div>
+                </li>
+                <!-- Weitere <li> Elemente hier einfügen -->
             </ul>
         </div>
     </div>
@@ -63,20 +62,8 @@
   <!-- Neuer Bereich für den Video-Player --> 
     <div class="player-container">
         <video id="video-player" controls>
-            <!-- Hier fügst du die verschiedenen Videoquellen hinzu -->
-        <source src="video.m3u" type="audio/x-mpegurl">
-        <source src="video.m3u8" type="application/vnd.apple.mpegurl">
-        <source src="video.mp4" type="video/mp4">
-        <source src="video.mbd" type="video/x-ms-bmp">
-        <source src="video.webm" type="video/webm">
-        <source src="video.ogv" type="video/ogg">
-        <source src="video.avi" type="video/x-msvideo">
-        <source src="video.flv" type="video/x-flv">
-        <source src="video.mkv" type="video/x-matroska">
-        <!-- Falls erforderlich, füge weitere Quellen hinzu für andere Formate -->
-        <!-- Beispiel: <source src="video.wmv" type="video/x-ms-wmv"> -->
-        Dein Browser unterstützt das Videoformat nicht.
-            
+            <!-- Optionale Videoquelle(n) hier einfügen -->
+            <!-- Beispiel: <source src="video.mp4" type="video/mp4"> -->
         </video>
     
 </div>
