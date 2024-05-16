@@ -33,26 +33,27 @@
         <div class="sidebar-content"> <!-- Bereich für scrollbar Inhalt -->
             <ul id="sidebar-list">
                 <!-- Platzhalter für Senderinformationen, die dynamisch hinzugefügt werden -->
-                <li>
-                    <div class="channel-info">
-                        <!-- Logo-Container für Bild oder Text -->
-                        <div class="logo-container">
-                            <img src="logo.png" alt="Sender Logo"> <!-- Beispiel-Bild -->
-                        </div>
-                        <span class="sender-name">Sendername</span> <!-- Name des Senders -->
-                        <span class="epg-channel">
-                            <span>Titel der Sendung</span> <!-- Sendungstitel -->
-                            <!-- Zeitachse für das laufende Programm -->
-                            <div class="epg-timeline">
-                                <!-- Abschnitt, der bereits gesendet wurde -->
-                                <div class="epg-past"></div>
-                                <!-- Abschnitt, der noch gesendet wird -->
-                                <div class="epg-future"></div>
-                            </div>
-                        </span>
-                    </div>
-                </li>
-                <!-- Weitere <li> Elemente hier einfügen -->
+<li>
+    <div class="channel-info" data-stream-url="STREAM_URL_DES_SENDERS_HIER_EINFÜGEN">
+        <!-- Logo-Container für Bild oder Text -->
+        <div class="logo-container">
+            <img src="logo.png" alt="Sender Logo"> <!-- Beispiel-Bild -->
+        </div>
+        <span class="sender-name">Sendername</span> <!-- Name des Senders -->
+        <span class="epg-channel">
+            <span>Titel der Sendung</span> <!-- Sendungstitel -->
+            <!-- Zeitachse für das laufende Programm -->
+            <div class="epg-timeline">
+                <!-- Abschnitt, der bereits gesendet wurde -->
+                <div class="epg-past"></div>
+                <!-- Abschnitt, der noch gesendet wird -->
+                <div class="epg-future"></div>
+            </div>
+        </span>
+    </div>
+</li>
+<!-- Weitere <li> Elemente hier einfügen -->
+
             </ul>
         </div>
     </div>
