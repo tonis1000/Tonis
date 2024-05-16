@@ -110,6 +110,17 @@ function getCurrentProgram(channelId) {
     return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
+// Funktion zum Starten des Streamings
+function startStreaming(streamURL) {
+    const videoPlayer = document.getElementById('video-player');
+    // Stoppen des aktuellen Videos, falls eines läuft
+    videoPlayer.pause();
+    // Setzen der neuen Videoquelle
+    videoPlayer.src = streamURL;
+    // Starten des Streams
+    videoPlayer.play();
+}
+
 // Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
@@ -127,6 +138,8 @@ function updateSidebarFromM3U(data) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+                const streamMatch = line.match(/,(http.+)$/); // Extrahiere den Stream-URL
+                const streamURL = streamMatch && streamMatch[1];
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
@@ -144,11 +157,14 @@ function updateSidebarFromM3U(data) {
                         </span>
                     </div>
                 `;
+                // Füge einen Event-Listener hinzu, um das Streaming zu starten
+                listItem.addEventListener('click', () => startStreaming(streamURL));
                 sidebarList.appendChild(listItem);
             }
         }
     });
 }
+
 
 // Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
