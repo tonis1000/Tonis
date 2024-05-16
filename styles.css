@@ -7,17 +7,16 @@
     color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
 }
 .main-container {
-    display: flex;
-    justify-content: space-between;
+    float: left;
 }
 
 
 /* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
 .container {
-    display: flex;
-    flex-direction: column;
-    width: 340px;
-    height: 90px;
+    #display: flex;
+    #flex-direction: column;
+    #width: 340px;
+    #height: 90px;
     border-top: 5px solid transparent;
     font-size: 16px;
     background-color: #333;
@@ -161,13 +160,14 @@ button:hover {
 }
 /* Einfügen video player
         .player-container {
-            float: right;
-            width: 60%; /* oder eine andere angemessene Breite */
+            #float: right;
+            #width: 60%; /* oder eine andere angemessene Breite */
             /* Zusätzliche Stile für den Player, z.B. Hintergrundfarbe oder Rahmen */
         }
 
         /* Sie können diesen Stil anpassen, um den Player anzupassen */
-        #video-player {
-            width: 100%;
-            height: auto; /* Oder eine feste Höhe, je nach Bedarf */
+        .video-player {
+            width: 640px;
+            #width: 100%;
+            #height: auto; /* Oder eine feste Höhe, je nach Bedarf */
         }
