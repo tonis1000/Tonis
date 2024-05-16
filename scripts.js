@@ -130,9 +130,12 @@ function updateSidebarFromM3U(data) {
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
 
+                // Extrahieren der Stream-URL für den Sender
+                const streamUrl = extractStreamUrlForChannel(channelId); // Funktion zum Extrahieren der Stream-URL für den Sender
+
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <div class="channel-info">
+                    <div class="channel-info" data-stream-url="${streamUrl}">
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                         </div>
@@ -151,6 +154,7 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
+
 
 // Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
