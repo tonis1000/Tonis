@@ -6,8 +6,7 @@
     <title>GitHub TV</title>
     <link rel="stylesheet" href="styles.css">
 
-        <link href="https://vjs.zencdn.net/7.16.0/video-js.css" rel="stylesheet">
-    <script src="https://vjs.zencdn.net/7.16.0/video.js"></script>
+
     
 </head>
 <body>
@@ -65,34 +64,7 @@
 
   <!-- Neuer Bereich für den Video-Player --> 
     <div class="player-container">
-            <video id="video-player" class="video-js vjs-default-skin" controls>
-                <!-- MP4-Format -->
-        <source src="video.mp4" type="video/mp4">
-        
-        <!-- WebM-Format -->
-        <source src="video.webm" type="video/webm">
-        
-        <!-- Ogg-Format -->
-        <source src="video.ogg" type="video/ogg">
-
-        <!-- Weitere Videoquellen -->
-        <!-- AVI-Format -->
-        <source src="video.avi" type="video/x-msvideo">
-        
-        <!-- MOV-Format -->
-        <source src="video.mov" type="video/quicktime">
-        
-        <!-- FLV-Format -->
-        <source src="video.flv" type="video/x-flv">
-        
-        <!-- WMV-Format -->
-        <source src="video.wmv" type="video/x-ms-wmv">
-
-        <!-- M3U-Playlist -->
-        <source src="video.m3u" type="application/x-mpegURL">
-        
-        <!-- M3U8-Playlist -->
-        <source src="video.m3u8" type="application/x-mpegURL">        
+            <video id="video-player" controls></video>    
                 
             <!-- Optionale Videoquelle(n) hier einfügen -->
             <!-- Beispiel: <source src="video.mp4" type="video/mp4"> -->
@@ -100,7 +72,8 @@
     
 </div>
 
-    
+        <!-- Hinzufügen von hls.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="scripts.js"></script>
 </body>
 </html>
