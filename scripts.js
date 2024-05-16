@@ -170,3 +170,38 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
+
+
+
+
+// Ereignisbehandler für Klicks auf Sender in der Sidebar
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('channel-info')) {
+        // Senderinformationen extrahieren
+        const senderName = event.target.querySelector('.sender-name').textContent;
+
+        // Quelle für den Sender auswählen (Beispiel: aus der Playlist extrahieren)
+        const videoSource = getVideoSourceForSender(senderName); // Funktion zur Quellenauswahl implementieren
+
+        // Wenn eine Quelle gefunden wurde, Video-Player aktualisieren
+        if (videoSource) {
+            updateVideoPlayer(videoSource);
+        } else {
+            console.error('Quelle für Sender nicht gefunden:', senderName);
+        }
+    }
+});
+
+// Beispiel: Funktion zur Auswahl der Videoquelle für den Sender aus der Playlist
+function getVideoSourceForSender(senderName) {
+    // Hier implementiere Logik zum Extrahieren der Videoquelle für den Sender aus der Playlist
+    // Rückgabe der Videoquelle für den ausgewählten Sender
+    return videoSource;
+}
+
+// Beispiel: Funktion zum Aktualisieren des Video-Players mit der ausgewählten Quelle
+function updateVideoPlayer(videoSource) {
+    const videoPlayer = document.getElementById('video-player');
+    videoPlayer.src = videoSource;
+    videoPlayer.play();
+}
