@@ -187,21 +187,26 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 
-    // Event-Handler für den Klick auf einen Sender
-    const channelInfos = document.querySelectorAll('.channel-info');
-    channelInfos.forEach(channelInfo => {
-        channelInfo.addEventListener('click', function () {
-            const streamURL = this.dataset.stream;
-            if (streamURL) {
-                const videoPlayer = document.getElementById('video-player');
-                videoPlayer.src = streamURL;
-                videoPlayer.play(); // Automatisch abspielen
-            } else {
-                console.error('Stream-URL nicht gefunden.');
-            }
+    // HLS-Stream initialisieren und mit dem Video-Player verbinden
+    if (Hls.isSupported()) {
+        const videoPlayer = document.getElementById('video-player');
+        const hls = new Hls();
+        hls.loadSource('https://example.com/your-hls-stream.m3u8'); // Hier Stream-URL einfügen
+        hls.attachMedia(videoPlayer);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            videoPlayer.play(); // Automatisch abspielen, wenn der Stream bereit ist
         });
-    });
+    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        // Für Safari und ältere Versionen von IE/Edge
+        videoPlayer.src = 'https://example.com/your-hls-stream.m3u8'; // Hier Stream-URL einfügen
+        videoPlayer.addEventListener('loadedmetadata', function () {
+            videoPlayer.play(); // Automatisch abspielen, wenn der Stream bereit ist
+        });
+    } else {
+        console.error('HLS wird vom aktuellen Browser nicht unterstützt.');
+    }
 });
+
 
 
 
