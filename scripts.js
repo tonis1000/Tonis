@@ -112,6 +112,30 @@ function getCurrentProgram(channelId) {
     return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
+
+
+
+
+
+
+// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
+function extractStreamURL(data, channelId) {
+    const lines = data.split('\n');
+    let streamURL = null;
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('#EXTINF')) {
+            const idMatch = lines[i].match(/tvg-id="([^"]+)"/);
+            const currentChannelId = idMatch && idMatch[1];
+            if (currentChannelId === channelId) {
+                const urlLine = lines[i + 1];
+                streamURL = urlLine.trim();
+                break;
+            }
+        }
+    }
+    return streamURL;
+}
+
 // Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
@@ -129,10 +153,11 @@ function updateSidebarFromM3U(data) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+                const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <div class="channel-info">
+                    <div class="channel-info" data-stream="${streamURL}"> <!-- Datenattribut für den Stream-URL -->
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                         </div>
@@ -152,6 +177,7 @@ function updateSidebarFromM3U(data) {
     });
 }
 
+
 // Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
     loadEPGData();
@@ -160,7 +186,26 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
+
+    // Event-Handler für den Klick auf einen Sender
+    const channelInfos = document.querySelectorAll('.channel-info');
+    channelInfos.forEach(channelInfo => {
+        channelInfo.addEventListener('click', function () {
+            const streamURL = this.dataset.stream;
+            if (streamURL) {
+                const videoPlayer = document.getElementById('video-player');
+                videoPlayer.src = streamURL;
+                videoPlayer.play(); // Automatisch abspielen
+            } else {
+                console.error('Stream-URL nicht gefunden.');
+            }
+        });
+    });
 });
+
+
+
+
 
 // Aktualisierung der Uhrzeit
 function updateClock() {
