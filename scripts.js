@@ -178,7 +178,20 @@ function updateSidebarFromM3U(data) {
 }
 
 
-// Ereignisbehandler
+// Funktion zum Laden und Abspielen eines HLS-Streams basierend auf dem Stream-URL
+function playHLSStream(streamURL) {
+    const videoPlayer = document.getElementById('video-player');
+    const hls = new Hls();
+    hls.loadSource(streamURL);
+    hls.attachMedia(videoPlayer);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        videoPlayer.play();
+    });
+}
+
+
+
+// Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
     loadEPGData();
     updateClock();
@@ -187,25 +200,36 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 
-    // HLS-Stream initialisieren und mit dem Video-Player verbinden
+    // Klick-Event für Sender hinzufügen
+    const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.addEventListener('click', function (event) {
+        const channelInfo = event.target.closest('.channel-info');
+        if (channelInfo) {
+            const streamURL = channelInfo.dataset.stream; // Stream-URL aus dem Datenattribut abrufen
+            playStream(streamURL);
+        }
+    });
+});
+
+// Funktion zum Abspielen eines HLS-Streams im Video-Player
+function playStream(streamURL) {
+    const videoPlayer = document.getElementById('video-player');
     if (Hls.isSupported()) {
-        const videoPlayer = document.getElementById('video-player');
         const hls = new Hls();
-        hls.loadSource('https://example.com/your-hls-stream.m3u8'); // Hier Stream-URL einfügen
+        hls.loadSource(streamURL);
         hls.attachMedia(videoPlayer);
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            videoPlayer.play(); // Automatisch abspielen, wenn der Stream bereit ist
+            videoPlayer.play();
         });
     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-        // Für Safari und ältere Versionen von IE/Edge
-        videoPlayer.src = 'https://example.com/your-hls-stream.m3u8'; // Hier Stream-URL einfügen
+        videoPlayer.src = streamURL;
         videoPlayer.addEventListener('loadedmetadata', function () {
-            videoPlayer.play(); // Automatisch abspielen, wenn der Stream bereit ist
+            videoPlayer.play();
         });
     } else {
         console.error('HLS wird vom aktuellen Browser nicht unterstützt.');
     }
-});
+}
 
 
 
