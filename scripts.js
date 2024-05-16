@@ -1,5 +1,3 @@
-// poli kalo
-
 // Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
@@ -130,12 +128,9 @@ function updateSidebarFromM3U(data) {
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
 
-                // Extrahieren der Stream-URL für den Sender
-                const streamUrl = extractStreamUrlForChannel(channelId); // Funktion zum Extrahieren der Stream-URL für den Sender
-
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <div class="channel-info" data-stream-url="${streamUrl}">
+                    <div class="channel-info">
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                         </div>
@@ -154,7 +149,6 @@ function updateSidebarFromM3U(data) {
         }
     });
 }
-
 
 // Ereignisbehandler
 document.addEventListener('DOMContentLoaded', function () {
@@ -176,56 +170,3 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
-
-
-
-
-// Funktion zum Laden und Abspielen des Streams
-function playStream(streamUrl) {
-    const videoPlayer = document.getElementById('video-player');
-    // Entfernen aller vorherigen Quellen
-    while (videoPlayer.firstChild) {
-        videoPlayer.removeChild(videoPlayer.firstChild);
-    }
-    // Hinzufügen der neuen Videoquelle
-    const source = document.createElement('source');
-    source.src = streamUrl;
-    videoPlayer.appendChild(source);
-    // Starten des Videos
-    videoPlayer.play();
-}
-
-document.querySelector('.sidebar').addEventListener('click', function (event) {
-    const clickedElement = event.target.closest('.channel-info');
-    // Überprüfen, ob der geklickte Bereich einen Sender repräsentiert
-    if (clickedElement) {
-        // Extrahieren der Stream-URL aus dem geklickten Element
-        const streamUrl = clickedElement.dataset.streamUrl;
-        if (streamUrl) {
-            // Abspielen des Streams
-            playStream(streamUrl);
-        }
-    }
-});
-
-
-// Ereignisbehandler für das Ändern des Mauszeigers beim Überfahren eines Senders
-document.addEventListener('mouseover', function (event) {
-    const hoveredElement = event.target;
-    // Überprüfen, ob der Mauszeiger über einen Sender fährt
-    if (hoveredElement.classList.contains('channel-info')) {
-        // Ändern des Mauszeigers in eine Hand
-        hoveredElement.style.cursor = 'pointer';
-    }
-});
-
-// Ereignisbehandler für das Zurücksetzen des Mauszeigers
-document.addEventListener('mouseout', function (event) {
-    const hoveredElement = event.target;
-    // Überprüfen, ob der Mauszeiger den Senderbereich verlässt
-    if (hoveredElement.classList.contains('channel-info')) {
-        // Zurücksetzen des Mauszeigers
-        hoveredElement.style.cursor = 'auto';
-    }
-});
-
