@@ -191,11 +191,10 @@ function playStream(streamUrl) {
     videoPlayer.play();
 }
 
-// Ereignisbehandler für das Klicken auf einen Sender in der Sidebar
-document.addEventListener('click', function (event) {
-    const clickedElement = event.target;
+document.querySelector('.sidebar').addEventListener('click', function (event) {
+    const clickedElement = event.target.closest('.channel-info');
     // Überprüfen, ob der geklickte Bereich einen Sender repräsentiert
-    if (clickedElement.classList.contains('channel-info')) {
+    if (clickedElement) {
         // Extrahieren der Stream-URL aus dem geklickten Element
         const streamUrl = clickedElement.dataset.streamUrl;
         if (streamUrl) {
@@ -204,6 +203,7 @@ document.addEventListener('click', function (event) {
         }
     }
 });
+
 
 // Ereignisbehandler für das Ändern des Mauszeigers beim Überfahren eines Senders
 document.addEventListener('mouseover', function (event) {
