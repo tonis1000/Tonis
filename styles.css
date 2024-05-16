@@ -1,3 +1,4 @@
+User
 /* Grundlegende Farben und Schriftgrößen als Wiederverwendbare Klassen */
 .base-background {
     background-color: #333;  /* Dunkelgrauer Hintergrund für Container und Sidebar */
@@ -100,7 +101,6 @@ button:hover {
     background-color: #444; /* Hintergrundfarbe für die Senderinformationen */
     margin-bottom: 5px;
     padding: 5px;
-    cursor: pointer;
 }
 
 /* Container für Senderlogos mit spezifischen Abmessungen */
