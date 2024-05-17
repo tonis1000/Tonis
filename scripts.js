@@ -201,27 +201,6 @@ function checkStreamStatus() {
 }
 
 
-// Funktion, um die URL durch einen Proxy zu leiten
-function fetchWithProxy(dynamicUrl) {
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const url = `${proxyUrl}${dynamicUrl}`;
-
-    return fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log(data);
-            return data;
-        })
-        .catch(error => {
-            console.error('Fehler:', error);
-        });
-}
-
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
     loadEPGData();
@@ -243,17 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Überprüfen Sie den Status der Streams alle Minute
     setInterval(checkStreamStatus, 60000);
-
-    // Beispielaufruf der Funktion mit einer dynamischen URL
-    const dynamicUrl = 'https://live.netmaxtv.com:8080/live/live/playlist.m3u8';
-    fetchWithProxy(dynamicUrl).then(data => {
-        // Hier kannst du die Daten weiterverarbeiten, z.B. die Sidebar aktualisieren
-        updateSidebarFromM3U(data);
-    });
 });
-
-// Rest deines vorhandenen Codes ...
-
 
 // Funktion zum Abspielen eines HLS-Streams im Video-Player
 function playStream(streamURL) {
