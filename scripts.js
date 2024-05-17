@@ -130,63 +130,51 @@ function extractStreamURL(data, channelId) {
     return streamURL;
 }
 
-
-
-// Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.innerHTML = ''; // Vorhandene Einträge löschen
+    sidebarList.innerHTML = '';
 
     const lines = data.split('\n');
-    for (let i = 0; i < lines.length; i++) {
-        if (lines[i].startsWith('#EXTINF')) {
-            const idMatch = lines[i].match(/tvg-id="([^"]+)"/);
-            const logoMatch = lines[i].match(/tvg-logo="([^"]+)"/);
+    lines.forEach(line => {
+        if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
-            const logoURL = logoMatch && logoMatch[1];
-            const channelName = lines[i].split(',').pop().trim();
+            const programInfo = getCurrentProgram(channelId);
 
-            const currentProgram = getCurrentProgram(channelId);
+            const nameMatch = line.match(/,(.*)$/);
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+                const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
 
-            const listItem = document.createElement('li');
-            listItem.className = 'channel-info';
-            listItem.innerHTML = `
-                <div class="logo-container">
-                    <img src="${logoURL}" alt="${channelName} Logo">
-                </div>
-                <div class="sender-name">${channelName}</div>
-                <div class="epg-channel">
-                    <div>${currentProgram.title}</div>
-                    <div class="epg-timeline">
-                        <div class="epg-past" style="width: ${currentProgram.pastPercentage}%;"></div>
-                        <div class="epg-future" style="width: ${currentProgram.futurePercentage}%;"></div>
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="channel-info" data-stream="${streamURL}"> <!-- Datenattribut für den Stream-URL -->
+                        <div class="logo-container">
+                            <img src="${imgURL}" alt="${name} Logo">
+                        </div>
+                        <span class="sender-name">${name}</span>
+                        <span class="epg-channel">
+                            <span>${programInfo.title}</span>
+                            <div class="epg-timeline">
+                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                            </div>
+                        </span>
                     </div>
-                </div>
-            `;
-            listItem.addEventListener('click', () => {
-                const streamURL = extractStreamURL(data, channelId);
-                if (streamURL) {
-                    const videoPlayer = document.getElementById('video-player');
-                    videoPlayer.src = streamURL;
-                    videoPlayer.play();
-                } else {
-                    alert('Stream-URL nicht gefunden.');
-                }
-            });
-            sidebarList.appendChild(listItem);
+                `;
+                sidebarList.appendChild(listItem);
+            }
         }
-    }
+    });
 
     // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
 
 
-
-
-
-
-// Regelmäßige Überprüfung des Stream-Status alle 2 Minuten
+// Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
     sidebarChannels.forEach(channel => {
@@ -206,21 +194,11 @@ function checkStreamStatus() {
                 .catch(error => {
                     // Fehler beim Überprüfen des Stream-Status
                     console.error('Fehler beim Überprüfen des Stream-Status:', error);
+                    channel.querySelector('.sender-name').classList.remove('online'); // Sendername zurücksetzen
                 });
         }
     });
 }
-
-// Initialisieren der Playlist und EPG-Daten
-window.onload = function () {
-    loadMyPlaylist();
-    loadExternalPlaylist();
-    loadSportPlaylist();
-    loadEPGData();
-
-    // Regelmäßige Statusaktualisierung des Stream-Status alle 2 Minuten
-    setInterval(checkStreamStatus, 2 * 60 * 1000);
-};
 
 
 // Ereignisbehandler für Klicks auf Sender
