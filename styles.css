@@ -60,7 +60,7 @@ button:hover {
 
 /* Sidebar-Styling mit spezifischen Maßen und Layout-Einstellungen */
 .sidebar {
-    width: 330px;
+    width: 350px;
     height: 740px;
     padding: 10px;
     margin-top: 2px;
@@ -106,7 +106,7 @@ button:hover {
 
 .logo-container {
     width: 60px; /* Breite des Logo-Containers */
-    height: 60px; /* Höhe des Logo-Containers */
+    #height: 60px; /* Höhe des Logo-Containers */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -123,14 +123,20 @@ button:hover {
 .sender-name {
     font-size: 20px; /* Größe des Sendernamens */
     color: #ffffff; /* Farbe des Sendernamens */
-        flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
+    #flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
+    width: 70px;
 }
 
 /* Stil für den Sendungstitel */
 .epg-channel {
-    display: flex;
-    flex-direction: column;
-    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
+    #display: flex;
+    #flex-direction: column;
+    #flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
+    color: #ffffff;
+    display: grid;
+    margin-left: 10px;
+
+    
 }
 
 /* Zeitachse für das laufende Programm */
