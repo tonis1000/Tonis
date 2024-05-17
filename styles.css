@@ -1,3 +1,4 @@
+
 /* Grundlegende Farben und Schriftgrößen als Wiederverwendbare Klassen */
 .base-background {
     background-color: #333;  /* Dunkelgrauer Hintergrund für Container und Sidebar */
@@ -94,18 +95,18 @@ button:hover {
 
 /* Stil für die Senderinformationen innerhalb der Sidebar */
 .channel-info {
-    display: grid; /* Grid-Layout für drei Spalten */
-    grid-template-columns: 60px 1fr 2fr; /* Drei Spalten: Logo, Sendername, Sendungstitel mit EPG */
-    align-items: center; /* Elemente vertikal zentrieren */
-    gap: 10px; /* Abstand zwischen den Spalten */
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Abstand zwischen den Elementen */
     background-color: #444; /* Hintergrundfarbe für die Senderinformationen */
     margin-bottom: 5px;
     padding: 5px;
     cursor: pointer;
 }
 
-/* Container für Senderlogos mit spezifischen Abmessungen */
 .logo-container {
+    width: 60px; /* Breite des Logo-Containers */
+    height: 60px; /* Höhe des Logo-Containers */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -113,52 +114,68 @@ button:hover {
 }
 
 .logo-container img {
-    width: 50px; /* Breite des Logos */
-    height: 50px; /* Höhe des Logos */
-    object-fit: cover; /* Proportionales Anpassen des Bildes */
+    width: 100%; /* Logo-Bild wird auf die Breite des Containers angepasst */
+    height: 100%; /* Logo-Bild wird auf die Höhe des Containers angepasst */
+    object-fit: cover; /* Das Bild wird proportional in den Container eingepasst */
 }
 
 /* Stil für den Sendername */
 .sender-name {
-    font-size: 16px; /* Größe des Sendernamens */
+    font-size: 20px; /* Größe des Sendernamens */
     color: #ffffff; /* Farbe des Sendernamens */
+        flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
 }
 
-/* Stil für den Sendungstitel und die EPG-Zeitleiste */
+/* Stil für den Sendungstitel */
 .epg-channel {
-    font-size: 14px; /* Größe des Sendungstitels */
-    color: #dddddd; /* Farbe des Sendungstitels */
     display: flex;
     flex-direction: column;
+    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
 }
 
 /* Zeitachse für das laufende Programm */
 .epg-timeline {
     display: flex;
-    flex-direction: row;
-    width: 100%;
     height: 5px; /* Höhe der Zeitachse */
     background-color: #666; /* Hintergrundfarbe der Zeitachse */
     border-radius: 2px; /* Abrundung der Ecken */
-    margin-top: 5px; /* Abstand nach oben */
+    margin-left: 10px; /* Abstand zur EPG-Beschreibung */
+    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
 }
 
 /* Stil für den Abschnitt, der bereits gesendet wurde */
-.epg-past {
+.epg-past,
+.epg-future {
     flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
+}
+
+.epg-past {
     background-color: #ff0000; /* Farbe für bereits vergangene Zeit */
 }
 
-/* Stil für den Abschnitt, der noch gesendet wird */
 .epg-future {
-    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
     background-color: #00ff00; /* Farbe für noch verbleibende Zeit */
 }
 
 /* Container für den Video-Player */
 .player-container {
+    #float: right; /* Positioniert den Container rechts */
     width: 60%; /* Breite des Containers */
     background-color: #f9f9f9; /* Beispiel-Hintergrundfarbe */
     border: 1px solid #ccc; /* Beispiel-Rahmen */
     padding: 5px; /* Beispiel-Abstand innerhalb des Containers */
+}
+
+/* Stil für den Video-Player */
+.video-player {
+    width: 900px; /* Breite des Video-Players */
+    position: fixed; /* Positioniert den Player fest an einer Stelle im Fenster */
+    bottom: 5px; /* Abstand vom unteren Rand des Fensters */
+    right: 5px; /* Abstand vom rechten Rand des Fensters */
+    z-index: 1000; /* Stellt sicher, dass der Player über anderen Elementen liegt */
+}
+
+.online {
+    color: lightgreen;
+    font-weight: bold;
 }
