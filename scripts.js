@@ -181,28 +181,12 @@ function updateSidebarFromM3U(data) {
     checkStreamStatus();
 }
 
-// Regelmäßige Statusaktualisierung alle 2 Minuten
-window.onload = function () {
-    loadMyPlaylist();
-    loadExternalPlaylist();
-    loadSportPlaylist();
-    loadEPGData();
-
-    // Statusaktualisierung alle 2 Minuten
-    setInterval(() => {
-        loadEPGData();
-        loadMyPlaylist();
-        loadExternalPlaylist();
-        loadSportPlaylist();
-    }, 2 * 60 * 1000);
-};
 
 
 
 
 
-
-// Funktion zum Überprüfen des Status der Streams
+// Regelmäßige Überprüfung des Stream-Status alle 2 Minuten
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
     sidebarChannels.forEach(channel => {
@@ -222,11 +206,21 @@ function checkStreamStatus() {
                 .catch(error => {
                     // Fehler beim Überprüfen des Stream-Status
                     console.error('Fehler beim Überprüfen des Stream-Status:', error);
-                    channel.querySelector('.sender-name').classList.remove('online'); // Sendername zurücksetzen
                 });
         }
     });
 }
+
+// Initialisieren der Playlist und EPG-Daten
+window.onload = function () {
+    loadMyPlaylist();
+    loadExternalPlaylist();
+    loadSportPlaylist();
+    loadEPGData();
+
+    // Regelmäßige Statusaktualisierung des Stream-Status alle 2 Minuten
+    setInterval(checkStreamStatus, 2 * 60 * 1000);
+};
 
 
 // Ereignisbehandler für Klicks auf Sender
