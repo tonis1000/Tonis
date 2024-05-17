@@ -130,7 +130,6 @@ function extractStreamURL(data, channelId) {
     return streamURL;
 }
 
-// Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
@@ -174,6 +173,7 @@ function updateSidebarFromM3U(data) {
     checkStreamStatus();
 }
 
+
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
@@ -194,10 +194,12 @@ function checkStreamStatus() {
                 .catch(error => {
                     // Fehler beim Überprüfen des Stream-Status
                     console.error('Fehler beim Überprüfen des Stream-Status:', error);
+                    channel.querySelector('.sender-name').classList.remove('online'); // Sendername zurücksetzen
                 });
         }
     });
 }
+
 
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
