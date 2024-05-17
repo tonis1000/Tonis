@@ -174,3 +174,8 @@ button:hover {
     right: 5px; /* Abstand vom rechten Rand des Fensters */
     z-index: 1000; /* Stellt sicher, dass der Player über anderen Elementen liegt */
 }
+
+.online {
+    color: lightgreen;
+    font-weight: bold;
+}
