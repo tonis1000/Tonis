@@ -138,6 +138,9 @@ button:hover {
 
     
 }
+.epg-channel span {
+    padding-bottom: 20px;
+}
 
 /* Zeitachse für das laufende Programm */
 .epg-timeline {
