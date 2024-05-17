@@ -131,7 +131,7 @@ button:hover {
 .epg-channel {
     #display: flex;
     #flex-direction: column;
-    #flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
+    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
     color: #ffffff;
     display: grid;
     margin-left: 10px;
