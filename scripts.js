@@ -130,48 +130,76 @@ function extractStreamURL(data, channelId) {
     return streamURL;
 }
 
+
+
+// Funktion zum Aktualisieren der Sidebar basierend auf der M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.innerHTML = '';
+    sidebarList.innerHTML = ''; // Vorhandene Einträge löschen
 
     const lines = data.split('\n');
-    lines.forEach(line => {
-        if (line.startsWith('#EXTINF')) {
-            const idMatch = line.match(/tvg-id="([^"]+)"/);
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('#EXTINF')) {
+            const idMatch = lines[i].match(/tvg-id="([^"]+)"/);
+            const logoMatch = lines[i].match(/tvg-logo="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
-            const programInfo = getCurrentProgram(channelId);
+            const logoURL = logoMatch && logoMatch[1];
+            const channelName = lines[i].split(',').pop().trim();
 
-            const nameMatch = line.match(/,(.*)$/);
-            if (nameMatch && nameMatch.length > 1) {
-                const name = nameMatch[1].trim();
-                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
-                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
+            const currentProgram = getCurrentProgram(channelId);
 
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <div class="channel-info" data-stream="${streamURL}"> <!-- Datenattribut für den Stream-URL -->
-                        <div class="logo-container">
-                            <img src="${imgURL}" alt="${name} Logo">
-                        </div>
-                        <span class="sender-name">${name}</span>
-                        <span class="epg-channel">
-                            <span>${programInfo.title}</span>
-                            <div class="epg-timeline">
-                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
-                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
-                            </div>
-                        </span>
+            const listItem = document.createElement('li');
+            listItem.className = 'channel-info';
+            listItem.innerHTML = `
+                <div class="logo-container">
+                    <img src="${logoURL}" alt="${channelName} Logo">
+                </div>
+                <div class="sender-name">${channelName}</div>
+                <div class="epg-channel">
+                    <div>${currentProgram.title}</div>
+                    <div class="epg-timeline">
+                        <div class="epg-past" style="width: ${currentProgram.pastPercentage}%;"></div>
+                        <div class="epg-future" style="width: ${currentProgram.futurePercentage}%;"></div>
                     </div>
-                `;
-                sidebarList.appendChild(listItem);
-            }
+                </div>
+            `;
+            listItem.addEventListener('click', () => {
+                const streamURL = extractStreamURL(data, channelId);
+                if (streamURL) {
+                    const videoPlayer = document.getElementById('video-player');
+                    videoPlayer.src = streamURL;
+                    videoPlayer.play();
+                } else {
+                    alert('Stream-URL nicht gefunden.');
+                }
+            });
+            sidebarList.appendChild(listItem);
         }
-    });
+    }
 
     // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
+
+// Regelmäßige Statusaktualisierung alle 2 Minuten
+window.onload = function () {
+    loadMyPlaylist();
+    loadExternalPlaylist();
+    loadSportPlaylist();
+    loadEPGData();
+
+    // Statusaktualisierung alle 2 Minuten
+    setInterval(() => {
+        loadEPGData();
+        loadMyPlaylist();
+        loadExternalPlaylist();
+        loadSportPlaylist();
+    }, 2 * 60 * 1000);
+};
+
+
+
+
 
 
 // Funktion zum Überprüfen des Status der Streams
