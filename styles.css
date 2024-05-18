@@ -176,6 +176,7 @@ button:hover {
     width: 900px;
     float: left;
     display: flex;
+    position: relative; /* Stelle sicher, dass die innere Leiste relativ zum Container positioniert ist */
 }
 
 /* Stil für den Video-Player */
@@ -194,3 +195,39 @@ button:hover {
     color: lightgreen;
     font-weight: bold;
 }
+
+
+.player-info {
+    background-color: #333; /* Dunkelgrauer Hintergrund wie der Rest des Players */
+    padding: 10px; /* Abstand innerhalb der Leiste */
+    display: flex; /* Elemente nebeneinander anordnen */
+    justify-content: space-between; /* Platz zwischen den Elementen verteilen */
+    align-items: center; /* Elemente vertikal zentrieren */
+}
+
+#current-channel {
+    color: #fff; /* Weiße Schriftfarbe */
+    font-size: 16px; /* Größe des Sendernamens */
+}
+
+#stream-url {
+    flex: 1; /* Das Textfeld soll den verfügbaren Platz einnehmen */
+    margin: 0 10px; /* Abstand zu anderen Elementen */
+    padding: 5px; /* Innenabstand */
+}
+
+#play-button {
+    background-color: #007bff; /* Blaue Farbe wie deine anderen Buttons */
+    color: #fff; /* Weiße Schriftfarbe */
+    border: none; /* Kein Rahmen */
+    padding: 8px 16px; /* Größe des Buttons */
+    border-radius: 5px; /* Abgerundete Ecken */
+    cursor: pointer; /* Zeiger anzeigen */
+}
+
+#play-button:hover {
+    background-color: #0056b3; /* Dunklerer Blauton bei Hover */
+}
+
+
+
