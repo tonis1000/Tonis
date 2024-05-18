@@ -204,6 +204,7 @@ function checkStreamStatus() {
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
     loadEPGData();
+    updateCurrentChannel(); // Aktualisiere den aktuellen Sendernamen
     updateClock();
     setInterval(updateClock, 1000);
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
@@ -255,9 +256,12 @@ function updateClock() {
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
 
-// Annahme: Hier wird der aktuelle Sendernamen aus einer Quelle abgerufen und in der Variable currentChannel gespeichert
-var currentChannel = "Aktueller Sender";
+// Aktuellen Sendernamen aktualisieren
+function updateCurrentChannel() {
+    // Hier wird derzeit angenommen, dass der erste Kanal in epgData der aktuell ausgewählte ist
+    const selectedChannel = Object.keys(epgData)[0]; // Nehme den ersten Kanal als Beispiel
+    const currentProgram = getCurrentProgram(selectedChannel);
+    const currentChannelName = currentProgram.title;
+    document.getElementById("current-channel").textContent = currentChannelName;
 
-// Aktualisierung des Sendernamens im HTML
-document.getElementById("current-channel").textContent = currentChannel;
 
