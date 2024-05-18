@@ -254,3 +254,52 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
+
+
+const proxyUrls = [
+    'https://cors-anywhere.herokuapp.com/',
+    'https://proxy.example.com/',
+    'https://another-proxy.com/'
+];
+
+function fetchWithMultipleProxies(dynamicUrl) {
+    return new Promise((resolve, reject) => {
+        let attempt = 0;
+
+        function tryFetch() {
+            const proxyUrl = proxyUrls[attempt];
+            const url = `${proxyUrl}${dynamicUrl}`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    resolve(data);
+                })
+                .catch(error => {
+                    console.error(`Fehler bei Proxy ${proxyUrl}:`, error);
+                    attempt++;
+                    if (attempt < proxyUrls.length) {
+                        tryFetch(); // Versuche den nächsten Proxy
+                    } else {
+                        reject(new Error('Alle Proxies sind fehlgeschlagen'));
+                    }
+                });
+        }
+
+        tryFetch();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const dynamicUrl = 'https://streamcdnb7-c98db5952cb54b358365984178fb898a.msvdn.net/live/S86713049/gonOwuUacAxM/playlist.m3u8';
+    fetchWithMultipleProxies(dynamicUrl).then(data => {
+        console.log('Daten erfolgreich geladen:', data);
+    }).catch(error => {
+        console.error('Fehler beim Laden der Playlist mit allen Proxies:', error);
+    });
+});
