@@ -255,4 +255,9 @@ function updateClock() {
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
 
+// Annahme: Hier wird der aktuelle Sendernamen aus einer Quelle abgerufen und in der Variable currentChannel gespeichert
+var currentChannel = "Aktueller Sender";
+
+// Aktualisierung des Sendernamens im HTML
+document.getElementById("current-channel").textContent = currentChannel;
 
