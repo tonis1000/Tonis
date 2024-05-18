@@ -1,5 +1,3 @@
-// poli kalo
-
 // Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
@@ -88,7 +86,6 @@ function parseDateTime(epgTime) {
     return date;
 }
 
-
 // Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
 function getCurrentProgram(channelId) {
     const now = new Date();
@@ -173,7 +170,6 @@ function updateSidebarFromM3U(data) {
     checkStreamStatus();
 }
 
-
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
@@ -199,7 +195,6 @@ function checkStreamStatus() {
         }
     });
 }
-
 
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
@@ -254,7 +249,6 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
-
 
 const proxyUrls = [
     'https://cors-anywhere.herokuapp.com/',
