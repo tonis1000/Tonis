@@ -1,63 +1,39 @@
-// Funktion zum Abrufen von Daten mit mehreren Proxies
-function fetchWithMultipleProxies(dynamicUrl) {
-    return new Promise((resolve, reject) => {
-        let attempt = 0;
+document.addEventListener('DOMContentLoaded', async function () {
+    const sidebarList = document.getElementById('sidebar-list');
+    let epgData = {};
 
-        function tryFetch() {
-            const proxyUrl = proxyUrls[attempt];
-            const url = `${proxyUrl}${dynamicUrl}`;
-
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    resolve(data);
-                })
-                .catch(error => {
-                    console.error(`Fehler bei Proxy ${proxyUrl}:`, error);
-                    attempt++;
-                    if (attempt < proxyUrls.length) {
-                        tryFetch(); // Versuche den nächsten Proxy
-                    } else {
-                        reject(new Error('Alle Proxies sind fehlgeschlagen'));
-                    }
-                });
+    // Laden der Playlist.m3u und Aktualisieren der Sidebar
+    async function loadMyPlaylist() {
+        try {
+            const response = await fetch('playlist.m3u');
+            const data = await response.text();
+            updateSidebarFromM3U(data);
+        } catch (error) {
+            console.error('Fehler beim Laden der Playlist:', error);
         }
+    }
 
-        tryFetch();
-    });
-}
+    // Laden der externen Playlist und Aktualisieren der Sidebar
+    async function loadExternalPlaylist() {
+        try {
+            const response = await fetch('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u');
+            const data = await response.text();
+            updateSidebarFromM3U(data);
+        } catch (error) {
+            console.error('Fehler beim Laden der externen Playlist:', error);
+        }
+    }
 
-// Laden der Playlist.m3u und Aktualisieren der Sidebar mit Proxies
-function loadMyPlaylist() {
-    const playlistUrl = 'playlist.m3u';
-    fetchWithMultipleProxies(playlistUrl)
-        .then(data => updateSidebarFromM3U(data))
-        .catch(error => console.error('Fehler beim Laden der Playlist mit Proxies:', error));
-}
+    // Laden der Sport-Playlist und Aktualisieren der Sidebar
+    function loadSportPlaylist() {
+        alert("Funktionalität für Sport-Playlist wird implementiert...");
+    }
 
-// Laden der externen Playlist und Aktualisieren der Sidebar mit Proxies
-function loadExternalPlaylist() {
-    const playlistUrl = 'https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u';
-    fetchWithMultipleProxies(playlistUrl)
-        .then(data => updateSidebarFromM3U(data))
-        .catch(error => console.error('Fehler beim Laden der externen Playlist mit Proxies:', error));
-}
-
-// Aktualisierung der restlichen Funktionen bleibt unverändert
-
-// Globales Objekt für EPG-Daten
-let epgData = {};
-
-// Laden und Parsen der EPG-Daten mit Zeitabgleich
-function loadEPGData() {
-    fetch('https://ext.greektv.app/epg/epg.xml')
-        .then(response => response.text())
-        .then(data => {
+    // Laden und Parsen der EPG-Daten mit Zeitabgleich
+    async function loadEPGData() {
+        try {
+            const response = await fetch('https://ext.greektv.app/epg/epg.xml');
+            const data = await response.text();
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(data, "application/xml");
             const programmes = xmlDoc.getElementsByTagName('programme');
@@ -78,13 +54,14 @@ function loadEPGData() {
                     });
                 }
             });
-        })
-        .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
-}
+        } catch (error) {
+            console.error('Fehler beim Laden der EPG-Daten:', error);
+        }
+    }
 
-// Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
-function parseDateTime(epgTime) {
-    // Überprüfen, ob epgTime vorhanden und nicht leer ist
+    // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
+    function parseDateTime(epgTime) {
+            // Überprüfen, ob epgTime vorhanden und nicht leer ist
     if (!epgTime || epgTime.length < 19) {
         console.error('Ungültige EPG-Zeitangabe:', epgTime);
         return null;
@@ -115,11 +92,12 @@ function parseDateTime(epgTime) {
     // Erstellen und zurückgeben des Date-Objekts
     const date = new Date(Date.UTC(year, month, day, hour - tzHour, minute - tzMin, second));
     return date;
-}
+   }
+    
 
-// Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
-function getCurrentProgram(channelId) {
-    const now = new Date();
+    // Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
+    function getCurrentProgram(channelId) {
+            const now = new Date();
     if (epgData[channelId]) {
         const currentProgram = epgData[channelId].find(prog => now >= prog.start && now < prog.stop);
         if (currentProgram) {
@@ -138,11 +116,11 @@ function getCurrentProgram(channelId) {
         }
     }
     return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
-}
+    }
 
-// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
-function extractStreamURL(data, channelId) {
-    const lines = data.split('\n');
+    // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
+    function extractStreamURL(data, channelId) {
+        const lines = data.split('\n');
     let streamURL = null;
     for (let i = 0; i < lines.length; i++) {
         if (lines[i].startsWith('#EXTINF')) {
@@ -156,10 +134,12 @@ function extractStreamURL(data, channelId) {
         }
     }
     return streamURL;
-}
 
-function updateSidebarFromM3U(data) {
-    const sidebarList = document.getElementById('sidebar-list');
+    }
+
+    // Aktualisierung der Sidebar basierend auf der M3U-Datei
+    function updateSidebarFromM3U(data) {
+            const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
 
     const lines = data.split('\n');
@@ -197,49 +177,42 @@ function updateSidebarFromM3U(data) {
         }
     });
 
-    // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
-    checkStreamStatus();
-}
+    }
 
-// Funktion zum Überprüfen des Status der Streams
-function checkStreamStatus() {
+    // Funktion zum Überprüfen des Status der Streams
+    async function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
-    sidebarChannels.forEach(channel => {
-        const streamURL = channel.dataset.stream; // Stream-URL aus dem Datenattribut erhalten
+    for (const channel of sidebarChannels) {
+        const streamURL = channel.dataset.stream;
         if (streamURL) {
-            // Status der Stream-URL überprüfen (z.B. durch einen Kopfzeilen-Request)
-            fetch(streamURL, { method: 'HEAD' })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Stream nicht verfügbar');
-                    }
-                    // Stream ist verfügbar
-                    channel.classList.add('stream-available');
-                    channel.classList.remove('stream-unavailable');
-                })
-                .catch(error => {
-                    // Stream ist nicht verfügbar
-                    channel.classList.add('stream-unavailable');
-                    channel.classList.remove('stream-available');
-                });
+            try {
+                const response = await fetch(streamURL);
+                if (response.ok) {
+                    channel.querySelector('.sender-name').classList.add('online');
+                } else {
+                    channel.querySelector('.sender-name').classList.remove('online');
+                }
+            } catch (error) {
+                console.error('Fehler beim Überprüfen des Stream-Status:', error);
+                channel.querySelector('.sender-name').classList.remove('online');
+            }
         }
-    });
+    }
 }
 
-// Event-Listener für DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function () {
+    // Ereignisbehandler für Klicks auf Sender
     loadEPGData();
     updateClock();
     setInterval(updateClock, 1000);
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
-    
+    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
+
     // Klick-Event für Sender hinzufügen
-    const sidebarList = document.getElementById('sidebar-list');
     sidebarList.addEventListener('click', function (event) {
         const channelInfo = event.target.closest('.channel-info');
         if (channelInfo) {
-            const streamURL = channelInfo.dataset.stream; // Stream-URL aus dem Datenattribut abrufen
+            const streamURL = channelInfo.dataset.stream;
             playStream(streamURL);
         }
     });
@@ -250,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Funktion zum Abspielen eines HLS-Streams im Video-Player
 function playStream(streamURL) {
-    const videoPlayer = document.getElementById('video-player');
+        const videoPlayer = document.getElementById('video-player');
     if (Hls.isSupported()) {
         const hls = new Hls();
         hls.loadSource(streamURL);
@@ -277,11 +250,47 @@ function updateClock() {
     document.getElementById('tag').textContent = tag;
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
+
 }
 
-// Proxy-URLs definieren
 const proxyUrls = [
     'https://cors-anywhere.herokuapp.com/',
     'https://proxy.example.com/',
     'https://another-proxy.com/'
 ];
+
+
+// Funktion zum Fetchen mit mehreren Proxies
+
+function fetchWithMultipleProxies(dynamicUrl) {
+    return new Promise((resolve, reject) => {
+        let attempt = 0;
+
+        function tryFetch() {
+            const proxyUrl = proxyUrls[attempt];
+            const url = `${proxyUrl}${dynamicUrl}`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    resolve(data);
+                })
+                .catch(error => {
+                    console.error(`Fehler bei Proxy ${proxyUrl}:`, error);
+                    attempt++;
+                    if (attempt < proxyUrls.length) {
+                        tryFetch(); // Versuche den nächsten Proxy
+                    } else {
+                        reject(new Error(`Alle Proxies sind fehlgeschlagen für die URL: ${dynamicUrl}`));
+                    }
+                });
+        }
+
+        tryFetch();
+    });
+}
