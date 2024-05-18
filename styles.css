@@ -173,6 +173,9 @@ button:hover {
     background-color: #f9f9f9; /* Beispiel-Hintergrundfarbe */
     border: 1px solid #ccc; /* Beispiel-Rahmen */
     padding: 5px; /* Beispiel-Abstand innerhalb des Containers */
+    width: 900px;
+    float: left;
+    display: flex;
 }
 
 /* Stil für den Video-Player */
@@ -182,6 +185,9 @@ button:hover {
     bottom: 5px; /* Abstand vom unteren Rand des Fensters */
     right: 5px; /* Abstand vom rechten Rand des Fensters */
     z-index: 1000; /* Stellt sicher, dass der Player über anderen Elementen liegt */
+    width: 900px;
+    height: 700px;
+    display: flex;
 }
 
 .online {
