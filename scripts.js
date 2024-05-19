@@ -253,6 +253,88 @@ function updateClock() {
     document.getElementById('tag').textContent = tag;
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
+
+
+
+
+
+
+    // Existierende Funktionen und globale Variablen
+let epgData = {};
+
+document.addEventListener('DOMContentLoaded', function () {
+    loadEPGData();
+    updateClock();
+    setInterval(updateClock, 1000);
+    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
+    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
+    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
+
+    // Klick-Event für Sender hinzufügen
+    const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.addEventListener('click', function (event) {
+        const channelInfo = event.target.closest('.channel-info');
+        if (channelInfo) {
+            const streamURL = channelInfo.dataset.stream; // Stream-URL aus dem Datenattribut abrufen
+            const channelName = channelInfo.querySelector('.sender-name').textContent; // Sendername abrufen
+            setCurrentChannel(channelName, streamURL);
+            playStream(streamURL);
+        }
+    });
+
+    // Überprüfen Sie den Status der Streams alle Minute
+    setInterval(checkStreamStatus, 60000);
+
+    // Event Listener für den Play-Button
+    const playButton = document.getElementById('play-button');
+    const streamUrlInput = document.getElementById('stream-url');
+
+    const playStreamFromInput = () => {
+        const streamUrl = streamUrlInput.value;
+        if (streamUrl) {
+            playStream(streamUrl);
+        }
+    };
+
+    playButton.addEventListener('click', playStreamFromInput);
+
+    streamUrlInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            playStreamFromInput();
+        }
+    });
+});
+
+// Funktion zum Abspielen eines HLS-Streams im Video-Player
+function playStream(streamURL) {
+    const videoPlayer = document.getElementById('video-player');
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(streamURL);
+        hls.attachMedia(videoPlayer);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            videoPlayer.play();
+        });
+    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        videoPlayer.src = streamURL;
+        videoPlayer.addEventListener('loadedmetadata', function () {
+            videoPlayer.play();
+        });
+    } else {
+        console.error('HLS wird vom aktuellen Browser nicht unterstützt.');
+    }
+}
+
+// Beispiel: Funktion zum Setzen des aktuellen Sendernamens und der URL
+function setCurrentChannel(channelName, streamUrl) {
+    const currentChannelName = document.getElementById('current-channel-name');
+    const streamUrlInput = document.getElementById('stream-url');
+    currentChannelName.textContent = `Aktueller Sender: ${channelName}`;
+    streamUrlInput.value = streamUrl;
+}
+
+// Die restlichen Funktionen bleiben unverändert
+
 }
 
 
