@@ -123,23 +123,29 @@ function updatePlayerDescription(title, description) {
     document.getElementById('program-desc').textContent = description;
 }
 
-// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
+// Funktion zum Extrahieren des Stream-URLs aus den M3U-Daten
 function extractStreamURL(data, channelId) {
     const lines = data.split('\n');
-    let streamURL = null;
+    let streamURL = '';
+    let foundChannel = false;
+
     for (let i = 0; i < lines.length; i++) {
-        if (lines[i].startsWith('#EXTINF')) {
-            const idMatch = lines[i].match(/tvg-id="([^"]+)"/);
+        const line = lines[i];
+        if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
             const currentChannelId = idMatch && idMatch[1];
             if (currentChannelId === channelId) {
-                const urlLine = lines[i + 1];
-                streamURL = urlLine.trim();
-                break;
+                foundChannel = true;
             }
+        } else if (foundChannel && line.trim() !== '') {
+            streamURL = line.trim();
+            break;
         }
     }
+
     return streamURL;
 }
+
 
 // Funktion zum Aktualisieren der Sidebar basierend auf einer M3U-Playlist
 function updateSidebarFromM3U(data) {
