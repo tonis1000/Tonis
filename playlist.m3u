@@ -39,16 +39,16 @@ https://opentvlive1.siliconweb.com/opentvliveabr/openlatin2/opentvlive/openlatin
 #EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV
 https://streamcdnb7-c98db5952cb54b358365984178fb898a.msvdn.net/live/S86713049/gonOwuUacAxM/playlist.m3u8
 
-#EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV 1
+#EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV 
 https://streamcdnh3-c98db5952cb54b358365984178fb898a.msvdn.net/live/S86713049/gonOwuUacAxM/chunklist_b3710976.m3u8
 
-#EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV 2
+#EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV 
 https://c98db5952cb54b358365984178fb898a.msvdn.net/live/S86713049/gonOwuUacAxM/playlist.m3u8
 
-#EXTINF:-1 tvg-id="mega", MEGA TV 3
+#EXTINF:-1 tvg-id="mega", MEGA TV 
 https://s2.cystream.net/galanos/open/chunks.m3u8?nimblesessiontvg-id=792681&wmsAuthSign=c2VydmVyX3RpbWU9MTEvMjEvMjAyMyA3OjA3OjI2IFBNJmhhc2hfdmFsdWU9R2JkcnhiZ1NudUZkbnRrZEdobTdiUT09JnZhbGlkbWludXRlcz0yMA==
 
-#EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV 4
+#EXTINF:-1 tvg-id="mega" tvg-logo="https://i.imgur.com/UsyFADE.png", MEGA TV 
 https://d1nfykbwa3n98t.cloudfront.net/out/v1/6e5667da5a6843899a337dea72adb61b/antenna.m3u8
 
 #EXTINF:-1 tvg-id="star" tvg-logo="https://i.imgur.com/6NUpxhr.png", Star TV
