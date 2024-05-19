@@ -1,4 +1,9 @@
-// Poli kalo
+// Globales Objekt für EPG-Daten
+let epgData = {};
+
+// ==============================
+// Funktionen zum Laden von Playlists
+// ==============================
 
 // Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
@@ -21,8 +26,9 @@ function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
-// Globales Objekt für EPG-Daten
-let epgData = {};
+// ==============================
+// Funktionen zum Laden und Verarbeiten der EPG-Daten
+// ==============================
 
 // Laden und Parsen der EPG-Daten mit Zeitabgleich
 function loadEPGData() {
@@ -55,15 +61,13 @@ function loadEPGData() {
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
-    // Überprüfen, ob epgTime vorhanden und nicht leer ist
     if (!epgTime || epgTime.length < 19) {
         console.error('Ungültige EPG-Zeitangabe:', epgTime);
         return null;
     }
 
-    // Format: YYYYMMDDHHMMSS ±ZZZZ
     const year = parseInt(epgTime.substr(0, 4), 10);
-    const month = parseInt(epgTime.substr(4, 2), 10) - 1; // Monate sind 0-basiert in JavaScript
+    const month = parseInt(epgTime.substr(4, 2), 10) - 1;
     const day = parseInt(epgTime.substr(6, 2), 10);
     const hour = parseInt(epgTime.substr(8, 2), 10);
     const minute = parseInt(epgTime.substr(10, 2), 10);
@@ -71,19 +75,16 @@ function parseDateTime(epgTime) {
     const tzHour = parseInt(epgTime.substr(15, 3), 10);
     const tzMin = parseInt(epgTime.substr(18, 2), 10) * (epgTime[14] === '+' ? 1 : -1);
 
-    // Überprüfen, ob die geparsten Werte gültig sind
     if (isNaN(year) || isNaN(month) || isNaN(day) || isNaN(hour) || isNaN(minute) || isNaN(second) || isNaN(tzHour) || isNaN(tzMin)) {
         console.error('Ungültige EPG-Zeitangabe:', epgTime);
         return null;
     }
 
-    // Überprüfen, ob das Jahr, der Monat und der Tag im gültigen Bereich liegen
     if (year < 0 || month < 0 || month > 11 || day < 1 || day > 31) {
         console.error('Ungültige EPG-Zeitangabe:', epgTime);
         return null;
     }
 
-    // Erstellen und zurückgeben des Date-Objekts
     const date = new Date(Date.UTC(year, month, day, hour - tzHour, minute - tzMin, second));
     return date;
 }
@@ -111,6 +112,24 @@ function getCurrentProgram(channelId) {
     return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
+// ==============================
+// Funktionen zur Verarbeitung der M3U-Playlist und zum Aktualisieren der Sidebar
+// ==============================
+
+// Hilfsfunktion zum Extrahieren der Senderinformationen aus einer Zeile
+function extractChannelInfo(line) {
+    const infoPattern = /#EXTINF:-1 tvg-id="([^"]*)" tvg-logo="([^"]*)", (.*)/;
+    const match = line.match(infoPattern);
+    if (match) {
+        return {
+            id: match[1],
+            logo: match[2],
+            name: match[3]
+        };
+    }
+    return null;
+}
+
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURL(data, channelId) {
     const lines = data.split('\n');
@@ -129,6 +148,7 @@ function extractStreamURL(data, channelId) {
     return streamURL;
 }
 
+// Funktion zum Aktualisieren der Sidebar basierend auf einer M3U-Playlist
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
@@ -145,11 +165,11 @@ function updateSidebarFromM3U(data) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
+                const streamURL = extractStreamURL(data, channelId);
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <div class="channel-info" data-stream="${streamURL}"> <!-- Datenattribut für den Stream-URL -->
+                    <div class="channel-info" data-stream="${streamURL}">
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                         </div>
@@ -168,79 +188,38 @@ function updateSidebarFromM3U(data) {
         }
     });
 
-    // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
+
+// ==============================
+// Funktionen zum Überprüfen des Stream-Status
+// ==============================
 
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
     sidebarChannels.forEach(channel => {
-        const streamURL = channel.dataset.stream; // Stream-URL aus dem Datenattribut erhalten
+        const streamURL = channel.dataset.stream;
         if (streamURL) {
-            // Status der Stream-Verfügbarkeit überprüfen
             fetch(streamURL)
                 .then(response => {
                     if (response.ok) {
-                        // Stream ist verfügbar
-                        channel.querySelector('.sender-name').classList.add('online'); // Sendername markieren
+                        channel.querySelector('.sender-name').classList.add('online');
                     } else {
-                        // Stream ist nicht verfügbar
-                        channel.querySelector('.sender-name').classList.remove('online'); // Sendername zurücksetzen
+                        channel.querySelector('.sender-name').classList.remove('online');
                     }
                 })
                 .catch(error => {
-                    // Fehler beim Überprüfen des Stream-Status
                     console.error('Fehler beim Überprüfen des Stream-Status:', error);
-                    channel.querySelector('.sender-name').classList.remove('online'); // Sendername zurücksetzen
+                    channel.querySelector('.sender-name').classList.remove('online');
                 });
         }
     });
 }
 
-// Ereignisbehandler für Klicks auf Sender
-document.addEventListener('DOMContentLoaded', function () {
-    loadEPGData();
-    updateClock();
-    setInterval(updateClock, 1000);
-    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
-    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
-    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
-
-    // Klick-Event für Sender hinzufügen
-    const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.addEventListener('click', function (event) {
-        const channelInfo = event.target.closest('.channel-info');
-        if (channelInfo) {
-            const streamURL = channelInfo.dataset.stream; // Stream-URL aus dem Datenattribut abrufen
-            const channelName = channelInfo.querySelector('.sender-name').textContent; // Sendername abrufen
-            setCurrentChannel(channelName, streamURL);
-            playStream(streamURL);
-        }
-    });
-
-    // Überprüfen Sie den Status der Streams alle Minute
-    setInterval(checkStreamStatus, 60000);
-
-    // Event Listener für den Play-Button
-    const playButton = document.getElementById('play-button');
-    const streamUrlInput = document.getElementById('stream-url');
-
-    const playStreamFromInput = () => {
-        const streamUrl = streamUrlInput.value;
-        if (streamUrl) {
-            playStream(streamUrl);
-        }
-    };
-
-    playButton.addEventListener('click', playStreamFromInput);
-
-    streamUrlInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            playStreamFromInput();
-        }
-    });
-});
+// ==============================
+// Funktionen zum Abspielen und Verwalten des Video-Players
+// ==============================
 
 // Funktion zum Abspielen eines HLS-Streams im Video-Player
 function playStream(streamURL) {
@@ -266,9 +245,13 @@ function playStream(streamURL) {
 function setCurrentChannel(channelName, streamUrl) {
     const currentChannelName = document.getElementById('current-channel-name');
     const streamUrlInput = document.getElementById('stream-url');
-    currentChannelName.textContent = channelName; // Nur der Sendername
+    currentChannelName.textContent = channelName;
     streamUrlInput.value = streamUrl;
 }
+
+// ==============================
+// Sonstige Hilfsfunktionen
+// ==============================
 
 // Aktualisierung der Uhrzeit
 function updateClock() {
@@ -280,3 +263,47 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
+
+// ==============================
+// Ereignisbehandler für DOMContentLoaded
+// ==============================
+
+document.addEventListener('DOMContentLoaded', function () {
+    loadEPGData();
+    updateClock();
+    setInterval(updateClock, 1000);
+    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
+    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
+    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
+
+    const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.addEventListener('click', function (event) {
+        const channelInfo = event.target.closest('.channel-info');
+        if (channelInfo) {
+            const streamURL = channelInfo.dataset.stream;
+            const channelName = channelInfo.querySelector('.sender-name').textContent;
+            setCurrentChannel(channelName, streamURL);
+            playStream(streamURL);
+        }
+    });
+
+    setInterval(checkStreamStatus, 60000);
+
+    const playButton = document.getElementById('play-button');
+    const streamUrlInput = document.getElementById('stream-url');
+
+    const playStreamFromInput = () => {
+        const streamUrl = streamUrlInput.value;
+        if (streamUrl) {
+            playStream(streamUrl);
+        }
+    };
+
+    playButton.addEventListener('click', playStreamFromInput);
+
+    streamUrlInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            playStreamFromInput();
+        }
+    });
+});
