@@ -21,8 +21,6 @@ function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
-
-
 // Globales Objekt für EPG-Daten
 let epgData = {};
 
@@ -54,7 +52,6 @@ function loadEPGData() {
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
-
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
@@ -91,9 +88,6 @@ function parseDateTime(epgTime) {
     return date;
 }
 
-
-
-
 // Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
 function getCurrentProgram(channelId) {
     const now = new Date();
@@ -117,9 +111,6 @@ function getCurrentProgram(channelId) {
     return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
-
-
-
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURL(data, channelId) {
     const lines = data.split('\n');
@@ -138,43 +129,41 @@ function extractStreamURL(data, channelId) {
     return streamURL;
 }
 
-
-
-
-// Funktion zum Aktualisieren der Sidebar basierend auf einer M3U-Playlist
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.innerHTML = ''; // Sidebar leeren
+    sidebarList.innerHTML = '';
 
-    // Daten in Zeilen aufteilen
     const lines = data.split('\n');
-    let currentChannel = null;
     lines.forEach(line => {
-        // Überprüfen, ob die Zeile eine Stream-URL enthält
-        if (line.startsWith('http')) {
-            const streamURL = line.trim();
-            if (currentChannel) {
-                currentChannel.dataset.stream = streamURL; // Stream-URL für aktuellen Sender setzen
-                currentChannel = null; // Aktuellen Sender zurücksetzen
-            }
-        } else if (line.startsWith('#EXTINF')) {
-            // Neue Senderinformationen extrahieren und zur Sidebar hinzufügen
-            const channelInfo = extractChannelInfo(line);
-            if (channelInfo) {
-                const listItem = createSidebarListItem(channelInfo);
-                sidebarList.appendChild(listItem);
-                currentChannel = listItem.querySelector('.channel-info'); // Aktuellen Sender festlegen
+        if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
+            const channelId = idMatch && idMatch[1];
+            const programInfo = getCurrentProgram(channelId);
 
-                // EPG-Daten für diesen Sender abrufen und anzeigen
-                const epg = getCurrentProgram(channelInfo.id);
-                const epgChannel = listItem.querySelector('.epg-channel');
-                epgChannel.innerHTML = `
-                    <span>${epg.title}</span>
-                    <div class="epg-timeline">
-                        <div class="epg-past" style="width: ${epg.pastPercentage}%;"></div>
-                        <div class="epg-future" style="width: ${epg.futurePercentage}%;"></div>
+            const nameMatch = line.match(/,(.*)$/);
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+                const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
+
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="channel-info" data-stream="${streamURL}"> <!-- Datenattribut für den Stream-URL -->
+                        <div class="logo-container">
+                            <img src="${imgURL}" alt="${name} Logo">
+                        </div>
+                        <span class="sender-name">${name}</span>
+                        <span class="epg-channel">
+                            <span>${programInfo.title}</span>
+                            <div class="epg-timeline">
+                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                            </div>
+                        </span>
                     </div>
                 `;
+                sidebarList.appendChild(listItem);
             }
         }
     });
@@ -182,58 +171,6 @@ function updateSidebarFromM3U(data) {
     // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
-
-
-
-// Hilfsfunktion zum Erstellen eines Listenelements für die Sidebar
-function createSidebarListItem(channelInfo) {
-    const listItem = document.createElement('li');
-    listItem.innerHTML = `
-        <div class="channel-info" data-stream="">
-            <div class="logo-container">
-                <img src="${channelInfo.logo}" alt="${channelInfo.name} Logo">
-            </div>
-            <span class="sender-name">${channelInfo.name}</span>
-            <span class="epg-channel">
-                <!-- EPG-Daten werden hier dynamisch eingefügt -->
-            </span>
-        </div>
-    `;
-    return listItem;
-}
-
-// Funktion zum Überprüfen des Stream-Status (dummy-Funktion, kann angepasst werden)
-function checkStreamStatus() {
-    // Hier kann der Code zum Überprüfen des Stream-Status eingefügt werden
-    console.log('Stream-Status überprüfen...');
-}
-
-
-
-
-// Funktion zum Überprüfen des Stream-Status (dummy-Funktion, kann angepasst werden)
-function checkStreamStatus() {
-    // Hier kann der Code zum Überprüfen des Stream-Status eingefügt werden
-    console.log('Stream-Status überprüfen...');
-}
-
-// Beispielcode zum Laden einer M3U-Playlist und Aktualisieren der Sidebar
-fetch('playlist.m3u')
-    .then(response => response.text())
-    .then(data => {
-        updateSidebarFromM3U(data);
-    })
-    .catch(error => {
-        console.error('Fehler beim Laden der Playlist:', error);
-    });
-
-// Laden der EPG-Daten beim Start
-loadEPGData();
-
-
-
-
-
 
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
