@@ -129,6 +129,9 @@ function extractStreamURL(data, channelId) {
     return streamURL;
 }
 
+
+
+
 // Funktion zum Aktualisieren der Sidebar basierend auf einer M3U-Playlist
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
@@ -184,7 +187,7 @@ function createSidebarListItem(channelInfo) {
             </div>
             <span class="sender-name">${channelInfo.name}</span>
             <span class="epg-channel">
-                <span>${channelInfo.name}</span>
+                <span class="epg-title">EPG Titel</span> <!-- Hier wird der Titel der EPG angezeigt -->
                 <div class="epg-timeline">
                     <div class="epg-past"></div>
                     <div class="epg-future"></div>
@@ -210,6 +213,10 @@ fetch('playlist.m3u')
     .catch(error => {
         console.error('Fehler beim Laden der Playlist:', error);
     });
+
+
+
+
 
 
 // Funktion zum Überprüfen des Status der Streams
