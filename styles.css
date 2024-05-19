@@ -166,17 +166,20 @@ button:hover {
     background-color: #00ff00; /* Farbe für noch verbleibende Zeit */
 }
 
-/* Container für den Video-Player */
+/* Container für den Video-Player und Steuerungsleiste */
 .player-container {
-    #float: right; /* Positioniert den Container rechts */
-    width: 60%; /* Breite des Containers */
-    background-color: #f9f9f9; /* Beispiel-Hintergrundfarbe */
-    border: 1px solid #ccc; /* Beispiel-Rahmen */
-    padding: 5px; /* Beispiel-Abstand innerhalb des Containers */
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
     width: 900px;
-    float: left;
+    height: 750px; /* Angepasst für Platz der Steuerleiste */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 5px;
+    z-index: 1000;
     display: flex;
-    position: relative; /* Stelle sicher, dass die innere Leiste relativ zum Container positioniert ist */
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 /* Stil für den Video-Player */
@@ -194,40 +197,57 @@ button:hover {
 .online {
     color: lightgreen;
     font-weight: bold;
+/* Zusätzliche Stile für die neue Feldleiste */
+.player-container {
+    width: 900px;
+    float: left;
+    display: flex;
+    flex-direction: column; /* Ändert das Layout zu einer Spalte */
 }
 
-
-.player-info {
-    background-color: #333; /* Dunkelgrauer Hintergrund wie der Rest des Players */
-    padding: 10px; /* Abstand innerhalb der Leiste */
-    display: flex; /* Elemente nebeneinander anordnen */
-    justify-content: space-between; /* Platz zwischen den Elementen verteilen */
-    align-items: center; /* Elemente vertikal zentrieren */
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border-bottom: 1px solid #ccc;
 }
 
-#current-channel {
-    color: #fff; /* Weiße Schriftfarbe */
-    font-size: 16px; /* Größe des Sendernamens */
+.player-header input {
+    flex: 1;
+    margin-left: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-#stream-url {
-    flex: 1; /* Das Textfeld soll den verfügbaren Platz einnehmen */
-    margin: 0 10px; /* Abstand zu anderen Elementen */
-    padding: 5px; /* Innenabstand */
+.player-header button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-#play-button {
-    background-color: #007bff; /* Blaue Farbe wie deine anderen Buttons */
-    color: #fff; /* Weiße Schriftfarbe */
-    border: none; /* Kein Rahmen */
-    padding: 8px 16px; /* Größe des Buttons */
-    border-radius: 5px; /* Abgerundete Ecken */
-    cursor: pointer; /* Zeiger anzeigen */
+.player-header button:hover {
+    background-color: #0056b3;
 }
 
-#play-button:hover {
-    background-color: #0056b3; /* Dunklerer Blauton bei Hover */
+.video-player {
+    width: 900px;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    z-index: 1000;
+    width: 900px;
+    height: 700px;
+    display: flex;
 }
+
 
 
 
