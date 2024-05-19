@@ -1,32 +1,15 @@
-// Funktion, um die Playlist-Datei zu laden
-function makeProxyRequest(url) {
-    return fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            // Hier kannst du die Playlist-Datei parsen und verarbeiten
-            // Zum Beispiel: updateSidebarFromM3U(data);
-            console.log('Playlist loaded successfully:', data);
-        })
-        .catch(error => {
-            console.error('Error fetching playlist:', error);
-        });
-}
-
 // Funktion zum Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
-    makeProxyRequest('playlist.m3u')
+    fetch('playlist.m3u')
+        .then(response => response.text())
         .then(data => updateSidebarFromM3U(data))
         .catch(error => console.error('Fehler beim Laden der Playlist:', error));
 }
 
 // Funktion zum Laden der externen Playlist und Aktualisieren der Sidebar
 function loadExternalPlaylist() {
-    makeProxyRequest('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u')
+    fetch('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u')
+        .then(response => response.text())
         .then(data => updateSidebarFromM3U(data))
         .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
 }
@@ -158,7 +141,6 @@ function extractStreamURL(data, channelId) {
     return streamURL;
 }
 
-// Funktion, um die Sidebar mit den Informationen aus der Playlist zu aktualisieren
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
@@ -202,12 +184,6 @@ function updateSidebarFromM3U(data) {
     // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
-
-
-
-
-
-
 
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
