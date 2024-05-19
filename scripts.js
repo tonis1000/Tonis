@@ -21,6 +21,8 @@ function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
+
+
 // Globales Objekt für EPG-Daten
 let epgData = {};
 
@@ -52,6 +54,7 @@ function loadEPGData() {
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
+
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
@@ -88,6 +91,9 @@ function parseDateTime(epgTime) {
     return date;
 }
 
+
+
+
 // Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
 function getCurrentProgram(channelId) {
     const now = new Date();
@@ -110,6 +116,9 @@ function getCurrentProgram(channelId) {
     }
     return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
+
+
+
 
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURL(data, channelId) {
@@ -155,6 +164,17 @@ function updateSidebarFromM3U(data) {
                 const listItem = createSidebarListItem(channelInfo);
                 sidebarList.appendChild(listItem);
                 currentChannel = listItem.querySelector('.channel-info'); // Aktuellen Sender festlegen
+
+                // EPG-Daten für diesen Sender abrufen und anzeigen
+                const epg = getCurrentProgram(channelInfo.id);
+                const epgChannel = listItem.querySelector('.epg-channel');
+                epgChannel.innerHTML = `
+                    <span>${epg.title}</span>
+                    <div class="epg-timeline">
+                        <div class="epg-past" style="width: ${epg.pastPercentage}%;"></div>
+                        <div class="epg-future" style="width: ${epg.futurePercentage}%;"></div>
+                    </div>
+                `;
             }
         }
     });
@@ -163,19 +183,7 @@ function updateSidebarFromM3U(data) {
     checkStreamStatus();
 }
 
-// Hilfsfunktion zum Extrahieren der Senderinformationen aus einer Zeile
-function extractChannelInfo(line) {
-    const infoPattern = /#EXTINF:-1 tvg-id="([^"]*)" tvg-logo="([^"]*)", (.*)/;
-    const match = line.match(infoPattern);
-    if (match) {
-        return {
-            id: match[1],
-            logo: match[2],
-            name: match[3]
-        };
-    }
-    return null;
-}
+
 
 // Hilfsfunktion zum Erstellen eines Listenelements für die Sidebar
 function createSidebarListItem(channelInfo) {
@@ -187,16 +195,21 @@ function createSidebarListItem(channelInfo) {
             </div>
             <span class="sender-name">${channelInfo.name}</span>
             <span class="epg-channel">
-                <span class="epg-title">EPG Titel</span> <!-- Hier wird der Titel der EPG angezeigt -->
-                <div class="epg-timeline">
-                    <div class="epg-past"></div>
-                    <div class="epg-future"></div>
-                </div>
+                <!-- EPG-Daten werden hier dynamisch eingefügt -->
             </span>
         </div>
     `;
     return listItem;
 }
+
+// Funktion zum Überprüfen des Stream-Status (dummy-Funktion, kann angepasst werden)
+function checkStreamStatus() {
+    // Hier kann der Code zum Überprüfen des Stream-Status eingefügt werden
+    console.log('Stream-Status überprüfen...');
+}
+
+
+
 
 // Funktion zum Überprüfen des Stream-Status (dummy-Funktion, kann angepasst werden)
 function checkStreamStatus() {
@@ -213,6 +226,9 @@ fetch('playlist.m3u')
     .catch(error => {
         console.error('Fehler beim Laden der Playlist:', error);
     });
+
+// Laden der EPG-Daten beim Start
+loadEPGData();
 
 
 
