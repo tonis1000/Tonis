@@ -156,12 +156,13 @@ function extractStreamURL(data, channelId) {
 }
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
+// Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
 
     const lines = data.split('\n');
-    const channels = {};
+    const channels = {}; // Objekt zur Speicherung von Kanälen basierend auf der tvg-id
 
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
@@ -173,30 +174,38 @@ function updateSidebarFromM3U(data) {
             if (nameMatch && nameMatch.length > 1) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
-                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
+                const imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+                const urlLine = lines[lines.indexOf(line) + 1]; // Nächste Zeile enthält die Stream-URL
+                const streamURL = urlLine.trim(); // Stream-URL extrahieren
 
-                if (!channels[name]) {
-                    channels[name] = { streamURL: streamURL, programInfo: programInfo };
+                // Wenn der Kanal bereits existiert, füge die URL nur hinzu
+                if (channels[channelId]) {
+                    channels[channelId].urls.push(streamURL);
+                } else {
+                    channels[channelId] = {
+                        name: name,
+                        imgURL: imgURL,
+                        urls: [streamURL]
+                    };
                 }
             }
         }
     });
 
-    // Füge jeden Sender in die Sidebar ein
-    Object.entries(channels).forEach(([name, channel]) => {
+    // Iteriere über die Kanäle und füge sie zur Sidebar hinzu
+    Object.values(channels).forEach(channel => {
         const listItem = document.createElement('li');
         listItem.innerHTML = `
-            <div class="channel-info" data-stream="${channel.streamURL}"> <!-- Datenattribute für den Stream-URL -->
+            <div class="channel-info" data-stream="${channel.urls[0]}" data-channel-id="${channelId}">
                 <div class="logo-container">
-                    <img src="${imgURL}" alt="${name} Logo">
+                    <img src="${channel.imgURL}" alt="${channel.name} Logo">
                 </div>
-                <span class="sender-name">${name}</span>
+                <span class="sender-name">${channel.name}</span>
                 <span class="epg-channel">
-                    <span>${channel.programInfo.title}</span>
+                    <span>${programInfo.title}</span>
                     <div class="epg-timeline">
-                        <div class="epg-past" style="width: ${channel.programInfo.pastPercentage}%"></div>
-                        <div class="epg-future" style="width: ${channel.programInfo.futurePercentage}%"></div>
+                        <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                        <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
                     </div>
                 </span>
             </div>
@@ -207,6 +216,7 @@ function updateSidebarFromM3U(data) {
     // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
+
 
 
 
