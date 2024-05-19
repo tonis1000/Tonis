@@ -1,17 +1,20 @@
-// Funktion zum Ausführen einer Proxy-Anfrage im Browser
-async function makeProxyRequest(url) {
-    try {
-        const response = await fetch(url); // Fetch-API verwenden, um die Anfrage zu senden
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const responseData = await response.text(); // Response-Text abrufen
-        console.log('Response data:', responseData); // Ausgabe des Response-Texts zur Überprüfung
-        return responseData; // Die Daten zurückgeben
-    } catch (error) {
-        console.error('Proxy request failed:', error);
-        throw error; // Fehler weiterleiten
-    }
+// Funktion, um die Playlist-Datei zu laden
+function makeProxyRequest(url) {
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Hier kannst du die Playlist-Datei parsen und verarbeiten
+            // Zum Beispiel: updateSidebarFromM3U(data);
+            console.log('Playlist loaded successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error fetching playlist:', error);
+        });
 }
 
 // Funktion zum Laden der Playlist.m3u und Aktualisieren der Sidebar
@@ -156,9 +159,9 @@ function extractStreamURL(data, channelId) {
 }
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
-// Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
+    console.log('Updating sidebar with playlist data:', data);
     sidebarList.innerHTML = '';
 
     const lines = data.split('\n');
