@@ -161,6 +161,8 @@ function updateSidebarFromM3U(data) {
     sidebarList.innerHTML = '';
 
     const lines = data.split('\n');
+    const channels = {};
+
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
@@ -174,25 +176,32 @@ function updateSidebarFromM3U(data) {
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
                 const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
 
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}"> <!-- Datenattribute für den Stream-URL und die Channel-ID -->
-                        <div class="logo-container">
-                            <img src="${imgURL}" alt="${name} Logo">
-                        </div>
-                        <span class="sender-name">${name}</span>
-                        <span class="epg-channel">
-                            <span>${programInfo.title}</span>
-                            <div class="epg-timeline">
-                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
-                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
-                            </div>
-                        </span>
-                    </div>
-                `;
-                sidebarList.appendChild(listItem);
+                if (!channels[channelId]) {
+                    channels[channelId] = { name: name, imgURL: imgURL, streamURL: streamURL };
+                }
             }
         }
+    });
+
+    // Füge jeden Sender in die Sidebar ein
+    Object.values(channels).forEach(channel => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <div class="channel-info" data-stream="${channel.streamURL}" data-channel-id="${channelId}"> <!-- Datenattribute für den Stream-URL und die Channel-ID -->
+                <div class="logo-container">
+                    <img src="${channel.imgURL}" alt="${channel.name} Logo">
+                </div>
+                <span class="sender-name">${channel.name}</span>
+                <span class="epg-channel">
+                    <span>${programInfo.title}</span>
+                    <div class="epg-timeline">
+                        <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                        <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                    </div>
+                </span>
+            </div>
+        `;
+        sidebarList.appendChild(listItem);
     });
 
     // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
