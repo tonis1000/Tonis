@@ -144,31 +144,6 @@ function extractStreamURL(data, channelId) {
 
 
 
-// Funktion zum Überprüfen des Status der Streams
-function checkStreamStatus() {
-    const sidebarChannels = document.querySelectorAll('.channel-info');
-    sidebarChannels.forEach(channel => {
-        const streamURL = channel.dataset.stream; // Stream-URL aus dem Datenattribut erhalten
-        if (streamURL) {
-            // Status der Stream-Verfügbarkeit überprüfen
-            fetch(streamURL)
-                .then(response => {
-                    if (response.ok) {
-                        // Stream ist verfügbar
-                        channel.querySelector('.sender-name').classList.add('online'); // Sendername markieren
-                    } else {
-                        // Stream ist nicht verfügbar
-                        channel.querySelector('.sender-name').classList.remove('online'); // Sendername zurücksetzen
-                    }
-                })
-                .catch(error => {
-                    // Fehler beim Überprüfen des Stream-Status
-                    console.error('Fehler beim Überprüfen des Stream-Status:', error);
-                    channel.querySelector('.sender-name').classList.remove('online'); // Sendername zurücksetzen
-                });
-        }
-    });
-}
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
