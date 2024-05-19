@@ -1,3 +1,22 @@
+// Funktion, um die Playlist-Datei zu laden
+function makeProxyRequest(url) {
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Hier kannst du die Playlist-Datei parsen und verarbeiten
+            // Zum Beispiel: updateSidebarFromM3U(data);
+            console.log('Playlist loaded successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error fetching playlist:', error);
+        });
+}
+
 // Funktion zum Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
