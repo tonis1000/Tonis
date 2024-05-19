@@ -167,6 +167,8 @@ function updateSidebarFromM3U(data) {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch && idMatch[1];
+            const programInfo = getCurrentProgram(channelId);
+
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
                 const name = nameMatch[1].trim();
@@ -175,32 +177,37 @@ function updateSidebarFromM3U(data) {
                 const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
 
                 if (!channels[name]) {
-                    channels[name] = [];
+                    channels[name] = { streamURL: streamURL, programInfo: programInfo };
                 }
-                channels[name].push({ streamURL: streamURL });
             }
         }
     });
 
     // Füge jeden Sender in die Sidebar ein
-    Object.entries(channels).forEach(([name, streams]) => {
-        streams.forEach(stream => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `
-                <div class="channel-info" data-stream="${stream.streamURL}"> <!-- Datenattribute für den Stream-URL und die Channel-ID -->
-                    <div class="logo-container">
-                        <img src="${imgURL}" alt="${name} Logo">
-                    </div>
-                    <span class="sender-name">${name}</span>
+    Object.entries(channels).forEach(([name, channel]) => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <div class="channel-info" data-stream="${channel.streamURL}"> <!-- Datenattribute für den Stream-URL -->
+                <div class="logo-container">
+                    <img src="${imgURL}" alt="${name} Logo">
                 </div>
-            `;
-            sidebarList.appendChild(listItem);
-        });
+                <span class="sender-name">${name}</span>
+                <span class="epg-channel">
+                    <span>${channel.programInfo.title}</span>
+                    <div class="epg-timeline">
+                        <div class="epg-past" style="width: ${channel.programInfo.pastPercentage}%"></div>
+                        <div class="epg-future" style="width: ${channel.programInfo.futurePercentage}%"></div>
+                    </div>
+                </span>
+            </div>
+        `;
+        sidebarList.appendChild(listItem);
     });
 
     // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
+
 
 
 
