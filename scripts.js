@@ -266,7 +266,7 @@ function playStream(streamURL) {
 function setCurrentChannel(channelName, streamUrl) {
     const currentChannelName = document.getElementById('current-channel-name');
     const streamUrlInput = document.getElementById('stream-url');
-    currentChannelName.textContent = `Aktueller Sender: ${channelName}`;
+    currentChannelName.textContent = channelName; // Nur der Sendername
     streamUrlInput.value = streamUrl;
 }
 
