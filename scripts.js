@@ -1,4 +1,6 @@
-// Funktion zum Laden der Playlist.m3u und Aktualisieren der Sidebar
+// Poli kalo
+
+// Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
         .then(response => response.text())
@@ -6,7 +8,7 @@ function loadMyPlaylist() {
         .catch(error => console.error('Fehler beim Laden der Playlist:', error));
 }
 
-// Funktion zum Laden der externen Playlist und Aktualisieren der Sidebar
+// Laden der externen Playlist und Aktualisieren der Sidebar
 function loadExternalPlaylist() {
     fetch('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u')
         .then(response => response.text())
@@ -14,7 +16,7 @@ function loadExternalPlaylist() {
         .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
 }
 
-// Funktion zum Laden der Sport-Playlist und Aktualisieren der Sidebar
+// Laden der Sport-Playlist und Aktualisieren der Sidebar
 function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
@@ -22,7 +24,7 @@ function loadSportPlaylist() {
 // Globales Objekt für EPG-Daten
 let epgData = {};
 
-// Funktion zum Laden und Parsen der EPG-Daten
+// Laden und Parsen der EPG-Daten mit Zeitabgleich
 function loadEPGData() {
     fetch('https://ext.greektv.app/epg/epg.xml')
         .then(response => response.text())
@@ -35,18 +37,15 @@ function loadEPGData() {
                 const start = prog.getAttribute('start');
                 const stop = prog.getAttribute('stop');
                 const titleElement = prog.getElementsByTagName('title')[0];
-                const descElement = prog.getElementsByTagName('desc')[0];
                 if (titleElement) {
                     const title = titleElement.textContent;
-                    const desc = descElement ? descElement.textContent : 'Keine Beschreibung verfügbar';
                     if (!epgData[channelId]) {
                         epgData[channelId] = [];
                     }
                     epgData[channelId].push({
                         start: parseDateTime(start),
                         stop: parseDateTime(stop),
-                        title: title,
-                        desc: desc
+                        title: title
                     });
                 }
             });
@@ -100,49 +99,33 @@ function getCurrentProgram(channelId) {
             const totalTime = currentProgram.stop - currentProgram.start;
             const pastPercentage = (pastTime / totalTime) * 100;
             const futurePercentage = (futureTime / totalTime) * 100;
-
-            // Extrahiere auch die Beschreibung des laufenden Programms
-            const description = currentProgram.desc || 'Keine Beschreibung verfügbar';
-
             return {
                 title: currentProgram.title,
-                description: description,
                 pastPercentage: pastPercentage,
                 futurePercentage: futurePercentage
             };
         } else {
-            return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
+            return { title: 'Keine aktuelle Sendung verfügbar', pastPercentage: 0, futurePercentage: 0 };
         }
     }
-    return { title: 'Keine EPG-Daten verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
+    return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
-// Funktion zum Aktualisieren des Players mit der Programmbeschreibung
-function updatePlayerDescription(title, description) {
-    document.getElementById('program-title').textContent = title;
-    document.getElementById('program-desc').textContent = description;
-}
-
-// Funktion zum Extrahieren des Stream-URLs aus den M3U-Daten
+// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURL(data, channelId) {
     const lines = data.split('\n');
-    let streamURL = '';
-    let foundChannel = false;
-
+    let streamURL = null;
     for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        if (line.startsWith('#EXTINF')) {
-            const idMatch = line.match(/tvg-id="([^"]+)"/);
+        if (lines[i].startsWith('#EXTINF')) {
+            const idMatch = lines[i].match(/tvg-id="([^"]+)"/);
             const currentChannelId = idMatch && idMatch[1];
             if (currentChannelId === channelId) {
-                foundChannel = true;
+                const urlLine = lines[i + 1];
+                streamURL = urlLine.trim();
+                break;
             }
-        } else if (foundChannel && line.trim() !== '') {
-            streamURL = line.trim();
-            break;
         }
     }
-
     return streamURL;
 }
 
@@ -150,23 +133,17 @@ function extractStreamURL(data, channelId) {
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = ''; // Sidebar leeren
-    const parser = document.createElement('a');
-    parser.href = data;
-    const baseURL = parser.protocol + '//' + parser.hostname;
 
     // Daten in Zeilen aufteilen
     const lines = data.split('\n');
     let currentChannel = null;
-    let currentEPG = null;
     lines.forEach(line => {
         // Überprüfen, ob die Zeile eine Stream-URL enthält
         if (line.startsWith('http')) {
             const streamURL = line.trim();
             if (currentChannel) {
                 currentChannel.dataset.stream = streamURL; // Stream-URL für aktuellen Sender setzen
-                currentChannel.querySelector('.epg-channel').innerHTML = currentEPG; // EPG-Informationen für aktuellen Sender setzen
                 currentChannel = null; // Aktuellen Sender zurücksetzen
-                currentEPG = null; // Aktuelle EPG-Informationen zurücksetzen
             }
         } else if (line.startsWith('#EXTINF')) {
             // Neue Senderinformationen extrahieren und zur Sidebar hinzufügen
@@ -176,9 +153,6 @@ function updateSidebarFromM3U(data) {
                 sidebarList.appendChild(listItem);
                 currentChannel = listItem.querySelector('.channel-info'); // Aktuellen Sender festlegen
             }
-        } else if (line.startsWith('tvg-name')) {
-            // EPG-Informationen extrahieren
-            currentEPG = extractEPGInfo(line);
         }
     });
 
@@ -186,41 +160,56 @@ function updateSidebarFromM3U(data) {
     checkStreamStatus();
 }
 
-// Hilfsfunktion zum Extrahieren der EPG-Informationen aus der Zeile
-function extractEPGInfo(line) {
-    // EPG-Informationen aus der Zeile extrahieren und zurückgeben
-    const matches = line.match(/"([^"]*)"/);
-    return matches ? matches[1] : null;
-}
-
-
-
-
-// Funktion zum Extrahieren von Senderinformationen aus einem #EXTINF-Tag
-function extractChannelInfo(extinfLine) {
-    const match = extinfLine.match(/tvg-logo="([^"]+)"\s*,\s*([^\n\r]+)/);
-    if (match && match.length === 3) {
-        const logoURL = match[1];
-        const channelName = match[2];
-        return { logoURL, channelName };
+// Hilfsfunktion zum Extrahieren der Senderinformationen aus einer Zeile
+function extractChannelInfo(line) {
+    const infoPattern = /#EXTINF:-1 tvg-id="([^"]*)" tvg-logo="([^"]*)", (.*)/;
+    const match = line.match(infoPattern);
+    if (match) {
+        return {
+            id: match[1],
+            logo: match[2],
+            name: match[3]
+        };
     }
     return null;
 }
 
-// Funktion zum Erstellen eines Listenelements für die Sidebar
+// Hilfsfunktion zum Erstellen eines Listenelements für die Sidebar
 function createSidebarListItem(channelInfo) {
     const listItem = document.createElement('li');
-    const channelName = channelInfo.channelName;
-    const streamURL = ''; // Leere Stream-URL, wird später aktualisiert
     listItem.innerHTML = `
-        <div class="channel-info" data-stream="${streamURL}">
+        <div class="channel-info" data-stream="">
             <div class="logo-container">
-                <img src="${channelInfo.logoURL}" alt="${channelName} Logo">
+                <img src="${channelInfo.logo}" alt="${channelInfo.name} Logo">
             </div>
-            <span class="sender-name">${channelName}</span>
-        </div>`;
+            <span class="sender-name">${channelInfo.name}</span>
+            <span class="epg-channel">
+                <span>${channelInfo.name}</span>
+                <div class="epg-timeline">
+                    <div class="epg-past"></div>
+                    <div class="epg-future"></div>
+                </div>
+            </span>
+        </div>
+    `;
     return listItem;
 }
+
+// Funktion zum Überprüfen des Stream-Status (dummy-Funktion, kann angepasst werden)
+function checkStreamStatus() {
+    // Hier kann der Code zum Überprüfen des Stream-Status eingefügt werden
+    console.log('Stream-Status überprüfen...');
+}
+
+// Beispielcode zum Laden einer M3U-Playlist und Aktualisieren der Sidebar
+fetch('playlist.m3u')
+    .then(response => response.text())
+    .then(data => {
+        updateSidebarFromM3U(data);
+    })
+    .catch(error => {
+        console.error('Fehler beim Laden der Playlist:', error);
+    });
 
 
 // Funktion zum Überprüfen des Status der Streams
@@ -258,24 +247,22 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 
+    // Klick-Event für Sender hinzufügen
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.addEventListener('click', function (event) {
         const channelInfo = event.target.closest('.channel-info');
         if (channelInfo) {
-            const streamURL = channelInfo.dataset.stream;
-            const channelId = channelInfo.dataset.channelId;
-            const programInfo = getCurrentProgram(channelId);
-
-            setCurrentChannel(channelInfo.querySelector('.sender-name').textContent, streamURL);
+            const streamURL = channelInfo.dataset.stream; // Stream-URL aus dem Datenattribut abrufen
+            const channelName = channelInfo.querySelector('.sender-name').textContent; // Sendername abrufen
+            setCurrentChannel(channelName, streamURL);
             playStream(streamURL);
-
-            // Aktualisieren der Programmbeschreibung
-            updatePlayerDescription(programInfo.title, programInfo.description);
         }
     });
 
+    // Überprüfen Sie den Status der Streams alle Minute
     setInterval(checkStreamStatus, 60000);
 
+    // Event Listener für den Play-Button
     const playButton = document.getElementById('play-button');
     const streamUrlInput = document.getElementById('stream-url');
 
