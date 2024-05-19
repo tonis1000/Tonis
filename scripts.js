@@ -1,19 +1,40 @@
-javascript
-Code kopieren
 // Funktion zum Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
-    makeProxyRequest('playlist.m3u')
+    const corsAnywhereURL = 'https://cors-anywhere.herokuapp.com/playlist.m3u';
+    const allOriginsURL = 'https://api.allorigins.win/get?url=' + encodeURIComponent('playlist.m3u');
+
+    // Erst CORS Anywhere ausprobieren
+    fetch(corsAnywhereURL)
+        .then(response => response.text())
         .then(data => updateSidebarFromM3U(data))
-        .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+        .catch(() => {
+            // Falls CORS Anywhere nicht verfügbar ist, auf AllOrigins zurückgreifen
+            fetch(allOriginsURL)
+                .then(response => response.json())
+                .then(data => updateSidebarFromM3U(data.contents))
+                .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+        });
 }
 
 // Funktion zum Laden der externen Playlist und Aktualisieren der Sidebar
 function loadExternalPlaylist() {
     const externalPlaylistURL = 'https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u';
-    makeProxyRequest(externalPlaylistURL)
+    const corsAnywhereURL = 'https://cors-anywhere.herokuapp.com/' + externalPlaylistURL;
+    const allOriginsURL = 'https://api.allorigins.win/get?url=' + encodeURIComponent(externalPlaylistURL);
+
+    // Erst CORS Anywhere ausprobieren
+    fetch(corsAnywhereURL)
+        .then(response => response.text())
         .then(data => updateSidebarFromM3U(data))
-        .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
+        .catch(() => {
+            // Falls CORS Anywhere nicht verfügbar ist, auf AllOrigins zurückgreifen
+            fetch(allOriginsURL)
+                .then(response => response.json())
+                .then(data => updateSidebarFromM3U(data.contents))
+                .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
+        });
 }
+
 
 // Funktion zum Laden der Sport-Playlist und Aktualisieren der Sidebar
 function loadSportPlaylist() {
