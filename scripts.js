@@ -144,29 +144,39 @@ function extractStreamURL(data, channelId) {
 // Funktion zum Aktualisieren der Sidebar basierend auf einer M3U-Playlist
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.innerHTML = ''; // Sidebar leeren
-    const parser = document.createElement('a');
-    parser.href = data;
-    const baseURL = parser.protocol + '//' + parser.hostname;
+    sidebarList.innerHTML = '';
 
-    // Daten in Zeilen aufteilen
     const lines = data.split('\n');
-    let currentChannel = null;
     lines.forEach(line => {
-        // Überprüfen, ob die Zeile eine Stream-URL enthält
-        if (line.startsWith('http')) {
-            const streamURL = line.trim();
-            if (currentChannel) {
-                currentChannel.dataset.stream = streamURL; // Stream-URL für aktuellen Sender setzen
-                currentChannel = null; // Aktuellen Sender zurücksetzen
-            }
-        } else if (line.startsWith('#EXTINF')) {
-            // Neue Senderinformationen extrahieren und zur Sidebar hinzufügen
-            const channelInfo = extractChannelInfo(line);
-            if (channelInfo) {
-                const listItem = createSidebarListItem(channelInfo);
+        if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
+            const channelId = idMatch && idMatch[1];
+            const programInfo = getCurrentProgram(channelId);
+
+            const nameMatch = line.match(/,(.*)$/);
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+                const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
+
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}"> <!-- Datenattribute für den Stream-URL und die Channel-ID -->
+                        <div class="logo-container">
+                            <img src="${imgURL}" alt="${name} Logo">
+                        </div>
+                        <span class="sender-name">${name}</span>
+                        <span class="epg-channel">
+                            <span>${programInfo.title}</span>
+                            <div class="epg-timeline">
+                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                            </div>
+                        </span>
+                    </div>
+                `;
                 sidebarList.appendChild(listItem);
-                currentChannel = listItem.querySelector('.channel-info'); // Aktuellen Sender festlegen
             }
         }
     });
@@ -174,6 +184,7 @@ function updateSidebarFromM3U(data) {
     // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
+
 
 // Funktion zum Extrahieren von Senderinformationen aus einem #EXTINF-Tag
 function extractChannelInfo(extinfLine) {
