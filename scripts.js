@@ -118,20 +118,25 @@ function getCurrentProgram(channelId) {
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURL(data, channelId) {
     const lines = data.split('\n');
-    let streamURL = null;
     for (let i = 0; i < lines.length; i++) {
         if (lines[i].startsWith('#EXTINF')) {
             const idMatch = lines[i].match(/tvg-id="([^"]+)"/);
             const currentChannelId = idMatch && idMatch[1];
             if (currentChannelId === channelId) {
-                const urlLine = lines[i + 1];
-                streamURL = urlLine.trim();
+                // Wir haben den gewünschten Kanal gefunden, also extrahieren wir den Stream-URL
+                for (let j = i + 1; j < lines.length; j++) {
+                    if (!lines[j].startsWith('#')) {
+                        return lines[j].trim();
+                    }
+                }
                 break;
             }
         }
     }
-    return streamURL;
+    // Falls kein Stream-URL gefunden wurde, geben wir null zurück
+    return null;
 }
+
 
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
