@@ -1,3 +1,79 @@
+// Funktion zum Ausführen einer Proxy-Anfrage im Browser
+async function makeProxyRequest(url) {
+    try {
+        const response = await fetch(url); // Fetch-API verwenden, um die Anfrage zu senden
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const responseData = await response.text(); // Response-Text abrufen
+        console.log('Response data:', responseData); // Ausgabe des Response-Texts zur Überprüfung
+        return responseData; // Die Daten zurückgeben
+    } catch (error) {
+        console.error('Proxy request failed:', error);
+        throw error; // Fehler weiterleiten
+    }
+}
+
+// Funktion zum Abrufen und Anzeigen von JSON-Daten
+async function fetchAndDisplayData() {
+    const url = 'https://api.example.com/data'; // Beispiel-URL
+    try {
+        const responseData = await makeProxyRequest(url);
+        const data = JSON.parse(responseData); // JSON-Daten parsen
+        console.log('Fetched data:', data);
+
+        // Beispiel: Daten in der Benutzeroberfläche anzeigen
+        const dataContainer = document.getElementById('data-container');
+        dataContainer.innerHTML = JSON.stringify(data, null, 2); // JSON-Daten formatieren und anzeigen
+    } catch (error) {
+        console.error('Error fetching and displaying data:', error);
+    }
+}
+
+// Funktion zum Abrufen und Einfügen von HTML-Inhalten
+async function fetchAndInsertHTML() {
+    const url = 'https://example.com/some-html-page'; // Beispiel-URL
+    try {
+        const responseData = await makeProxyRequest(url);
+        console.log('Fetched HTML:', responseData);
+
+        // Beispiel: HTML-Inhalt in die Seite einfügen
+        const contentContainer = document.getElementById('content-container');
+        contentContainer.innerHTML = responseData;
+    } catch (error) {
+        console.error('Error fetching and inserting HTML:', error);
+    }
+}
+
+// Funktion zum Abrufen von Daten über einen Proxy-Server
+async function fetchWithProxy() {
+    const proxyUrl = 'https://your-proxy-server.com/proxy?url=';
+    const targetUrl = 'https://api.example.com/data';
+    const fullUrl = proxyUrl + encodeURIComponent(targetUrl);
+
+    try {
+        const responseData = await makeProxyRequest(fullUrl);
+        const data = JSON.parse(responseData); // JSON-Daten parsen
+        console.log('Fetched data through proxy:', data);
+
+        // Beispiel: Daten in der Benutzeroberfläche anzeigen
+        const dataContainer = document.getElementById('data-container');
+        dataContainer.innerHTML = JSON.stringify(data, null, 2); // JSON-Daten formatieren und anzeigen
+    } catch (error) {
+        console.error('Error fetching data through proxy:', error);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 // Funktion zum Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
