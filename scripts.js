@@ -1,22 +1,3 @@
-// Funktion, um die Playlist-Datei zu laden
-function makeProxyRequest(url) {
-    return fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            // Hier kannst du die Playlist-Datei parsen und verarbeiten
-            // Zum Beispiel: updateSidebarFromM3U(data);
-            console.log('Playlist loaded successfully:', data);
-        })
-        .catch(error => {
-            console.error('Error fetching playlist:', error);
-        });
-}
-
 // Funktion zum Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
@@ -160,68 +141,24 @@ function extractStreamURL(data, channelId) {
     return streamURL;
 }
 
-/ Funktion, um die Sidebar mit den Informationen aus der Playlist zu aktualisieren
+// Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
-    // Splitte die Playlist in Zeilen
+    const sidebarList = document.getElementById('sidebar-list');
+    sidebarList.innerHTML = '';
+
     const lines = data.split('\n');
-    // Array für die Kanäle erstellen
-    const channels = [];
-
-    // Durch jede Zeile der Playlist iterieren
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        // Prüfen, ob die Zeile mit '#EXTINF' beginnt, was auf einen Kanal hinweist
+    lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
-            // Kanalinformationen extrahieren (zum Beispiel Name und URL)
-            const info = line.split(',');
-            const channel = {
-                name: info[1], // Hier den Namen des Kanals extrahieren
-                url: lines[i + 1] // Hier die URL des Kanals extrahieren
-            };
-            // Kanal zum Array hinzufügen
-            channels.push(channel);
-        }
-    }
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
+            const channelId = idMatch && idMatch[1];
+            const programInfo = getCurrentProgram(channelId);
 
-    // Hier kannst du die Sidebar mit den extrahierten Kanalinformationen aktualisieren
-    console.log('Updating sidebar with playlist data:', channels);
-    // Beispiel: channels.forEach(channel => addChannelToSidebar(channel));
-}
-
-// Beispielimplementation für addChannelToSidebar(channel)
-function addChannelToSidebar(channel) {
-    // Erstelle ein neues <li> Element für den Kanal
-    const li = document.createElement('li');
-    // Erstelle einen <div> Container für die Kanalinformationen
-    const channelInfoDiv = document.createElement('div');
-    channelInfoDiv.className = 'channel-info';
-    // Füge den Stream-URL als Datenattribut hinzu
-    channelInfoDiv.setAttribute('data-stream', channel.url);
-    
-    // Erstelle ein <img> Element für das Senderlogo
-    const logoImg = document.createElement('img');
-    logoImg.src = 'logo.png'; // Hier das echte Logo setzen, falls verfügbar
-    logoImg.alt = 'Sender Logo';
-    // Füge das Logo zur Kanalinfo hinzu
-    channelInfoDiv.appendChild(logoImg);
-
-    // Erstelle ein <span> Element für den Sendernamen
-    const nameSpan = document.createElement('span');
-    nameSpan.className = 'sender-name';
-    nameSpan.textContent = channel.name;
-    // Füge den Sendernamen zur Kanalinfo hinzu
-    channelInfoDiv.appendChild(nameSpan);
-
-    // Füge die Kanalinfo zur <li> hinzu
-    li.appendChild(channelInfoDiv);
-
-    // Füge das <li> Element zur Sidebar-Liste hinzu
-    document.getElementById('sidebar-list').appendChild(li);
-}
-
-// Beispielaufruf von makeProxyRequest() mit der URL zur Playlist-Datei
-const playlistURL = 'https://example.com/playlist.m3u';
-makeProxyRequest(playlistURL);
+            const nameMatch = line.match(/,(.*)$/);
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+                const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
@@ -247,7 +184,6 @@ makeProxyRequest(playlistURL);
     // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
-
 
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
