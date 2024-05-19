@@ -1,6 +1,4 @@
-// Poli kalo
-
-// Laden der Playlist.m3u und Aktualisieren der Sidebar
+// Funktion zum Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
         .then(response => response.text())
@@ -8,7 +6,7 @@ function loadMyPlaylist() {
         .catch(error => console.error('Fehler beim Laden der Playlist:', error));
 }
 
-// Laden der externen Playlist und Aktualisieren der Sidebar
+// Funktion zum Laden der externen Playlist und Aktualisieren der Sidebar
 function loadExternalPlaylist() {
     fetch('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u')
         .then(response => response.text())
@@ -16,7 +14,7 @@ function loadExternalPlaylist() {
         .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
 }
 
-// Laden der Sport-Playlist und Aktualisieren der Sidebar
+// Funktion zum Laden der Sport-Playlist und Aktualisieren der Sidebar
 function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
@@ -24,7 +22,7 @@ function loadSportPlaylist() {
 // Globales Objekt für EPG-Daten
 let epgData = {};
 
-// Laden und Parsen der EPG-Daten mit Zeitabgleich
+// Funktion zum Laden und Parsen der EPG-Daten
 function loadEPGData() {
     fetch('https://ext.greektv.app/epg/epg.xml')
         .then(response => response.text())
@@ -37,15 +35,18 @@ function loadEPGData() {
                 const start = prog.getAttribute('start');
                 const stop = prog.getAttribute('stop');
                 const titleElement = prog.getElementsByTagName('title')[0];
+                const descElement = prog.getElementsByTagName('desc')[0];
                 if (titleElement) {
                     const title = titleElement.textContent;
+                    const desc = descElement ? descElement.textContent : 'Keine Beschreibung verfügbar';
                     if (!epgData[channelId]) {
                         epgData[channelId] = [];
                     }
                     epgData[channelId].push({
                         start: parseDateTime(start),
                         stop: parseDateTime(stop),
-                        title: title
+                        title: title,
+                        desc: desc
                     });
                 }
             });
@@ -99,16 +100,27 @@ function getCurrentProgram(channelId) {
             const totalTime = currentProgram.stop - currentProgram.start;
             const pastPercentage = (pastTime / totalTime) * 100;
             const futurePercentage = (futureTime / totalTime) * 100;
+
+            // Extrahiere auch die Beschreibung des laufenden Programms
+            const description = currentProgram.desc || 'Keine Beschreibung verfügbar';
+
             return {
                 title: currentProgram.title,
+                description: description,
                 pastPercentage: pastPercentage,
                 futurePercentage: futurePercentage
             };
         } else {
-            return { title: 'Keine aktuelle Sendung verfügbar', pastPercentage: 0, futurePercentage: 0 };
+            return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
         }
     }
-    return { title: 'Keine EPG-Daten verfügbar', pastPercentage: 0, futurePercentage: 0 };
+    return { title: 'Keine EPG-Daten verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
+}
+
+// Funktion zum Aktualisieren des Players mit der Programmbeschreibung
+function updatePlayerDescription(title, description) {
+    document.getElementById('program-title').textContent = title;
+    document.getElementById('program-desc').textContent = description;
 }
 
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
@@ -129,6 +141,7 @@ function extractStreamURL(data, channelId) {
     return streamURL;
 }
 
+// Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
@@ -149,7 +162,7 @@ function updateSidebarFromM3U(data) {
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <div class="channel-info" data-stream="${streamURL}"> <!-- Datenattribut für den Stream-URL -->
+                    <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}"> <!-- Datenattribute für den Stream-URL und die Channel-ID -->
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                         </div>
@@ -207,22 +220,24 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 
-    // Klick-Event für Sender hinzufügen
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.addEventListener('click', function (event) {
         const channelInfo = event.target.closest('.channel-info');
         if (channelInfo) {
-            const streamURL = channelInfo.dataset.stream; // Stream-URL aus dem Datenattribut abrufen
-            const channelName = channelInfo.querySelector('.sender-name').textContent; // Sendername abrufen
-            setCurrentChannel(channelName, streamURL);
+            const streamURL = channelInfo.dataset.stream;
+            const channelId = channelInfo.dataset.channelId;
+            const programInfo = getCurrentProgram(channelId);
+
+            setCurrentChannel(channelInfo.querySelector('.sender-name').textContent, streamURL);
             playStream(streamURL);
+
+            // Aktualisieren der Programmbeschreibung
+            updatePlayerDescription(programInfo.title, programInfo.description);
         }
     });
 
-    // Überprüfen Sie den Status der Streams alle Minute
     setInterval(checkStreamStatus, 60000);
 
-    // Event Listener für den Play-Button
     const playButton = document.getElementById('play-button');
     const streamUrlInput = document.getElementById('stream-url');
 
