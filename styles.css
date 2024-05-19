@@ -168,11 +168,11 @@ button:hover {
 
 /* Container für den Video-Player und Steuerungsleiste */
 .player-container {
-    position: fixed;
-    bottom: 5px;
-    right: 5px;
+    #position: fixed;
+    #bottom: 5px;
+    #right: 5px;
     width: 900px;
-    height: 750px; /* Angepasst für Platz der Steuerleiste */
+    #height: 750px; /* Angepasst für Platz der Steuerleiste */
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     padding: 5px;
