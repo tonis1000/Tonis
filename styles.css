@@ -247,10 +247,18 @@ button:hover {
     height: 700px;
     display: flex;
 }
+
+
+
+    
 #current-channel-name {
     font-size: 26px;
 }
 
+
+#stream-url {
+  width: 750px;
+}
 
 
 
