@@ -162,7 +162,7 @@ function updateSidebarFromM3U(data) {
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <div class="channel-info" data-stream="STREAM_URL_DES_SENDERS"> <!-- Datenattribut für den Stream-URL -->
+                    <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}"> <!-- Datenattribute für den Stream-URL und die Channel-ID -->
                         <div class="logo-container">
                             <img src="${imgURL}" alt="${name} Logo">
                         </div>
