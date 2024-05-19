@@ -69,18 +69,20 @@
   <!-- Neuer Bereich für den Video-Player --> 
     <div class="player-container">
 
-<div class="player-header">
+      <div class="player-header">
         <span id="current-channel-name" style="font-size: 26px;">Aktueller Sender: [Hier wird der Sendername angezeigt]</span>
-    
         <input type="text" id="stream-url" placeholder="Stream URL eingeben" style="width: 700px;">
         <button id="play-button">Play</button>
-    </div>
+     </div>
         
-           <video id="video-player" controls>
-                
+           <video id="video-player" controls>                
             <!-- Optionale Videoquelle(n) hier einfügen -->
             <!-- Beispiel: <source src="video.mp4" type="video/mp4"> -->
-        </video>
+          </video>
+     <div id="program-info">
+        <h4 id="program-title"></h4>
+        <p id="program-desc"></p>
+    </div>   
     
 </div>
 
