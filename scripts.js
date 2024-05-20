@@ -121,12 +121,13 @@ function extractStreamURLs(data) {
     const lines = data.split('\n');
     const streamURLs = {};
     let currentChannelId = null;
-    lines.forEach((line, index) => {
+    lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             currentChannelId = idMatch && idMatch[1];
-        } else if (currentChannelId && line.trim() && !lines[index - 1].startsWith('#')) {
-            streamURLs[currentChannelId] = line.trim();
+        } else if (currentChannelId && line.trim()) {
+            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
+            streamURLs[currentChannelId].push(line.trim());
             currentChannelId = null;
         }
     });
