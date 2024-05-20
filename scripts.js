@@ -315,15 +315,26 @@ function playStream(streamURL, subtitleURL) {
 
 
         // Funktion zum Lesen der SRT-Datei und Erstellen einer Blob-URL
-        function handleSubtitleFile(file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const subtitleBlob = new Blob([event.target.result], { type: 'text/vtt' });
-                const subtitleURL = URL.createObjectURL(subtitleBlob);
-                document.getElementById('subtitle-track').src = subtitleURL;
-            };
-            reader.readAsText(file);
-        }
+function handleSubtitleFile(file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const subtitleData = event.target.result;
+        const subtitleBlob = new Blob([subtitleData], { type: 'text/vtt' });
+        const subtitleURL = URL.createObjectURL(subtitleBlob);
+        document.getElementById('subtitle-track').src = subtitleURL;
+    };
+
+    if (file.name.endsWith('.srt')) {
+        // Wenn es sich um eine SRT-Datei handelt, konvertiere sie in VTT
+        reader.readAsText(file);
+    } else if (file.name.endsWith('.vtt')) {
+        // Wenn es sich um eine VTT-Datei handelt, verwende sie direkt
+        reader.readAsDataURL(file);
+    } else {
+        console.error('Unsupported subtitle file format.');
+    }
+}
+
 
         // Event-Listener für den Play-Button und Datei-Eingabe
         document.addEventListener('DOMContentLoaded', function () {
