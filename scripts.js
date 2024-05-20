@@ -296,9 +296,11 @@ function playStream(streamURL, subtitleURL) {
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
             videoPlayer.play();
         });
-    } else if (typeof dashjs !== 'undefined' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
-        const dashPlayer = dashjs.MediaPlayer().create();
-        dashPlayer.initialize(videoPlayer, streamURL, true);
+} else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
+    const dashPlayer = dashjs.MediaPlayer().create();
+    dashPlayer.initialize(videoPlayer, streamURL, true);
+}
+
     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
         videoPlayer.src = streamURL;
         videoPlayer.addEventListener('loadedmetadata', function () {
