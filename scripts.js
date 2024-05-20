@@ -289,3 +289,86 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
+
+
+
+
+// Funktion zum Abspielen eines Streams im Video-Player
+        function playStream(streamURL, subtitleURL) {
+            const videoPlayer = document.getElementById('video-player');
+            const subtitleTrack = document.getElementById('subtitle-track');
+
+            if (subtitleURL) {
+                subtitleTrack.src = subtitleURL;
+                subtitleTrack.track.mode = 'showing'; // Untertitel anzeigen
+            } else {
+                subtitleTrack.src = '';
+                subtitleTrack.track.mode = 'hidden'; // Untertitel ausblenden
+            }
+
+            if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
+                const hls = new Hls();
+                hls.loadSource(streamURL);
+                hls.attachMedia(videoPlayer);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    videoPlayer.play();
+                });
+            } else if (dashjs.MediaPlayer().isSupported() && streamURL.endsWith('.mpd')) {
+                const dashPlayer = dashjs.MediaPlayer().create();
+                dashPlayer.initialize(videoPlayer, streamURL, true);
+            } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+                videoPlayer.src = streamURL;
+                videoPlayer.addEventListener('loadedmetadata', function () {
+                    videoPlayer.play();
+                });
+            } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
+                videoPlayer.src = streamURL;
+                videoPlayer.play();
+            } else {
+                console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
+            }
+        }
+
+        // Funktion zum Lesen der SRT-Datei und Erstellen einer Blob-URL
+        function handleSubtitleFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const subtitleBlob = new Blob([event.target.result], { type: 'text/vtt' });
+                const subtitleURL = URL.createObjectURL(subtitleBlob);
+                document.getElementById('subtitle-track').src = subtitleURL;
+            };
+            reader.readAsText(file);
+        }
+
+        // Event-Listener für den Play-Button und Datei-Eingabe
+        document.addEventListener('DOMContentLoaded', function () {
+            const playButton = document.getElementById('play-button');
+            const streamUrlInput = document.getElementById('stream-url');
+            const subtitleFileInput = document.getElementById('subtitle-file');
+
+            const playStreamFromInput = () => {
+                const streamUrl = streamUrlInput.value;
+                const subtitleFile = subtitleFileInput.files[0];
+                if (streamUrl) {
+                    if (subtitleFile) {
+                        handleSubtitleFile(subtitleFile);
+                    }
+                    playStream(streamUrl, subtitleFile ? document.getElementById('subtitle-track').src : null);
+                }
+            };
+
+            playButton.addEventListener('click', playStreamFromInput);
+
+            streamUrlInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    playStreamFromInput();
+                }
+            });
+
+            subtitleFileInput.addEventListener('change', (event) => {
+                const subtitleFile = event.target.files[0];
+                if (subtitleFile) {
+                    handleSubtitleFile(subtitleFile);
+                }
+            });
+        });
