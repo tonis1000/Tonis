@@ -251,25 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Funktion zum Abspielen eines HLS-Streams im Video-Player
-function playStream(streamURL) {
-    const videoPlayer = document.getElementById('video-player');
-    if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(streamURL);
-        hls.attachMedia(videoPlayer);
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            videoPlayer.play();
-        });
-    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-        videoPlayer.src = streamURL;
-        videoPlayer.addEventListener('loadedmetadata', function () {
-            videoPlayer.play();
-        });
-    } else {
-        console.error('HLS wird vom aktuellen Browser nicht unterstützt.');
-    }
-}
+
 
 // Funktion zum Setzen des aktuellen Sendernamens und der URL
 function setCurrentChannel(channelName, streamUrl) {
@@ -293,7 +275,7 @@ function updateClock() {
 
 
 
-// Funktion zum Abspielen eines Streams im Video-Player
+        // Funktion zum Abspielen eines Streams im Video-Player
         function playStream(streamURL, subtitleURL) {
             const videoPlayer = document.getElementById('video-player');
             const subtitleTrack = document.getElementById('subtitle-track');
@@ -372,3 +354,5 @@ function updateClock() {
                 }
             });
         });
+
+
