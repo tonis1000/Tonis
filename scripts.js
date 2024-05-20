@@ -153,7 +153,7 @@ function updateSidebarFromM3U(data) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamURL = streamURLs[channelId] && streamURLs[channelId][0]; // Erste URL für den Channel
+                const streamURL = streamURLs[channelId] && streamURLs[channelId].shift(); // Nächste URL für den Channel
 
                 if (streamURL) {
                     const listItem = document.createElement('li');
@@ -180,6 +180,7 @@ function updateSidebarFromM3U(data) {
 
     checkStreamStatus();
 }
+
 
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
