@@ -276,7 +276,7 @@ function updateClock() {
 
 
 
-        // Funktion zum Abspielen eines Streams im Video-Player
+// Funktion zum Abspielen eines Streams im Video-Player
 function playStream(streamURL, subtitleURL) {
     const videoPlayer = document.getElementById('video-player');
     const subtitleTrack = document.getElementById('subtitle-track');
@@ -290,6 +290,7 @@ function playStream(streamURL, subtitleURL) {
     }
 
     if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
+        // HLS-Stream
         const hls = new Hls();
         hls.loadSource(streamURL);
         hls.attachMedia(videoPlayer);
@@ -297,20 +298,20 @@ function playStream(streamURL, subtitleURL) {
             videoPlayer.play();
         });
     } else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
+        // DASH-Stream
         const dashPlayer = dashjs.MediaPlayer().create();
         dashPlayer.initialize(videoPlayer, streamURL, true);
     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        // Andere Videoformate (z. B. MP4)
         videoPlayer.src = streamURL;
         videoPlayer.addEventListener('loadedmetadata', function () {
             videoPlayer.play();
         });
-    } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
-        videoPlayer.src = streamURL;
-        videoPlayer.play();
     } else {
         console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
 }
+
 
 
 
