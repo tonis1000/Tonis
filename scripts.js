@@ -277,40 +277,41 @@ function updateClock() {
 
 
         // Funktion zum Abspielen eines Streams im Video-Player
-        function playStream(streamURL, subtitleURL) {
-            const videoPlayer = document.getElementById('video-player');
-            const subtitleTrack = document.getElementById('subtitle-track');
+function playStream(streamURL, subtitleURL) {
+    const videoPlayer = document.getElementById('video-player');
+    const subtitleTrack = document.getElementById('subtitle-track');
 
-            if (subtitleURL) {
-                subtitleTrack.src = subtitleURL;
-                subtitleTrack.track.mode = 'showing'; // Untertitel anzeigen
-            } else {
-                subtitleTrack.src = '';
-                subtitleTrack.track.mode = 'hidden'; // Untertitel ausblenden
-            }
+    if (subtitleURL) {
+        subtitleTrack.src = subtitleURL;
+        subtitleTrack.track.mode = 'showing'; // Untertitel anzeigen
+    } else {
+        subtitleTrack.src = '';
+        subtitleTrack.track.mode = 'hidden'; // Untertitel ausblenden
+    }
 
-            if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
-                const hls = new Hls();
-                hls.loadSource(streamURL);
-                hls.attachMedia(videoPlayer);
-                hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                    videoPlayer.play();
-                });
-            } else if (dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
-                const dashPlayer = dashjs.MediaPlayer().create();
-                dashPlayer.initialize(videoPlayer, streamURL, true);
-            } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-                videoPlayer.src = streamURL;
-                videoPlayer.addEventListener('loadedmetadata', function () {
-                    videoPlayer.play();
-                });
-            } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
-                videoPlayer.src = streamURL;
-                videoPlayer.play();
-            } else {
-                console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
-            }
-        }
+    if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
+        const hls = new Hls();
+        hls.loadSource(streamURL);
+        hls.attachMedia(videoPlayer);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            videoPlayer.play();
+        });
+    } else if (typeof dashjs !== 'undefined' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
+        const dashPlayer = dashjs.MediaPlayer().create();
+        dashPlayer.initialize(videoPlayer, streamURL, true);
+    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        videoPlayer.src = streamURL;
+        videoPlayer.addEventListener('loadedmetadata', function () {
+            videoPlayer.play();
+        });
+    } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
+        videoPlayer.src = streamURL;
+        videoPlayer.play();
+    } else {
+        console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
+    }
+}
+
 
         // Funktion zum Lesen der SRT-Datei und Erstellen einer Blob-URL
         function handleSubtitleFile(file) {
