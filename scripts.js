@@ -275,6 +275,7 @@ function updateClock() {
 
 
 
+
         // Funktion zum Abspielen eines Streams im Video-Player
         function playStream(streamURL, subtitleURL) {
             const videoPlayer = document.getElementById('video-player');
@@ -295,7 +296,7 @@ function updateClock() {
                 hls.on(Hls.Events.MANIFEST_PARSED, function () {
                     videoPlayer.play();
                 });
-            } else if (dashjs.MediaPlayer().isSupported() && streamURL.endsWith('.mpd')) {
+            } else if (dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
                 const dashPlayer = dashjs.MediaPlayer().create();
                 dashPlayer.initialize(videoPlayer, streamURL, true);
             } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
@@ -354,5 +355,3 @@ function updateClock() {
                 }
             });
         });
-
-
