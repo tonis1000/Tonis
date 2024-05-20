@@ -314,26 +314,35 @@ function playStream(streamURL, subtitleURL) {
 
 
 
-        // Funktion zum Lesen der SRT-Datei und Erstellen einer Blob-URL
+// Funktion zum Lesen der SRT-Datei und Anzeigen der griechischen Untertitel
 function handleSubtitleFile(file) {
     const reader = new FileReader();
     reader.onload = function(event) {
-        const subtitleData = event.target.result;
-        const subtitleBlob = new Blob([subtitleData], { type: 'text/vtt' });
-        const subtitleURL = URL.createObjectURL(subtitleBlob);
-        document.getElementById('subtitle-track').src = subtitleURL;
+        const srtContent = event.target.result;
+        const vttContent = convertSrtToVtt(srtContent);
+        const blob = new Blob([vttContent], { type: 'text/vtt' });
+        const url = URL.createObjectURL(blob);
+        const track = document.getElementById('subtitle-track');
+        track.src = url;
+        track.label = 'Griechisch';
+        track.srclang = 'el';
+        track.default = true;
     };
-
-    if (file.name.endsWith('.srt')) {
-        // Wenn es sich um eine SRT-Datei handelt, konvertiere sie in VTT
-        reader.readAsText(file);
-    } else if (file.name.endsWith('.vtt')) {
-        // Wenn es sich um eine VTT-Datei handelt, verwende sie direkt
-        reader.readAsDataURL(file);
-    } else {
-        console.error('Unsupported subtitle file format.');
-    }
+    reader.readAsText(file);
 }
+
+// Funktion zum Konvertieren von SRT in VTT
+function convertSrtToVtt(srtContent) {
+    // SRT-Untertitelzeilen in VTT-Format konvertieren
+    const vttContent = 'WEBVTT\n\n' + srtContent
+        // Ersetze Trennzeichen
+        .replace(/\r\n|\r|\n/g, '\n')
+        // Ersetze Zeitformate von SRT in VTT
+        .replace(/(\d{2}):(\d{2}):(\d{2}),(\d{3})/g, '$1:$2:$3.$4');
+
+    return vttContent;
+}
+
 
 
         // Event-Listener für den Play-Button und Datei-Eingabe
