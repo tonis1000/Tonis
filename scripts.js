@@ -112,9 +112,14 @@ function getCurrentProgram(channelId) {
 
 // Funktion zum Aktualisieren des Players mit der Programmbeschreibung
 function updatePlayerDescription(title, description) {
-    document.getElementById('program-title').textContent = title;
-    document.getElementById('program-desc').textContent = description;
+    const playerTitle = document.getElementById('program-title');
+    const playerDesc = document.getElementById('program-desc');
+    if (playerTitle && playerDesc) {
+        playerTitle.textContent = title;
+        playerDesc.textContent = description;
+    }
 }
+
 
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURLs(data) {
