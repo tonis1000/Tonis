@@ -121,18 +121,18 @@ function extractStreamURLs(data) {
     const lines = data.split('\n');
     const streamURLs = {};
     let currentChannelId = null;
-    lines.forEach(line => {
+    lines.forEach((line, index) => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             currentChannelId = idMatch && idMatch[1];
-        } else if (currentChannelId && line.trim()) {
-            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
-            streamURLs[currentChannelId].push(line.trim());
+        } else if (currentChannelId && line.trim() && !lines[index - 1].startsWith('#')) {
+            streamURLs[currentChannelId] = line.trim();
             currentChannelId = null;
         }
     });
     return streamURLs;
 }
+
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
