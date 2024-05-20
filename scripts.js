@@ -116,25 +116,22 @@ function updatePlayerDescription(title, description) {
     document.getElementById('program-desc').textContent = description;
 }
 
-// Funktion zum Extrahieren des Stream-URLs und anderer Informationen aus der M3U-Datei
-function extractStreamInfo(data) {
+// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
+function extractStreamURLs(data) {
     const lines = data.split('\n');
-    const streamInfo = {};
+    const streamURLs = {};
     let currentChannelId = null;
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             currentChannelId = idMatch && idMatch[1];
-            if (currentChannelId) {
-                streamInfo[currentChannelId] = {};
-            }
         } else if (currentChannelId && line.trim()) {
-            if (!streamInfo[currentChannelId].url) {
-                streamInfo[currentChannelId].url = line.trim();
-            }
+            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
+            streamURLs[currentChannelId].push(line.trim());
+            currentChannelId = null;
         }
     });
-    return streamInfo;
+    return streamURLs;
 }
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
@@ -142,33 +139,38 @@ function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
 
-    const streamInfo = extractStreamInfo(data);
+    const lines = data.split('\n');
+    let currentChannelId = null;
+    let currentStreamURL = null;
 
-    Object.keys(streamInfo).forEach(channelId => {
-        const programInfo = getCurrentProgram(channelId);
-        const name = programInfo.title;
-
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-            <div class="channel-info" data-stream="${streamInfo[channelId].url}" data-channel-id="${channelId}">
-                <div class="logo-container">
-                    <img src="default_logo.png" alt="${name} Logo">
-                </div>
-                <span class="sender-name">${name}</span>
-                <span class="epg-channel">
-                    <span>${programInfo.title}</span>
-                    <div class="epg-timeline">
-                        <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
-                        <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+    lines.forEach(line => {
+        if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
+            currentChannelId = idMatch && idMatch[1];
+            const nameMatch = line.match(/,(.*)$/);
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="channel-info" data-stream="${currentStreamURL}" data-channel-id="${currentChannelId}">
+                        <div class="logo-container">
+                            <img src="${imgURL}" alt="${name} Logo">
+                        </div>
+                        <span class="sender-name">${name}</span>
                     </div>
-                </span>
-            </div>
-        `;
-        sidebarList.appendChild(listItem);
+                `;
+                sidebarList.appendChild(listItem);
+            }
+        } else if (line.trim()) {
+            currentStreamURL = line.trim();
+        }
     });
 
     checkStreamStatus();
 }
+
 
 
 
