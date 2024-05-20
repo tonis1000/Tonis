@@ -56,15 +56,13 @@ function loadEPGData() {
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
-    // Überprüfen, ob epgTime vorhanden und nicht leer ist
     if (!epgTime || epgTime.length < 19) {
         console.error('Ungültige EPG-Zeitangabe:', epgTime);
         return null;
     }
 
-    // Format: YYYYMMDDHHMMSS ±ZZZZ
     const year = parseInt(epgTime.substr(0, 4), 10);
-    const month = parseInt(epgTime.substr(4, 2), 10) - 1; // Monate sind 0-basiert in JavaScript
+    const month = parseInt(epgTime.substr(4, 2), 10) - 1;
     const day = parseInt(epgTime.substr(6, 2), 10);
     const hour = parseInt(epgTime.substr(8, 2), 10);
     const minute = parseInt(epgTime.substr(10, 2), 10);
@@ -72,19 +70,16 @@ function parseDateTime(epgTime) {
     const tzHour = parseInt(epgTime.substr(15, 3), 10);
     const tzMin = parseInt(epgTime.substr(18, 2), 10) * (epgTime[14] === '+' ? 1 : -1);
 
-    // Überprüfen, ob die geparsten Werte gültig sind
     if (isNaN(year) || isNaN(month) || isNaN(day) || isNaN(hour) || isNaN(minute) || isNaN(second) || isNaN(tzHour) || isNaN(tzMin)) {
         console.error('Ungültige EPG-Zeitangabe:', epgTime);
         return null;
     }
 
-    // Überprüfen, ob das Jahr, der Monat und der Tag im gültigen Bereich liegen
     if (year < 0 || month < 0 || month > 11 || day < 1 || day > 31) {
         console.error('Ungültige EPG-Zeitangabe:', epgTime);
         return null;
     }
 
-    // Erstellen und zurückgeben des Date-Objekts
     const date = new Date(Date.UTC(year, month, day, hour - tzHour, minute - tzMin, second));
     return date;
 }
@@ -100,8 +95,6 @@ function getCurrentProgram(channelId) {
             const totalTime = currentProgram.stop - currentProgram.start;
             const pastPercentage = (pastTime / totalTime) * 100;
             const futurePercentage = (futureTime / totalTime) * 100;
-
-            // Extrahiere auch die Beschreibung des laufenden Programms
             const description = currentProgram.desc || 'Keine Beschreibung verfügbar';
 
             return {
@@ -124,21 +117,21 @@ function updatePlayerDescription(title, description) {
 }
 
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
-function extractStreamURL(data, channelId) {
+function extractStreamURLs(data) {
     const lines = data.split('\n');
-    let streamURL = null;
-    for (let i = 0; i < lines.length; i++) {
-        if (lines[i].startsWith('#EXTINF')) {
-            const idMatch = lines[i].match(/tvg-id="([^"]+)"/);
-            const currentChannelId = idMatch && idMatch[1];
-            if (currentChannelId === channelId) {
-                const urlLine = lines[i + 1];
-                streamURL = urlLine.trim();
-                break;
-            }
+    const streamURLs = {};
+    let currentChannelId = null;
+    lines.forEach(line => {
+        if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
+            currentChannelId = idMatch && idMatch[1];
+        } else if (currentChannelId && line.trim()) {
+            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
+            streamURLs[currentChannelId].push(line.trim());
+            currentChannelId = null;
         }
-    }
-    return streamURL;
+    });
+    return streamURLs;
 }
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
@@ -146,7 +139,9 @@ function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
 
+    const streamURLs = extractStreamURLs(data);
     const lines = data.split('\n');
+
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
@@ -158,30 +153,31 @@ function updateSidebarFromM3U(data) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamURL = extractStreamURL(data, channelId); // Extrahieren des Stream-URLs
+                const streamURL = streamURLs[channelId] && streamURLs[channelId][0]; // Erste URL für den Channel
 
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}"> <!-- Datenattribute für den Stream-URL und die Channel-ID -->
-                        <div class="logo-container">
-                            <img src="${imgURL}" alt="${name} Logo">
-                        </div>
-                        <span class="sender-name">${name}</span>
-                        <span class="epg-channel">
-                            <span>${programInfo.title}</span>
-                            <div class="epg-timeline">
-                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
-                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                if (streamURL) {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
+                            <div class="logo-container">
+                                <img src="${imgURL}" alt="${name} Logo">
                             </div>
-                        </span>
-                    </div>
-                `;
-                sidebarList.appendChild(listItem);
+                            <span class="sender-name">${name}</span>
+                            <span class="epg-channel">
+                                <span>${programInfo.title}</span>
+                                <div class="epg-timeline">
+                                    <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                                    <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                                </div>
+                            </span>
+                        </div>
+                    `;
+                    sidebarList.appendChild(listItem);
+                }
             }
         }
     });
 
-    // Nachdem die Sidebar aktualisiert wurde, den Status der Streams überprüfen
     checkStreamStatus();
 }
 
@@ -189,23 +185,19 @@ function updateSidebarFromM3U(data) {
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
     sidebarChannels.forEach(channel => {
-        const streamURL = channel.dataset.stream; // Stream-URL aus dem Datenattribut erhalten
+        const streamURL = channel.dataset.stream;
         if (streamURL) {
-            // Status der Stream-Verfügbarkeit überprüfen
             fetch(streamURL)
                 .then(response => {
                     if (response.ok) {
-                        // Stream ist verfügbar
-                        channel.querySelector('.sender-name').classList.add('online'); // Sendername markieren
+                        channel.querySelector('.sender-name').classList.add('online');
                     } else {
-                        // Stream ist nicht verfügbar
-                        channel.querySelector('.sender-name').classList.remove('online'); // Sendername zurücksetzen
+                        channel.querySelector('.sender-name').classList.remove('online');
                     }
                 })
                 .catch(error => {
-                    // Fehler beim Überprüfen des Stream-Status
                     console.error('Fehler beim Überprüfen des Stream-Status:', error);
-                    channel.querySelector('.sender-name').classList.remove('online'); // Sendername zurücksetzen
+                    channel.querySelector('.sender-name').classList.remove('online');
                 });
         }
     });
