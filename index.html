@@ -6,6 +6,8 @@
     <title>GitHub TV</title>
     
     <link rel="stylesheet" type="text/css" href="styles.css"> <!-- Hier wird die CSS-Datei verlinkt -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 
 
     
@@ -75,10 +77,13 @@
         <button id="play-button">Play</button>
      </div>
         
-           <video id="video-player" controls>                
-            <!-- Optionale Videoquelle(n) hier einfügen -->
-            <!-- Beispiel: <source src="video.mp4" type="video/mp4"> -->
-          </video>
+           <video id="video-player" controls>
+            <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
+        </video>
+        <input type="text" id="stream-url" placeholder="Stream URL eingeben">
+        <input type="file" id="subtitle-file" accept=".srt">
+        <button id="play-button">Play</button>
+        
      <div id="program-info">
         <h4 id="program-title"></h4>
         <p id="program-desc"></p>
@@ -86,8 +91,8 @@
     
 </div>
 
-        <!-- Hinzufügen von hls.js -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    
     <script src="scripts.js"></script>
 </body>
 </html>
