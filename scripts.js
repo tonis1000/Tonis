@@ -116,22 +116,25 @@ function updatePlayerDescription(title, description) {
     document.getElementById('program-desc').textContent = description;
 }
 
-// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
-function extractStreamURLs(data) {
+// Funktion zum Extrahieren des Stream-URLs und anderer Informationen aus der M3U-Datei
+function extractStreamInfo(data) {
     const lines = data.split('\n');
-    const streamURLs = {};
+    const streamInfo = {};
     let currentChannelId = null;
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             currentChannelId = idMatch && idMatch[1];
+            if (currentChannelId) {
+                streamInfo[currentChannelId] = {};
+            }
         } else if (currentChannelId && line.trim()) {
-            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
-            streamURLs[currentChannelId].push(line.trim());
-            currentChannelId = null;
+            if (!streamInfo[currentChannelId].url) {
+                streamInfo[currentChannelId].url = line.trim();
+            }
         }
     });
-    return streamURLs;
+    return streamInfo;
 }
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
@@ -139,47 +142,34 @@ function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
 
-    const streamURLs = extractStreamURLs(data);
-    const lines = data.split('\n');
+    const streamInfo = extractStreamInfo(data);
 
-    lines.forEach(line => {
-        if (line.startsWith('#EXTINF')) {
-            const idMatch = line.match(/tvg-id="([^"]+)"/);
-            const channelId = idMatch && idMatch[1];
-            const programInfo = getCurrentProgram(channelId);
+    Object.keys(streamInfo).forEach(channelId => {
+        const programInfo = getCurrentProgram(channelId);
+        const name = programInfo.title;
 
-            const nameMatch = line.match(/,(.*)$/);
-            if (nameMatch && nameMatch.length > 1) {
-                const name = nameMatch[1].trim();
-                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
-                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamURLsForChannel = streamURLs[channelId] || []; // Alle URLs für den Channel
-
-                streamURLsForChannel.forEach(streamURL => { // Iteriere über alle URLs
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `
-                        <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
-                            <div class="logo-container">
-                                <img src="${imgURL}" alt="${name} Logo">
-                            </div>
-                            <span class="sender-name">${name}</span>
-                            <span class="epg-channel">
-                                <span>${programInfo.title}</span>
-                                <div class="epg-timeline">
-                                    <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
-                                    <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
-                                </div>
-                            </span>
-                        </div>
-                    `;
-                    sidebarList.appendChild(listItem);
-                });
-            }
-        }
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <div class="channel-info" data-stream="${streamInfo[channelId].url}" data-channel-id="${channelId}">
+                <div class="logo-container">
+                    <img src="default_logo.png" alt="${name} Logo">
+                </div>
+                <span class="sender-name">${name}</span>
+                <span class="epg-channel">
+                    <span>${programInfo.title}</span>
+                    <div class="epg-timeline">
+                        <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                        <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                    </div>
+                </span>
+            </div>
+        `;
+        sidebarList.appendChild(listItem);
     });
 
     checkStreamStatus();
 }
+
 
 
 // Funktion zum Überprüfen des Status der Streams
