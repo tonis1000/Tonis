@@ -153,9 +153,9 @@ function updateSidebarFromM3U(data) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamURL = streamURLs[channelId] && streamURLs[channelId][0]; // Erste URL für den Channel
+                const streamURLsForChannel = streamURLs[channelId] || []; // Alle URLs für den Channel
 
-                if (streamURL) {
+                streamURLsForChannel.forEach(streamURL => { // Iteriere über alle URLs
                     const listItem = document.createElement('li');
                     listItem.innerHTML = `
                         <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
@@ -173,13 +173,14 @@ function updateSidebarFromM3U(data) {
                         </div>
                     `;
                     sidebarList.appendChild(listItem);
-                }
+                });
             }
         }
     });
 
     checkStreamStatus();
 }
+
 
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
