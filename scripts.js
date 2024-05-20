@@ -134,6 +134,7 @@ function extractStreamURLs(data) {
     return streamURLs;
 }
 
+
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
@@ -142,6 +143,7 @@ function updateSidebarFromM3U(data) {
     const lines = data.split('\n');
     let currentChannelId = null;
     let currentStreamURL = null;
+    let currentProgramInfo = null;
 
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
@@ -159,12 +161,22 @@ function updateSidebarFromM3U(data) {
                             <img src="${imgURL}" alt="${name} Logo">
                         </div>
                         <span class="sender-name">${name}</span>
+                        ${currentProgramInfo ? `
+                            <span class="epg-channel">
+                                <span>${currentProgramInfo.title}</span>
+                                <div class="epg-timeline">
+                                    <div class="epg-past" style="width: ${currentProgramInfo.pastPercentage}%"></div>
+                                    <div class="epg-future" style="width: ${currentProgramInfo.futurePercentage}%"></div>
+                                </div>
+                            </span>` : ''}
                     </div>
                 `;
                 sidebarList.appendChild(listItem);
             }
         } else if (line.trim()) {
             currentStreamURL = line.trim();
+        } else {
+            currentProgramInfo = getCurrentProgram(currentChannelId);
         }
     });
 
