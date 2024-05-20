@@ -112,14 +112,9 @@ function getCurrentProgram(channelId) {
 
 // Funktion zum Aktualisieren des Players mit der Programmbeschreibung
 function updatePlayerDescription(title, description) {
-    const playerTitle = document.getElementById('program-title');
-    const playerDesc = document.getElementById('program-desc');
-    if (playerTitle && playerDesc) {
-        playerTitle.textContent = title;
-        playerDesc.textContent = description;
-    }
+    document.getElementById('program-title').textContent = title;
+    document.getElementById('program-desc').textContent = description;
 }
-
 
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURLs(data) {
@@ -139,57 +134,52 @@ function extractStreamURLs(data) {
     return streamURLs;
 }
 
-
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
 
+    const streamURLs = extractStreamURLs(data);
     const lines = data.split('\n');
-    let currentChannelId = null;
-    let currentStreamURL = null;
-    let currentProgramInfo = null;
 
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
-            currentChannelId = idMatch && idMatch[1];
+            const channelId = idMatch && idMatch[1];
+            const programInfo = getCurrentProgram(channelId);
+
             const nameMatch = line.match(/,(.*)$/);
             if (nameMatch && nameMatch.length > 1) {
                 const name = nameMatch[1].trim();
                 const imgMatch = line.match(/tvg-logo="([^"]+)"/);
                 let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <div class="channel-info" data-stream="${currentStreamURL}" data-channel-id="${currentChannelId}">
-                        <div class="logo-container">
-                            <img src="${imgURL}" alt="${name} Logo">
-                        </div>
-                        <span class="sender-name">${name}</span>
-                        ${currentProgramInfo ? `
+                const streamURL = streamURLs[channelId] && streamURLs[channelId][0]; // Erste URL für den Channel
+
+                if (streamURL) {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
+                            <div class="logo-container">
+                                <img src="${imgURL}" alt="${name} Logo">
+                            </div>
+                            <span class="sender-name">${name}</span>
                             <span class="epg-channel">
-                                <span>${currentProgramInfo.title}</span>
+                                <span>${programInfo.title}</span>
                                 <div class="epg-timeline">
-                                    <div class="epg-past" style="width: ${currentProgramInfo.pastPercentage}%"></div>
-                                    <div class="epg-future" style="width: ${currentProgramInfo.futurePercentage}%"></div>
+                                    <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                                    <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
                                 </div>
-                            </span>` : ''}
-                    </div>
-                `;
-                sidebarList.appendChild(listItem);
+                            </span>
+                        </div>
+                    `;
+                    sidebarList.appendChild(listItem);
+                }
             }
-        } else if (line.trim()) {
-            currentStreamURL = line.trim();
-        } else {
-            currentProgramInfo = getCurrentProgram(currentChannelId);
         }
     });
 
     checkStreamStatus();
 }
-
-
-
 
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
