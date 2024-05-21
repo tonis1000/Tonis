@@ -71,24 +71,24 @@
   <!-- Neuer Bereich für den Video-Player --> 
     <div class="player-container">
 
-   <div class="player-header">
+        <div class="player-header">
         <span id="current-channel-name" style="font-size: 26px;">Aktueller Sender: [Hier wird der Sendername angezeigt]</span>
         <input type="text" id="stream-url" placeholder="Stream URL eingeben" style="width: 700px;">
         <label for="subtitle-file" style="cursor: pointer;">SRT</label>
         <input type="file" id="subtitle-file" accept=".srt" style="display: none;">
         <button id="play-button">Play</button>
-    </div>
+       </div>
         
-<video id="video-player" controls>
+       <video id="video-player" controls>
        <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
-        </video>
-
-    </div>
-        
-     <div id="program-info">
+       </video>
+      <div id="program-info">
         <h4 id="program-title"></h4>
         <p id="program-desc"></p>
-    </div>   
+     </div>   
+    </div>
+        
+     
     
 </div>
 
