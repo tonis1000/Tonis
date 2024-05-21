@@ -67,6 +67,10 @@ button:hover {
     margin-top: 2px;
     margin-bottom: 5px;
 }
+.online {
+    color: lightgreen;
+    font-weight: bold;
+}
 
 .sidebar h2 {
     color: #f10d0d;
