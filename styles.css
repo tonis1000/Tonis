@@ -7,11 +7,12 @@
     color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
 }
 
+/* Hauptcontainer */
 .main-container {
     float: left;
 }
 
-/* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
+/* Container für Inhalte */
 .container {
     border-top: 5px solid transparent;
     font-size: 16px;
@@ -59,7 +60,7 @@ button:hover {
     background-color: #0056b3;  /* Dunklerer Blauton bei Hover */
 }
 
-/* Sidebar-Styling mit spezifischen Maßen und Layout-Einstellungen */
+/* Sidebar-Styling */
 .sidebar {
     width: 350px;
     height: 740px;
@@ -67,11 +68,14 @@ button:hover {
     margin-top: 2px;
     margin-bottom: 5px;
 }
+
+/* Online-Klasse für grünen Text */
 .online {
     color: lightgreen;
     font-weight: bold;
 }
 
+/* Sidebar-Überschrift */
 .sidebar h2 {
     color: #f10d0d;
     padding-bottom: 10px;
@@ -79,13 +83,14 @@ button:hover {
     margin-top: 1px;
 }
 
+/* Sidebar-Inhalt */
 .sidebar-content {
     overflow-y: auto;
     height: calc(100% - 40px);
     background-color: #0f0e0e;
 }
 
-/* Sidebar-Listenstil ohne Bullet Points */
+/* Sidebar-Listenstil */
 #sidebar-list {
     list-style-type: none;
     padding: 0;
@@ -154,18 +159,34 @@ button:hover {
 }
 
 /* Stil für den Abschnitt, der bereits gesendet wurde */
-.epg-past,
+/* Stil für den Abschnitt, der bereits gesendet wurde */
+.epg-past {
+    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
+    background-color: #ff0000; /* Ausgangsfarbe für bereits vergangene Zeit */
+    animation: pulse 2s infinite; /* Pulsationseffekt mit 2 Sekunden Dauer */
+}
+
+/* Definition der Pulsationsanimation */
+@keyframes pulse {
+    0% { background-color: #ff0000; } /* Anfangsfarbe */
+    50% { background-color: #ff6666; } /* Mittlere Farbe für den Pulsationseffekt */
+    100% { background-color: #ff0000; } /* Zurück zur Anfangsfarbe */
+}
+
+
+/* Stil für den Abschnitt, der noch gesendet wird */
 .epg-future {
     flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
+    background-color: #00ff00; /* Ausgangsfarbe für noch verbleibende Zeit */
+    animation: blink 1s infinite; /* Blinkende Animation mit 1 Sekunde Dauer */
 }
 
-.epg-past {
-    background-color: #ff0000; /* Farbe für bereits vergangene Zeit */
+/* Definition der Blinkanimation */
+@keyframes blink {
+    0%, 50%, 100% { background-color: #00ff00; } /* Ausgangsfarbe */
+    25%, 75% { background-color: #66ff66; } /* Blinkende Farbe */
 }
 
-.epg-future {
-    background-color: #00ff00; /* Farbe für noch verbleibende Zeit */
-}
 
 /* Container für den Video-Player und Steuerungsleiste */
 .player-container {
@@ -175,6 +196,7 @@ button:hover {
     flex-direction: column; /* Ändert das Layout zu einer Spalte */
 }
 
+/* Header des Video-Players */
 .player-header {
     display: flex;
     justify-content: space-between;
@@ -185,6 +207,7 @@ button:hover {
     border-bottom: 1px solid #ccc;
 }
 
+/* Eingabefeld für Stream-URL */
 .player-header input {
     flex: 1;
     margin-left: 10px;
@@ -193,6 +216,7 @@ button:hover {
     border-radius: 5px;
 }
 
+/* Button zum Abspielen */
 .player-header button {
     margin-left: 10px;
     padding: 5px 10px;
@@ -203,10 +227,12 @@ button:hover {
     cursor: pointer;
 }
 
+/* Hover-Effekt für Buttons */
 .player-header button:hover {
     background-color: #0056b3;
 }
 
+/* Video-Player-Stil */
 .video-player {
     width: 900px;
     position: fixed;
@@ -218,10 +244,12 @@ button:hover {
     display: flex;
 }
 
+/* Aktueller Kanalname */
 #current-channel-name {
     font-size: 26px;
 }
 
+/* Eingabefeld für Stream-URL */
 #stream-url {
     width: 750px;
 }
