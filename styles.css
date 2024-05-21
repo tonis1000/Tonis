@@ -7,43 +7,37 @@
     color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
 }
 
-/* Hauptcontainer */
+/* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
 .main-container {
-    float: left;
+    display: flex;
+    justify-content: space-between; /* Platz zwischen Hauptcontainer und Sidebar */
+    align-items: flex-start; /* Ausrichtung oben für Hauptcontainer */
+    padding: 20px; /* Äußerer Abstand für den Hauptcontainer */
 }
 
-/* Container für Inhalte */
 .container {
     border-top: 5px solid transparent;
     font-size: 16px;
     background-color: #333;
-    margin-right: 10px;
+    max-width: 800px; /* Maximale Breite des Containers */
+    padding: 20px; /* Innerer Abstand für den Container */
+    border-radius: 10px; /* Abgerundete Ecken für den Container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Leichter Schatten für Tiefe */
 }
 
 /* Styling für Informationen und Button-Reihen innerhalb des Containers */
-.info-panel,
-.button-row {
+.info-panel, .button-row {
     display: flex;
-    width: 310px;  /* Etwas schmaler als der Hauptcontainer für visuelle Trennung */
-    padding-left: 15px;
+    flex-direction: column; /* Spaltenlayout für Informationen und Button-Reihen */
+    gap: 10px; /* Abstand zwischen den Elementen */
 }
 
 .info-panel {
-    font-size: 21px;
-    font-style: italic;
-    font-weight: 500;
+    font-size: 18px; /* Leicht verkleinerte Schriftgröße für die Info-Panel */
 }
 
 .button-row {
-    gap: 10px;  /* Abstand zwischen den Buttons */
-    margin-top: 10px;  /* Abstand von oberen Elementen */
-    padding-bottom: 10px;  /* Abstand zum unteren Rand */
-}
-
-/* Informationen in einer Gruppe mit Abständen und Farbe */
-.info-group {
-    margin-right: 20px;
-    color: #ffffff;
+    align-self: flex-end; /* Ausrichtung am rechten Rand des Containers */
 }
 
 /* Einheitliche Button-Stile */
@@ -54,79 +48,44 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s; /* Flüssiger Übergang bei Hover */
 }
 
 button:hover {
     background-color: #0056b3;  /* Dunklerer Blauton bei Hover */
 }
 
-/* Sidebar-Styling */
+/* Sidebar-Styling mit spezifischen Maßen und Layout-Einstellungen */
 .sidebar {
     width: 350px;
-    height: 740px;
-    padding: 10px;
-    margin-top: 2px;
-    margin-bottom: 5px;
+    height: 100vh; /* Volle Höhe des Bildschirms */
+    background-color: #444; /* Dunklere Hintergrundfarbe für die Sidebar */
+    padding: 20px; /* Innerer Abstand für die Sidebar */
+    border-radius: 10px; /* Abgerundete Ecken für die Sidebar */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Leichter Schatten für Tiefe */
 }
 
-/* Online-Klasse für grünen Text */
-.online {
-    color: lightgreen;
-    font-weight: bold;
-}
-
-/* Sidebar-Überschrift */
 .sidebar h2 {
     color: #f10d0d;
-    padding-bottom: 10px;
-    margin-bottom: 1px;
-    margin-top: 1px;
+    margin-bottom: 20px; /* Größerer Abstand nach unten für Überschrift */
 }
 
-/* Sidebar-Inhalt */
-.sidebar-content {
-    overflow-y: auto;
-    height: calc(100% - 40px);
-    background-color: #0f0e0e;
-}
-
-/* Sidebar-Listenstil */
+/* Sidebar-Listenstil ohne Bullet Points */
 #sidebar-list {
     list-style-type: none;
     padding: 0;
-    margin-top: 5px;
 }
 
 #sidebar-list li {
-    margin-bottom: 5px;
-    padding-left: 5px;
-    padding-top: 5px;
+    margin-bottom: 10px; /* Größerer Abstand zwischen Listenelementen */
+    padding: 10px; /* Innerer Abstand für Listenelemente */
     background-color: #333;
+    border-radius: 5px; /* Abgerundete Ecken für Listenelemente */
+    transition: background-color 0.3s; /* Flüssiger Übergang bei Hover */
 }
 
-/* Stil für die Senderinformationen innerhalb der Sidebar */
-.channel-info {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Abstand zwischen den Elementen */
-    background-color: #444; /* Hintergrundfarbe für die Senderinformationen */
-    margin-bottom: 5px;
-    padding: 5px;
-    cursor: pointer;
-}
-
-.logo-container {
-    width: 60px; /* Breite des Logo-Containers */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-.logo-container img {
-    width: 100%; /* Logo-Bild wird auf die Breite des Containers angepasst */
-    height: 100%; /* Logo-Bild wird auf die Höhe des Containers angepasst */
-    object-fit: cover; /* Das Bild wird proportional in den Container eingepasst */
+#sidebar-list li:hover {
+    background-color: #555; /* Dunklere Hintergrundfarbe bei Hover */
 }
 
 /* Stil für den Sendername */
@@ -137,119 +96,64 @@ button:hover {
 
 /* Stil für den Sendungstitel */
 .epg-channel {
-    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
+    display: flex;
+    flex-direction: column; /* Spaltenlayout für den Sendungstitel */
+    gap: 5px; /* Kleiner Abstand zwischen den Elementen */
     color: #ffffff;
-    display: grid;
-    margin-left: 10px;
-    font-size: 12px;
+    font-size: 14px; /* Kleine Schriftgröße für den Sendungstitel */
 }
 
 .epg-channel span {
-    padding-bottom: 5px;
+    padding-bottom: 3px; /* Kleinerer Abstand unter den Textelementen */
 }
 
 /* Zeitachse für das laufende Programm */
 .epg-timeline {
-    display: flex;
     height: 5px; /* Höhe der Zeitachse */
     background-color: #666; /* Hintergrundfarbe der Zeitachse */
-    border-radius: 2px; /* Abrundung der Ecken */
-    margin-left: 10px; /* Abstand zur EPG-Beschreibung */
-    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
+    border-radius: 2px; /* Abgerundung der Ecken */
 }
 
-/* Stil für den Abschnitt, der bereits gesendet wurde */
 /* Stil für den Abschnitt, der bereits gesendet wurde */
 .epg-past {
-    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
-    background-color: #ff0000; /* Ausgangsfarbe für bereits vergangene Zeit */
-    animation: pulse 2s infinite; /* Pulsationseffekt mit 2 Sekunden Dauer */
+    background-color: #ff0000; /* Farbe für bereits vergangene Zeit */
+    transition: width 0.5s; /* Flüssige Animation für Breitenänderungen */
 }
-
-/* Definition der Pulsationsanimation */
-@keyframes pulse {
-    0% { background-color: #ff0000; } /* Anfangsfarbe */
-    50% { background-color: #ff6666; } /* Mittlere Farbe für den Pulsationseffekt */
-    100% { background-color: #ff0000; } /* Zurück zur Anfangsfarbe */
-}
-
 
 /* Stil für den Abschnitt, der noch gesendet wird */
 .epg-future {
-    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
-    background-color: #00ff00; /* Ausgangsfarbe für noch verbleibende Zeit */
-    animation: blink 1s infinite; /* Blinkende Animation mit 1 Sekunde Dauer */
+    background-color: #00ff00; /* Farbe für noch verbleibende Zeit */
+    transition: width 0.5s; /* Flüssige Animation für Breitenänderungen */
 }
-
-/* Definition der Blinkanimation */
-@keyframes blink {
-    0%, 50%, 100% { background-color: #00ff00; } /* Ausgangsfarbe */
-    25%, 75% { background-color: #66ff66; } /* Blinkende Farbe */
-}
-
 
 /* Container für den Video-Player und Steuerungsleiste */
 .player-container {
-    width: 900px;
-    float: left;
-    display: flex;
-    flex-direction: column; /* Ändert das Layout zu einer Spalte */
+    width: calc(100% - 380px); /* Dynamische Breite abzüglich der Sidebar */
+    max-width: 1200px; /* Maximale Breite des Containers */
+    padding: 20px; /* Innerer Abstand für den Container */
 }
 
-/* Header des Video-Players */
-.player-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-    border-bottom: 1px solid #ccc;
-}
-
-/* Eingabefeld für Stream-URL */
-.player-header input {
-    flex: 1;
-    margin-left: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Button zum Abspielen */
-.player-header button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* Hover-Effekt für Buttons */
-.player-header button:hover {
-    background-color: #0056b3;
-}
-
-/* Video-Player-Stil */
+/* Stil für den Video-Player */
 .video-player {
-    width: 900px;
-    position: fixed;
-    bottom: 5px;
-    right: 5px;
-    z-index: 1000;
-    width: 900px;
-    height: 700px;
-    display: flex;
+    width: 100%; /* Volle Breite des Video-Players */
+    border-radius: 10px; /* Abgerundete Ecken für den Video-Player */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Leichter Schatten für Tiefe */
 }
 
-/* Aktueller Kanalname */
+/* Stil für den aktuellen Kanalnamen */
 #current-channel-name {
-    font-size: 26px;
+    font-size: 26px; /* Größere Schriftgröße für den aktuellen Kanalnamen */
 }
 
-/* Eingabefeld für Stream-URL */
+/* Stil für die Stream-URL-Eingabe */
 #stream-url {
-    width: 750px;
+    width: 100%; /* Volle Breite der Eingabe */
+    padding: 10px; /* Innerer Abstand für die Eingabe */
+    border: 1px solid #ccc; /* Einfacher Rahmen für die Eingabe */
+    border-radius: 5px; /* Abgerundete Ecken für die Eingabe */
+    transition: border-color 0.3s; /* Flüssiger Übergang bei Fokus */
+}
+
+#stream-url:focus {
+    border-color: #007bff; /* Fokusfarbe für die Eingabe */
 }
