@@ -7,37 +7,44 @@
     color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
 }
 
-/* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
+
+/* Hauptcontainer */
 .main-container {
-    display: flex;
-    justify-content: space-between; /* Platz zwischen Hauptcontainer und Sidebar */
-    align-items: flex-start; /* Ausrichtung oben für Hauptcontainer */
-    padding: 20px; /* Äußerer Abstand für den Hauptcontainer */
+    float: left;
 }
 
+/* Container für Inhalte */
 .container {
     border-top: 5px solid transparent;
     font-size: 16px;
     background-color: #333;
-    max-width: 800px; /* Maximale Breite des Containers */
-    padding: 20px; /* Innerer Abstand für den Container */
-    border-radius: 10px; /* Abgerundete Ecken für den Container */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Leichter Schatten für Tiefe */
+    margin-right: 10px;
 }
 
 /* Styling für Informationen und Button-Reihen innerhalb des Containers */
-.info-panel, .button-row {
+.info-panel,
+.button-row {
     display: flex;
-    flex-direction: column; /* Spaltenlayout für Informationen und Button-Reihen */
-    gap: 10px; /* Abstand zwischen den Elementen */
+    width: 310px;  /* Etwas schmaler als der Hauptcontainer für visuelle Trennung */
+    padding-left: 15px;
 }
 
 .info-panel {
-    font-size: 18px; /* Leicht verkleinerte Schriftgröße für die Info-Panel */
+    font-size: 21px;
+    font-style: italic;
+    font-weight: 500;
 }
 
 .button-row {
-    align-self: flex-end; /* Ausrichtung am rechten Rand des Containers */
+    gap: 10px;  /* Abstand zwischen den Buttons */
+    margin-top: 10px;  /* Abstand von oberen Elementen */
+    padding-bottom: 10px;  /* Abstand zum unteren Rand */
+}
+
+/* Informationen in einer Gruppe mit Abständen und Farbe */
+.info-group {
+    margin-right: 20px;
+    color: #ffffff;
 }
 
 /* Einheitliche Button-Stile */
@@ -48,44 +55,79 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s; /* Flüssiger Übergang bei Hover */
 }
 
 button:hover {
     background-color: #0056b3;  /* Dunklerer Blauton bei Hover */
 }
 
-/* Sidebar-Styling mit spezifischen Maßen und Layout-Einstellungen */
+/* Sidebar-Styling */
 .sidebar {
     width: 350px;
-    height: 100vh; /* Volle Höhe des Bildschirms */
-    background-color: #444; /* Dunklere Hintergrundfarbe für die Sidebar */
-    padding: 20px; /* Innerer Abstand für die Sidebar */
-    border-radius: 10px; /* Abgerundete Ecken für die Sidebar */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Leichter Schatten für Tiefe */
+    height: 740px;
+    padding: 10px;
+    margin-top: 2px;
+    margin-bottom: 5px;
 }
 
+/* Online-Klasse für grünen Text */
+.online {
+    color: lightgreen;
+    font-weight: bold;
+}
+
+/* Sidebar-Überschrift */
 .sidebar h2 {
     color: #f10d0d;
-    margin-bottom: 20px; /* Größerer Abstand nach unten für Überschrift */
+    padding-bottom: 10px;
+    margin-bottom: 1px;
+    margin-top: 1px;
 }
 
-/* Sidebar-Listenstil ohne Bullet Points */
+/* Sidebar-Inhalt */
+.sidebar-content {
+    overflow-y: auto;
+    height: calc(100% - 40px);
+    background-color: #0f0e0e;
+}
+
+/* Sidebar-Listenstil */
 #sidebar-list {
     list-style-type: none;
     padding: 0;
+    margin-top: 5px;
 }
 
 #sidebar-list li {
-    margin-bottom: 10px; /* Größerer Abstand zwischen Listenelementen */
-    padding: 10px; /* Innerer Abstand für Listenelemente */
+    margin-bottom: 5px;
+    padding-left: 5px;
+    padding-top: 5px;
     background-color: #333;
-    border-radius: 5px; /* Abgerundete Ecken für Listenelemente */
-    transition: background-color 0.3s; /* Flüssiger Übergang bei Hover */
 }
 
-#sidebar-list li:hover {
-    background-color: #555; /* Dunklere Hintergrundfarbe bei Hover */
+/* Stil für die Senderinformationen innerhalb der Sidebar */
+.channel-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Abstand zwischen den Elementen */
+    background-color: #444; /* Hintergrundfarbe für die Senderinformationen */
+    margin-bottom: 5px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.logo-container {
+    width: 60px; /* Breite des Logo-Containers */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.logo-container img {
+    width: 100%; /* Logo-Bild wird auf die Breite des Containers angepasst */
+    height: 100%; /* Logo-Bild wird auf die Höhe des Containers angepasst */
+    object-fit: cover; /* Das Bild wird proportional in den Container eingepasst */
 }
 
 /* Stil für den Sendername */
@@ -96,64 +138,103 @@ button:hover {
 
 /* Stil für den Sendungstitel */
 .epg-channel {
-    display: flex;
-    flex-direction: column; /* Spaltenlayout für den Sendungstitel */
-    gap: 5px; /* Kleiner Abstand zwischen den Elementen */
+    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
     color: #ffffff;
-    font-size: 14px; /* Kleine Schriftgröße für den Sendungstitel */
+    display: grid;
+    margin-left: 10px;
+    font-size: 12px;
 }
 
 .epg-channel span {
-    padding-bottom: 3px; /* Kleinerer Abstand unter den Textelementen */
+    padding-bottom: 5px;
 }
 
 /* Zeitachse für das laufende Programm */
 .epg-timeline {
+    display: flex;
     height: 5px; /* Höhe der Zeitachse */
     background-color: #666; /* Hintergrundfarbe der Zeitachse */
-    border-radius: 2px; /* Abgerundung der Ecken */
+    border-radius: 2px; /* Abrundung der Ecken */
+    margin-left: 10px; /* Abstand zur EPG-Beschreibung */
+    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
 }
 
 /* Stil für den Abschnitt, der bereits gesendet wurde */
-.epg-past {
-    background-color: #ff0000; /* Farbe für bereits vergangene Zeit */
-    transition: width 0.5s; /* Flüssige Animation für Breitenänderungen */
+.epg-past,
+.epg-future {
+    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
 }
 
-/* Stil für den Abschnitt, der noch gesendet wird */
+.epg-past {
+    background-color: #ff0000; /* Farbe für bereits vergangene Zeit */
+}
+
 .epg-future {
     background-color: #00ff00; /* Farbe für noch verbleibende Zeit */
-    transition: width 0.5s; /* Flüssige Animation für Breitenänderungen */
 }
 
 /* Container für den Video-Player und Steuerungsleiste */
 .player-container {
-    width: calc(100% - 380px); /* Dynamische Breite abzüglich der Sidebar */
-    max-width: 1200px; /* Maximale Breite des Containers */
-    padding: 20px; /* Innerer Abstand für den Container */
+    width: 900px;
+    float: left;
+    display: flex;
+    flex-direction: column; /* Ändert das Layout zu einer Spalte */
 }
 
-/* Stil für den Video-Player */
+/* Header des Video-Players */
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Eingabefeld für Stream-URL */
+.player-header input {
+    flex: 1;
+    margin-left: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Button zum Abspielen */
+.player-header button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Hover-Effekt für Buttons */
+.player-header button:hover {
+    background-color: #0056b3;
+}
+
+/* Video-Player-Stil */
 .video-player {
-    width: 100%; /* Volle Breite des Video-Players */
-    border-radius: 10px; /* Abgerundete Ecken für den Video-Player */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Leichter Schatten für Tiefe */
+    width: 900px;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    z-index: 1000;
+    width: 900px;
+    height: 700px;
+    display: flex;
 }
 
-/* Stil für den aktuellen Kanalnamen */
+/* Aktueller Kanalname */
 #current-channel-name {
-    font-size: 26px; /* Größere Schriftgröße für den aktuellen Kanalnamen */
+    font-size: 26px;
 }
 
-/* Stil für die Stream-URL-Eingabe */
+/* Eingabefeld für Stream-URL */
 #stream-url {
-    width: 100%; /* Volle Breite der Eingabe */
-    padding: 10px; /* Innerer Abstand für die Eingabe */
-    border: 1px solid #ccc; /* Einfacher Rahmen für die Eingabe */
-    border-radius: 5px; /* Abgerundete Ecken für die Eingabe */
-    transition: border-color 0.3s; /* Flüssiger Übergang bei Fokus */
-}
-
-#stream-url:focus {
-    border-color: #007bff; /* Fokusfarbe für die Eingabe */
+    width: 750px;
 }
