@@ -1,3 +1,4 @@
+
 /* Grundlegende Farben und Schriftgrößen als Wiederverwendbare Klassen */
 .base-background {
     background-color: #333;  /* Dunkelgrauer Hintergrund für Container und Sidebar */
@@ -6,14 +7,12 @@
 .text-white {
     color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
 }
-
-
-/* Hauptcontainer */
 .main-container {
     float: left;
 }
 
-/* Container für Inhalte */
+
+/* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
 .container {
     border-top: 5px solid transparent;
     font-size: 16px;
@@ -22,8 +21,7 @@
 }
 
 /* Styling für Informationen und Button-Reihen innerhalb des Containers */
-.info-panel,
-.button-row {
+.info-panel, .button-row {
     display: flex;
     width: 310px;  /* Etwas schmaler als der Hauptcontainer für visuelle Trennung */
     padding-left: 15px;
@@ -61,7 +59,7 @@ button:hover {
     background-color: #0056b3;  /* Dunklerer Blauton bei Hover */
 }
 
-/* Sidebar-Styling */
+/* Sidebar-Styling mit spezifischen Maßen und Layout-Einstellungen */
 .sidebar {
     width: 350px;
     height: 740px;
@@ -70,13 +68,6 @@ button:hover {
     margin-bottom: 5px;
 }
 
-/* Online-Klasse für grünen Text */
-.online {
-    color: lightgreen;
-    font-weight: bold;
-}
-
-/* Sidebar-Überschrift */
 .sidebar h2 {
     color: #f10d0d;
     padding-bottom: 10px;
@@ -84,14 +75,13 @@ button:hover {
     margin-top: 1px;
 }
 
-/* Sidebar-Inhalt */
 .sidebar-content {
     overflow-y: auto;
     height: calc(100% - 40px);
     background-color: #0f0e0e;
 }
 
-/* Sidebar-Listenstil */
+/* Sidebar-Listenstil ohne Bullet Points */
 #sidebar-list {
     list-style-type: none;
     padding: 0;
@@ -118,6 +108,7 @@ button:hover {
 
 .logo-container {
     width: 60px; /* Breite des Logo-Containers */
+    #height: 60px; /* Höhe des Logo-Containers */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -134,17 +125,22 @@ button:hover {
 .sender-name {
     font-size: 20px; /* Größe des Sendernamens */
     color: #ffffff; /* Farbe des Sendernamens */
+    #flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
+    width: 70px;
 }
 
 /* Stil für den Sendungstitel */
 .epg-channel {
+    #display: flex;
+    #flex-direction: column;
     flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
     color: #ffffff;
     display: grid;
     margin-left: 10px;
     font-size: 12px;
-}
 
+    
+}
 .epg-channel span {
     padding-bottom: 5px;
 }
@@ -175,13 +171,43 @@ button:hover {
 
 /* Container für den Video-Player und Steuerungsleiste */
 .player-container {
+    #position: fixed;
+    #bottom: 5px;
+    #right: 5px;
+    width: 900px;
+    #height: 750px; /* Angepasst für Platz der Steuerleiste */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 5px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Stil für den Video-Player */
+.video-player {
+    width: 900px; /* Breite des Video-Players */
+    position: fixed; /* Positioniert den Player fest an einer Stelle im Fenster */
+    bottom: 5px; /* Abstand vom unteren Rand des Fensters */
+    right: 5px; /* Abstand vom rechten Rand des Fensters */
+    z-index: 1000; /* Stellt sicher, dass der Player über anderen Elementen liegt */
+    width: 900px;
+    height: 700px;
+    display: flex;
+}
+
+.online {
+    color: lightgreen;
+    font-weight: bold;
+/* Zusätzliche Stile für die neue Feldleiste */
+.player-container {
     width: 900px;
     float: left;
     display: flex;
     flex-direction: column; /* Ändert das Layout zu einer Spalte */
 }
 
-/* Header des Video-Players */
 .player-header {
     display: flex;
     justify-content: space-between;
@@ -192,7 +218,6 @@ button:hover {
     border-bottom: 1px solid #ccc;
 }
 
-/* Eingabefeld für Stream-URL */
 .player-header input {
     flex: 1;
     margin-left: 10px;
@@ -201,7 +226,6 @@ button:hover {
     border-radius: 5px;
 }
 
-/* Button zum Abspielen */
 .player-header button {
     margin-left: 10px;
     padding: 5px 10px;
@@ -212,12 +236,10 @@ button:hover {
     cursor: pointer;
 }
 
-/* Hover-Effekt für Buttons */
 .player-header button:hover {
     background-color: #0056b3;
 }
 
-/* Video-Player-Stil */
 .video-player {
     width: 900px;
     position: fixed;
@@ -229,12 +251,14 @@ button:hover {
     display: flex;
 }
 
-/* Aktueller Kanalname */
+
+
+    
 #current-channel-name {
     font-size: 26px;
 }
 
-/* Eingabefeld für Stream-URL */
+
 #stream-url {
-    width: 750px;
+  width: 750px;
 }
