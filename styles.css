@@ -78,7 +78,7 @@ button:hover {
 .sidebar-content {
     overflow-y: auto;
     height: calc(100% - 40px);
-    background-color: #444;  /* Etwas heller als die Sidebar für Kontrast */
+    background-color: #0f0e0e;
 }
 
 /* Sidebar-Listenstil ohne Bullet Points */
