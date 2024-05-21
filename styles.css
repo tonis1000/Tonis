@@ -136,6 +136,7 @@ button:hover {
     color: #ffffff;
     display: grid;
     margin-left: 10px;
+    font-size: 12px;
 
     
 }
