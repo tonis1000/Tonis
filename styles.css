@@ -140,24 +140,21 @@ button:hover {
 /* Zeitachse für das laufende Programm */
 .epg-timeline {
     display: flex;
-    height: 5px; /* Höhe der Zeitachse */
-    background-color: #666; /* Hintergrundfarbe der Zeitachse */
-    border-radius: 2px; /* Abrundung der Ecken */
+    height: 10px; /* Erhöhe die Höhe für eine bessere Sichtbarkeit */
+    background-color: #ccc; /* Hintergrundfarbe der Zeitachse für den Fall, dass keine Farben angezeigt werden */
     margin-left: 10px; /* Abstand zur EPG-Beschreibung */
     flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
 }
 
 /* Stil für den Abschnitt, der bereits gesendet wurde */
-.epg-past,
-.epg-future {
-    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
-}
-
 .epg-past {
+    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
     background-color: #ff0000; /* Farbe für bereits vergangene Zeit */
 }
 
+/* Stil für den Abschnitt, der noch gesendet wird */
 .epg-future {
+    flex-grow: 1; /* Der Abschnitt wird so groß wie möglich gemacht */
     background-color: #00ff00; /* Farbe für noch verbleibende Zeit */
 }
 
