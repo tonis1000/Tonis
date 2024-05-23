@@ -1,3 +1,52 @@
+// Λειτουργία που χρησιμοποιεί τον proxy server για τη φόρτωση της playlist
+function loadPlaylistWithProxy(url, callback) {
+    fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(url)}`)
+        .then(response => response.text())
+        .then(data => callback(data))
+        .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+}
+
+// Λειτουργία που φορτώνει την προσωπική playlist με χρήση του proxy server
+function loadMyPlaylist() {
+    loadPlaylistWithProxy('playlist.m3u', updateSidebarFromM3U);
+}
+
+// Λειτουργία που φορτώνει την εξωτερική playlist με χρήση του proxy server
+function loadExternalPlaylist() {
+    loadPlaylistWithProxy('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u', updateSidebarFromM3U);
+}
+
+// Συνάρτηση που φορτώνει την προσωπική playlist με χρήση του proxy server
+function loadMyPlaylist() {
+    loadPlaylistWithProxy('playlist.m3u', updateSidebarFromM3U);
+}
+
+// Συνάρτηση που φορτώνει την εξωτερική playlist με χρήση του proxy server
+function loadExternalPlaylist() {
+    loadPlaylistWithProxy('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u', updateSidebarFromM3U);
+}
+
+// Συνάρτηση που φορτώνει την playlist για τα σπορ με χρήση του proxy server
+function loadSportPlaylist() {
+    // Το URL της playlist για τα σπορ (εάν υπάρχει)
+    const sportPlaylistUrl = 'https://example.com/sport_playlist.m3u';
+
+    // Αν υπάρχει URL για την playlist των σπορ, φορτώνουμε μέσω του proxy server
+    if (sportPlaylistUrl) {
+        loadPlaylistWithProxy(sportPlaylistUrl, updateSidebarFromM3U);
+    } else {
+        // Αλλιώς εμφανίζουμε ένα μήνυμα ότι η λειτουργία είναι υπό ανάπτυξη
+        alert("Η λειτουργία για τα σπορ είναι υπό ανάπτυξη...");
+    }
+}
+
+
+
+
+
+
+
+
 // Funktion zum Laden der Playlist.m3u und Aktualisieren der Sidebar
 function loadMyPlaylist() {
     fetch('playlist.m3u')
@@ -379,6 +428,22 @@ function convertSrtToVtt(srtContent) {
         });
 
 
+// Λειτουργία που αναζητεί και λαμβάνει υπότιτλους
+function searchAndDownloadSubtitles(movieTitle) {
+    // Καλεί την επαναστατική συνάρτηση, που χρησιμοποιεί τον proxy server
+    searchAndDownloadSubtitlesWithProxy(movieTitle);
+}
+
+// Λειτουργία που χρησιμοποιεί τον proxy server για την αναζήτηση και λήψη υποτίτλων
+function searchAndDownloadSubtitlesWithProxy(movieTitle) {
+    fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(`https://api.opensubtitles.com/api/v1/subtitles/${movieTitle}/search?languages=ell`)}`)
+        .then(response => response.json())
+        .then(data => {
+            // Εδώ μπορείτε να προχωρήσετε στην επεξεργασία των δεδομένων υποτίτλων
+            console.log('Απάντηση υποτίτλων:', data);
+        })
+        .catch(error => console.error('Σφάλμα κατά την αναζήτηση και λήψη υποτίτλων:', error));
+}
 
 
 
