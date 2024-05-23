@@ -128,9 +128,7 @@ button:hover {
 
 /* Stil für den Sendungstitel */
 .epg-channel {
-    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
-    color: #ffffff;
-    display: grid;
+    display: flex;
     margin-left: 10px;
     font-size: 12px;
 }
@@ -166,7 +164,6 @@ button:hover {
 /* Container für den Video-Player und Steuerungsleiste */
 .player-container {
     width: 900px;
-    float: left;
     display: flex;
     flex-direction: column; /* Ändert das Layout zu einer Spalte */
 }
@@ -203,18 +200,20 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Einheitliche Button-Stile */
 .play-button {
-    margin-bottom: 10px;
-    margin-left: 15px;
-}
-
-#play-button {
     margin-bottom: 10px;
     margin-left: 10px;
 }
 
-/* Zusätzliche Stile für die neue Feldleiste */
+.video-player {
+    width: 900px;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    z-index: 1000;
+    display: flex;
+}
+
 .online {
     color: lightgreen;
     font-weight: bold;
