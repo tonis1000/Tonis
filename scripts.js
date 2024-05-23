@@ -207,7 +207,6 @@ function checkStreamStatus() {
 
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
-    // Lade zuerst die Event-Listener für das Laden von Playlist und die Sidebar
     loadEPGData();
     updateClock();
     setInterval(updateClock, 1000);
@@ -217,28 +216,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.addEventListener('click', function (event) {
-        // Code zum Laden von Streams ...
+        const channelInfo = event.target.closest('.channel-info');
+        if (channelInfo) {
+            const streamURL = channelInfo.dataset.stream;
+            const channelId = channelInfo.dataset.channelId;
+            const programInfo = getCurrentProgram(channelId);
+
+            setCurrentChannel(channelInfo.querySelector('.sender-name').textContent, streamURL);
+            playStream(streamURL);
+
+            // Aktualisieren der Programmbeschreibung
+            updatePlayerDescription(programInfo.title, programInfo.description);
+        }
     });
 
     setInterval(checkStreamStatus, 60000);
 
-    // Initialisiere die Event-Listener für den Play-Button und die Datei-Eingabe
     const playButton = document.getElementById('play-button');
     const streamUrlInput = document.getElementById('stream-url');
-    const subtitleFileInput = document.getElementById('subtitle-file');
 
     const playStreamFromInput = () => {
-        // Code zum Abspielen des Streams ...
+        const streamUrl = streamUrlInput.value;
+        if (streamUrl) {
+            playStream(streamUrl);
+        }
     };
 
     playButton.addEventListener('click', playStreamFromInput);
 
     streamUrlInput.addEventListener('keydown', (event) => {
-        // Code zum Abspielen des Streams ...
-    });
-
-    subtitleFileInput.addEventListener('change', (event) => {
-        // Code zum Abspielen des Streams ...
+        if (event.key === 'Enter') {
+            playStreamFromInput();
+        }
     });
 });
 
@@ -368,84 +377,3 @@ function convertSrtToVtt(srtContent) {
                 }
             });
         });
-
-
-
-
-
-
-
-// Frontend code (scripts.js)
-
-// Funktion zum Suchen und Herunterladen von Untertiteln von Ihrem Server
-function searchAndDownloadSubtitles(movieTitle) {
-    const searchUrl = `/api/subtitles?movieTitle=${encodeURIComponent(movieTitle)}`;
-
-    fetch(searchUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Fehler beim Suchen von Untertiteln');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Überprüfen, ob Untertitel gefunden wurden
-            if (data && data.length > 0) {
-                // Zeige dem Benutzer die verfügbaren Untertitel an und lasse ihn auswählen
-                // Hier ist ein einfaches Beispiel, wie die Untertitel-Auswahl angezeigt werden könnte
-                const subtitleList = document.createElement('ul');
-                data.forEach(subtitle => {
-                    const listItem = document.createElement('li');
-                    const subtitleLink = document.createElement('a');
-                    subtitleLink.href = '#';
-                    subtitleLink.textContent = subtitle.fileName;
-                    subtitleLink.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        downloadSubtitle(subtitle.links[0].href);
-                    });
-                    listItem.appendChild(subtitleLink);
-                    subtitleList.appendChild(listItem);
-                });
-                document.body.appendChild(subtitleList);
-            } else {
-                console.log('Keine Untertitel gefunden');
-            }
-        })
-        .catch(error => console.error('Fehler beim Suchen von Untertiteln:', error));
-}
-
-// Event-Listener für den Play-Button und Datei-Eingabe
-document.addEventListener('DOMContentLoaded', function () {
-    const playButton = document.getElementById('play-button');
-    const streamUrlInput = document.getElementById('stream-url');
-    const subtitleFileInput = document.getElementById('subtitle-file');
-
-    const playStreamFromInput = () => {
-        const streamUrl = streamUrlInput.value;
-        if (streamUrl) {
-            const subtitleFile = subtitleFileInput.files[0];
-            if (subtitleFile) {
-                handleSubtitleFile(subtitleFile);
-            } else {
-                const movieTitle = streamUrl.split('/').pop(); // Annahme: Der Filmtitel ist Teil der URL
-                searchAndDownloadSubtitles(movieTitle);
-            }
-            playStream(streamUrl, subtitleFile ? document.getElementById('subtitle-track').src : null);
-        }
-    };
-
-    playButton.addEventListener('click', playStreamFromInput);
-
-    streamUrlInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            playStreamFromInput();
-        }
-    });
-
-    subtitleFileInput.addEventListener('change', (event) => {
-        const subtitleFile = event.target.files[0];
-        if (subtitleFile) {
-            handleSubtitleFile(subtitleFile);
-        }
-    });
-});
