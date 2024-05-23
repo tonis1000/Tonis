@@ -384,33 +384,43 @@ function convertSrtToVtt(srtContent) {
 
 
 
-// Funktion zum Suchen und Herunterladen von Untertiteln von OpenSubtitles
-function searchAndDownloadSubtitles(movieTitle) {
-    const apiKey = 'IMGtuZZMWcq1BjCy1eGtIXwHsrj6NuK1';
-    const searchUrl = `https://api.opensubtitles.com/api/v1/subtitles/${movieTitle}/search?languages=ell`;
-    const proxyUrl = `https://cors-anywhere.herokuapp.com/`;
+// Frontend code (scripts.js)
 
-    fetch(proxyUrl + searchUrl, {
-        method: 'GET',
-        headers: {
-            'Api-Key': apiKey,
-            'Accept': '*/*',
-            'Accept-Language': 'de,en-US;q=0.7,en;q=0.3',
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Netzwerkantwort war nicht ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Weiterverarbeitung der Daten
-        console.log(data);
-    })
-    .catch(error => console.error('Fehler beim Suchen von Untertiteln:', error));
+// Funktion zum Suchen und Herunterladen von Untertiteln von Ihrem Server
+function searchAndDownloadSubtitles(movieTitle) {
+    const searchUrl = `/api/subtitles?movieTitle=${encodeURIComponent(movieTitle)}`;
+
+    fetch(searchUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Fehler beim Suchen von Untertiteln');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Überprüfen, ob Untertitel gefunden wurden
+            if (data && data.length > 0) {
+                // Zeige dem Benutzer die verfügbaren Untertitel an und lasse ihn auswählen
+                // Hier ist ein einfaches Beispiel, wie die Untertitel-Auswahl angezeigt werden könnte
+                const subtitleList = document.createElement('ul');
+                data.forEach(subtitle => {
+                    const listItem = document.createElement('li');
+                    const subtitleLink = document.createElement('a');
+                    subtitleLink.href = '#';
+                    subtitleLink.textContent = subtitle.fileName;
+                    subtitleLink.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        downloadSubtitle(subtitle.links[0].href);
+                    });
+                    listItem.appendChild(subtitleLink);
+                    subtitleList.appendChild(listItem);
+                });
+                document.body.appendChild(subtitleList);
+            } else {
+                console.log('Keine Untertitel gefunden');
+            }
+        })
+        .catch(error => console.error('Fehler beim Suchen von Untertiteln:', error));
 }
 
 // Event-Listener für den Play-Button und Datei-Eingabe
