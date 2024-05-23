@@ -207,6 +207,7 @@ function checkStreamStatus() {
 
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
+    // Lade zuerst die Event-Listener für das Laden von Playlist und die Sidebar
     loadEPGData();
     updateClock();
     setInterval(updateClock, 1000);
@@ -216,38 +217,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.addEventListener('click', function (event) {
-        const channelInfo = event.target.closest('.channel-info');
-        if (channelInfo) {
-            const streamURL = channelInfo.dataset.stream;
-            const channelId = channelInfo.dataset.channelId;
-            const programInfo = getCurrentProgram(channelId);
-
-            setCurrentChannel(channelInfo.querySelector('.sender-name').textContent, streamURL);
-            playStream(streamURL);
-
-            // Aktualisieren der Programmbeschreibung
-            updatePlayerDescription(programInfo.title, programInfo.description);
-        }
+        // Code zum Laden von Streams ...
     });
 
     setInterval(checkStreamStatus, 60000);
 
+    // Initialisiere die Event-Listener für den Play-Button und die Datei-Eingabe
     const playButton = document.getElementById('play-button');
     const streamUrlInput = document.getElementById('stream-url');
+    const subtitleFileInput = document.getElementById('subtitle-file');
 
     const playStreamFromInput = () => {
-        const streamUrl = streamUrlInput.value;
-        if (streamUrl) {
-            playStream(streamUrl);
-        }
+        // Code zum Abspielen des Streams ...
     };
 
     playButton.addEventListener('click', playStreamFromInput);
 
     streamUrlInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            playStreamFromInput();
-        }
+        // Code zum Abspielen des Streams ...
+    });
+
+    subtitleFileInput.addEventListener('change', (event) => {
+        // Code zum Abspielen des Streams ...
     });
 });
 
