@@ -538,3 +538,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Προσθέστε τον κώδικα για να κάνει αίτηση μέσω του proxy server
+const axios = require('axios');
+
+const proxyUrl = 'http://localhost:3000/proxy'; // Ανάλογα με τη διεύθυνση που λειτουργεί ο proxy server σας
+const apiUrl = 'https://api.opensubtitles.com/api/v1/subtitles/playlist_dvr.m3u8/search?languages=ell';
+
+axios.get(proxyUrl, {
+  params: {
+    url: apiUrl
+  }
+})
+.then(response => {
+  // Επεξεργασία της απόκρισης από τον proxy server
+  console.log(response.data); // Επιστρέφει τα δεδομένα από τον proxy server
+})
+.catch(error => {
+  // Χειρισμός σφαλμάτων
+  console.error('Error:', error);
+});
