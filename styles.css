@@ -107,8 +107,7 @@ button:hover {
 }
 
 .logo-container {
-    width: 60px; /* Breite des Logo-Containers */
-    #height: 60px; /* Höhe des Logo-Containers */
+    width: 40px; /* Breite des Logo-Containers */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -123,9 +122,8 @@ button:hover {
 
 /* Stil für den Sendername */
 .sender-name {
-    font-size: 20px; /* Größe des Sendernamens */
+    font-size: 18px; /* Größe des Sendernamens */
     color: #ffffff; /* Farbe des Sendernamens */
-    #flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
     width: 70px;
 }
 
