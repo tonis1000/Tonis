@@ -1,4 +1,3 @@
-
 /* Grundlegende Farben und Schriftgrößen als Wiederverwendbare Klassen */
 .base-background {
     background-color: #333;  /* Dunkelgrauer Hintergrund für Container und Sidebar */
@@ -7,10 +6,10 @@
 .text-white {
     color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
 }
+
 .main-container {
     float: left;
 }
-
 
 /* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
 .container {
@@ -129,16 +128,13 @@ button:hover {
 
 /* Stil für den Sendungstitel */
 .epg-channel {
-    #display: flex;
-    #flex-direction: column;
     flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
     color: #ffffff;
     display: grid;
     margin-left: 10px;
     font-size: 12px;
-
-    
 }
+
 .epg-channel span {
     padding-bottom: 5px;
 }
@@ -168,37 +164,6 @@ button:hover {
 }
 
 /* Container für den Video-Player und Steuerungsleiste */
-.player-container {
-    #position: fixed;
-    #bottom: 5px;
-    #right: 5px;
-    width: 900px;
-    #height: 750px; /* Angepasst für Platz der Steuerleiste */
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    padding: 5px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-/* Stil für den Video-Player */
-.video-player {
-    width: 900px; /* Breite des Video-Players */
-    position: fixed; /* Positioniert den Player fest an einer Stelle im Fenster */
-    bottom: 5px; /* Abstand vom unteren Rand des Fensters */
-    right: 5px; /* Abstand vom rechten Rand des Fensters */
-    z-index: 1000; /* Stellt sicher, dass der Player über anderen Elementen liegt */
-    width: 900px;
-    height: 700px;
-    display: flex;
-}
-
-.online {
-    color: lightgreen;
-    font-weight: bold;
-/* Zusätzliche Stile für die neue Feldleiste */
 .player-container {
     width: 900px;
     float: left;
@@ -237,35 +202,28 @@ button:hover {
 .player-header button:hover {
     background-color: #0056b3;
 }
+
+/* Einheitliche Button-Stile */
 .play-button {
     margin-bottom: 10px;
     margin-left: 15px;
-    margin-bottom: 10px;
 }
+
 #play-button {
-  margin-bottom: 10px;
-  margin-left: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
 }
 
-.video-player {
-    width: 900px;
-    position: fixed;
-    bottom: 5px;
-    right: 5px;
-    z-index: 1000;
-    width: 900px;
-    height: 700px;
-    display: flex;
+/* Zusätzliche Stile für die neue Feldleiste */
+.online {
+    color: lightgreen;
+    font-weight: bold;
 }
 
-
-
-    
 #current-channel-name {
     font-size: 26px;
 }
 
-
 #stream-url {
-  width: 750px;
+    width: 750px;
 }
