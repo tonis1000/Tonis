@@ -140,7 +140,7 @@ button:hover {
 /* Zeitachse für das laufende Programm */
 .epg-timeline {
     display: flex;
-    height: 10px; /* Erhöhe die Höhe für eine bessere Sichtbarkeit */
+    height: 15px; /* Erhöhe die Höhe für eine bessere Sichtbarkeit */
     background-color: #ccc; /* Hintergrundfarbe der Zeitachse für den Fall, dass keine Farben angezeigt werden */
     margin-left: 10px; /* Abstand zur EPG-Beschreibung */
     flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
