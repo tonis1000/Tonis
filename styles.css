@@ -146,7 +146,6 @@ button:hover {
     background-color: #666; /* Hintergrundfarbe der Zeitachse für den Fall, dass keine Farben angezeigt werden */
     border-radius: 2px; /* Abrundung der Ecken */
     margin-left: 10px; /* Abstand zur EPG-Beschreibung */
-    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
 }
 
 /* Stil für den Abschnitt, der bereits gesendet wurde */
