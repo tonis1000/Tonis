@@ -100,8 +100,6 @@ button:hover {
     align-items: center;
     gap: 10px; /* Abstand zwischen den Elementen */
     background-color: #444; /* Hintergrundfarbe für die Senderinformationen */
-    margin-bottom: 5px;
-    padding: 5px;
     cursor: pointer;
 }
 
