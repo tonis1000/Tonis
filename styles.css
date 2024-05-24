@@ -1,4 +1,4 @@
-/* Grundlegende Farben und Schriftgrößen als Wiederverwendbare Klassen */
+/* Grundlegende Farben und Schriftgrößen als wiederverwendbare Klassen */
 .base-background {
     background-color: #333;  /* Dunkelgrauer Hintergrund für Container und Sidebar */
 }
@@ -107,6 +107,7 @@ button:hover {
 
 .logo-container {
     width: 40px; /* Breite des Logo-Containers */
+    height: 40px; /* Höhe des Logo-Containers */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -129,8 +130,11 @@ button:hover {
 /* Stil für den Sendungstitel */
 .epg-channel {
     display: flex;
+    flex-direction: column;
     margin-left: 10px;
     font-size: 12px;
+    color: #ffffff;
+    flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
 }
 
 .epg-channel span {
@@ -140,8 +144,9 @@ button:hover {
 /* Zeitachse für das laufende Programm */
 .epg-timeline {
     display: flex;
-    height: 12px; /* Erhöhe die Höhe für eine bessere Sichtbarkeit */
-    background-color: #ccc; /* Hintergrundfarbe der Zeitachse für den Fall, dass keine Farben angezeigt werden */
+    height: 10px; /* Erhöhe die Höhe für eine bessere Sichtbarkeit */
+    background-color: #666; /* Hintergrundfarbe der Zeitachse für den Fall, dass keine Farben angezeigt werden */
+    border-radius: 2px; /* Abrundung der Ecken */
     margin-left: 10px; /* Abstand zur EPG-Beschreibung */
     flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
 }
@@ -209,6 +214,7 @@ button:hover {
     right: 5px;
     z-index: 1000;
     display: flex;
+    height: 700px;
 }
 
 .online {
