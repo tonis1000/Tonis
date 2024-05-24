@@ -143,10 +143,15 @@ button:hover {
 .epg-timeline {
     display: flex;
     height: 10px; /* Erhöhe die Höhe für eine bessere Sichtbarkeit */
+    width: 180px;
     background-color: #666; /* Hintergrundfarbe der Zeitachse für den Fall, dass keine Farben angezeigt werden */
     border-radius: 2px; /* Abrundung der Ecken */
     margin-left: 10px; /* Abstand zur EPG-Beschreibung */
 }
+#sidebar-list > li:nth-child(1) > div:nth-child(1) > span:nth-child(3) > span:nth-child(1) {
+  padding-left: 10px;
+}
+
 
 /* Stil für den Abschnitt, der bereits gesendet wurde */
 .epg-past {
