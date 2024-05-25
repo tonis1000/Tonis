@@ -146,7 +146,6 @@ button:hover {
     width: 180px;
     background-color: #666; /* Hintergrundfarbe der Zeitachse für den Fall, dass keine Farben angezeigt werden */
     border-radius: 2px; /* Abrundung der Ecken */
-    margin-left: 10px; /* Abstand zur EPG-Beschreibung */
 }
 
 #sidebar-list li > div > span:nth-child(3) {
