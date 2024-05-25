@@ -57,7 +57,7 @@ function calculateActiveWidth(actualTime, endTime, index) {
     return `${activeWidth}%`;
 }
 new Vue({
-  el: '#app',
+  el: '#tv-programm',
   data: {
     displayDate: '', // Datum, das angezeigt werden soll
     hours: '', // Stunde
