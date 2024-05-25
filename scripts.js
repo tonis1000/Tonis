@@ -54,10 +54,7 @@ function loadEPGData() {
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
 
-// Hilfsfunktion zur Überprüfung auf gültige Datumsangaben
-function isValidDateTime(dateTimeString) {
-    return /^\d{14}$/.test(dateTimeString); // Überprüft, ob die Zeichenfolge aus 14 Ziffern besteht (JJJJMMTTHHMMSS)
-}
+
 
 
 
