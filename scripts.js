@@ -36,7 +36,7 @@ function loadEPGData() {
                 const stop = prog.getAttribute('stop');
                 const titleElement = prog.getElementsByTagName('title')[0];
                 const descElement = prog.getElementsByTagName('desc')[0];
-                if (titleElement && isValidDateTime(start) && isValidDateTime(stop)) {
+                if (titleElement) {
                     const title = titleElement.textContent;
                     const desc = descElement ? descElement.textContent : 'Keine Beschreibung verfügbar';
                     if (!epgData[channelId]) {
@@ -53,10 +53,6 @@ function loadEPGData() {
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
-
-
-
-
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
