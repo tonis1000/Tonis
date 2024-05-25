@@ -23,36 +23,41 @@ function loadSportPlaylist() {
 let epgData = {};
 
 // Funktion zum Laden und Parsen der EPG-Daten
-function loadEPGData() {
-    fetch('https://ext.greektv.app/epg/epg.xml')
-        .then(response => response.text())
-        .then(data => {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(data, "application/xml");
-            const programmes = xmlDoc.getElementsByTagName('programme');
-            Array.from(programmes).forEach(prog => {
-                const channelId = prog.getAttribute('channel');
-                const start = prog.getAttribute('start');
-                const stop = prog.getAttribute('stop');
-                const titleElement = prog.getElementsByTagName('title')[0];
-                const descElement = prog.getElementsByTagName('desc')[0];
-                if (titleElement) {
-                    const title = titleElement.textContent;
-                    const desc = descElement ? descElement.textContent : 'Keine Beschreibung verfügbar';
-                    if (!epgData[channelId]) {
-                        epgData[channelId] = [];
-                    }
-                    epgData[channelId].push({
-                        start: parseDateTime(start),
-                        stop: parseDateTime(stop),
-                        title: title,
-                        desc: desc
-                    });
+async function loadEPGData() {
+    try {
+        const response = await fetch('https://ext.greektv.app/epg/epg.xml');
+        if (!response.ok) {
+            throw new Error('Fehler beim Laden der EPG-Daten: ' + response.status);
+        }
+        const data = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(data, "application/xml");
+        const programmes = xmlDoc.getElementsByTagName('programme');
+        Array.from(programmes).forEach(prog => {
+            const channelId = prog.getAttribute('channel');
+            const start = prog.getAttribute('start');
+            const stop = prog.getAttribute('stop');
+            const titleElement = prog.getElementsByTagName('title')[0];
+            const descElement = prog.getElementsByTagName('desc')[0];
+            if (titleElement) {
+                const title = titleElement.textContent;
+                const desc = descElement ? descElement.textContent : 'Keine Beschreibung verfügbar';
+                if (!epgData[channelId]) {
+                    epgData[channelId] = [];
                 }
-            });
-        })
-        .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
+                epgData[channelId].push({
+                    start: parseDateTime(start),
+                    stop: parseDateTime(stop),
+                    title: title,
+                    desc: desc
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Fehler beim Laden der EPG-Daten:', error);
+    }
 }
+
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
@@ -75,7 +80,7 @@ function parseDateTime(epgTime) {
         return null;
     }
 
-    if (year < 0 || month < 0 || month > 11 || day < 1 || day > 31) {
+    if (year < 0 || month < 0 || month > 11 || day < 1 || day > 31 || hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0 || second > 59) {
         console.error('Ungültige EPG-Zeitangabe:', epgTime);
         return null;
     }
@@ -83,6 +88,7 @@ function parseDateTime(epgTime) {
     const date = new Date(Date.UTC(year, month, day, hour - tzHour, minute - tzMin, second));
     return date;
 }
+
 
 // Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
 function getCurrentProgram(channelId) {
@@ -104,34 +110,21 @@ function getCurrentProgram(channelId) {
                 futurePercentage: futurePercentage
             };
         } else {
-            return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
+            return { 
+                title: 'Keine aktuelle Sendung verfügbar', 
+                description: 'Keine Beschreibung verfügbar', 
+                pastPercentage: 0, 
+                futurePercentage: 0 
+            };
         }
+    } else {
+        return { 
+            title: 'Keine EPG-Daten verfügbar', 
+            description: 'Keine Beschreibung verfügbar', 
+            pastPercentage: 0, 
+            futurePercentage: 0 
+        };
     }
-    return { title: 'Keine EPG-Daten verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
-}
-
-// Funktion zum Aktualisieren des Players mit der Programmbeschreibung
-function updatePlayerDescription(title, description) {
-    document.getElementById('program-title').textContent = title;
-    document.getElementById('program-desc').textContent = description;
-}
-
-// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
-function extractStreamURLs(data) {
-    const lines = data.split('\n');
-    const streamURLs = {};
-    let currentChannelId = null;
-    lines.forEach(line => {
-        if (line.startsWith('#EXTINF')) {
-            const idMatch = line.match(/tvg-id="([^"]+)"/);
-            currentChannelId = idMatch && idMatch[1];
-        } else if (currentChannelId && line.trim()) {
-            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
-            streamURLs[currentChannelId].push(line.trim());
-            currentChannelId = null;
-        }
-    });
-    return streamURLs;
 }
 
 
