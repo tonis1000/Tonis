@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meine Webseite</title>
+    <link rel="stylesheet" href="meine_dateien_styles.css">
+</head>
+<body>
+
 <div class="datesWrapper">
     <div class="wrapperInner">
         <a class="dateCta datePrev" data-uw-rm-kbnav="anohref" tabindex="0">Prev Date</a>
@@ -27,3 +37,5 @@
         <div class="text"></div>
     </div>
 </div>
+</body>
+</html>
