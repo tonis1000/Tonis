@@ -60,13 +60,6 @@ function isValidDateTime(dateTimeString) {
 }
 
 
-// Überprüfen, ob ein Datum und eine Uhrzeit gültig sind
-function isValidDateTime(dateTimeString) {
-    const regex = /^\d{14}[+-]\d{4}$/; // Beispiel: "20240101000000 +0000"
-    return regex.test(dateTimeString);
-}
-
-
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
