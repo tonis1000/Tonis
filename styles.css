@@ -104,8 +104,7 @@ button:hover {
 }
 
 .logo-container {
-    width: 40px; /* Breite des Logo-Containers */
-    height: 40px; /* Höhe des Logo-Containers */
+    width: 350px; /* Breite des Logo-Containers */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -114,7 +113,6 @@ button:hover {
 
 .logo-container img {
     width: 100%; /* Logo-Bild wird auf die Breite des Containers angepasst */
-    height: 100%; /* Logo-Bild wird auf die Höhe des Containers angepasst */
     object-fit: cover; /* Das Bild wird proportional in den Container eingepasst */
 }
 
