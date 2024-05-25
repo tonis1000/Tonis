@@ -230,6 +230,30 @@ button:hover {
     font-size: 26px;
 }
 
+
+/* Wrapper für den Player und zusätzlichen Inhalt, um sie nebeneinander zu platzieren */
+.content-wrapper {
+    display: flex;
+    gap: 20px; /* Abstand zwischen dem Player und dem zusätzlichen Inhalt */
+    margin-top: 20px;
+}
+
+/* Zusätzlicher Inhalt rechts neben dem Player */
+#additionalContent {
+    width: 400px; /* Breite des zusätzlichen Inhalts */
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#additionalContent iframe {
+    width: 100%; /* Iframe passt sich der Breite des Containers an */
+    height: 500px; /* Feste Höhe für das Iframe */
+}
+
+
 #stream-url {
     width: 750px;
 }
