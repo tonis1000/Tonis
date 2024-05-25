@@ -34,25 +34,39 @@ function loadEPGData() {
                 const channelId = prog.getAttribute('channel');
                 const start = prog.getAttribute('start');
                 const stop = prog.getAttribute('stop');
-                const titleElement = prog.getElementsByTagName('title')[0];
-                const descElement = prog.getElementsByTagName('desc')[0];
-                if (titleElement) {
-                    const title = titleElement.textContent;
-                    const desc = descElement ? descElement.textContent : 'Keine Beschreibung verfügbar';
-                    if (!epgData[channelId]) {
-                        epgData[channelId] = [];
+
+                // Überprüfung der Gültigkeit der Datumsangaben
+                if (isValidDateTime(start) && isValidDateTime(stop)) {
+                    const titleElement = prog.getElementsByTagName('title')[0];
+                    const descElement = prog.getElementsByTagName('desc')[0];
+                    if (titleElement) {
+                        const title = titleElement.textContent;
+                        const desc = descElement ? descElement.textContent : 'Keine Beschreibung verfügbar';
+                        if (!epgData[channelId]) {
+                            epgData[channelId] = [];
+                        }
+                        epgData[channelId].push({
+                            start: parseDateTime(start),
+                            stop: parseDateTime(stop),
+                            title: title,
+                            desc: desc
+                        });
                     }
-                    epgData[channelId].push({
-                        start: parseDateTime(start),
-                        stop: parseDateTime(stop),
-                        title: title,
-                        desc: desc
-                    });
+                } else {
+                    console.error('Ungültige EPG-Zeitangaben für Kanal:', channelId);
                 }
             });
         })
         .catch(error => console.error('Fehler beim Laden der EPG-Daten:', error));
 }
+
+// Überprüfen, ob ein Datum und eine Uhrzeit gültig sind
+function isValidDateTime(dateTimeString) {
+    const regex = /^\d{14}[+-]\d{4}$/; // Beispiel: "20240101000000 +0000"
+    return regex.test(dateTimeString);
+}
+
+
 
 // Hilfsfunktion zum Umwandeln der EPG-Zeitangaben in Date-Objekte
 function parseDateTime(epgTime) {
