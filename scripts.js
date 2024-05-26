@@ -100,7 +100,7 @@ function getCurrentProgram(channelId) {
             const end = currentProgram.stop.toLocaleString(); // Enddatum des laufenden Programms
 
             return {
-                title: currentProgram.title,
+                title: `${currentProgram.title} (${start} - ${end})`, // Titel mit Start- und Enddatum
                 description: description,
                 pastPercentage: pastPercentage,
                 futurePercentage: futurePercentage
@@ -117,6 +117,7 @@ function updatePlayerDescription(title, description) {
     document.getElementById('program-title').textContent = title;
     document.getElementById('program-desc').textContent = description;
 }
+
 
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURLs(data) {
