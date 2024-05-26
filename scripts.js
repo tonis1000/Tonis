@@ -98,7 +98,8 @@ function getCurrentProgram(channelId) {
             const description = currentProgram.desc || 'Keine Beschreibung verfügbar';
             const start = currentProgram.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Startzeit des laufenden Programms
             const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des laufenden Programms
-            const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, ''); // Titel ohne den Teil in eckigen Klammern
+            const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
+
 
 
             return {
