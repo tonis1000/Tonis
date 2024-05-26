@@ -96,8 +96,9 @@ function getCurrentProgram(channelId) {
             const pastPercentage = (pastTime / totalTime) * 100;
             const futurePercentage = (futureTime / totalTime) * 100;
             const description = currentProgram.desc || 'Keine Beschreibung verfügbar';
-            const start = currentProgram.start.toLocaleString(); // Startdatum des laufenden Programms
-            const end = currentProgram.stop.toLocaleString(); // Enddatum des laufenden Programms
+            const start = currentProgram.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Startzeit des laufenden Programms
+            const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des laufenden Programms
+
 
             return {
                 title: `${currentProgram.title} (${start} - ${end})`, // Titel mit Start- und Enddatum
