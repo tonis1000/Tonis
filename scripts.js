@@ -101,9 +101,7 @@ function getCurrentProgram(channelId) {
                 title: currentProgram.title,
                 description: description,
                 pastPercentage: pastPercentage,
-                futurePercentage: futurePercentage,
-                startTime: currentProgram.start,
-                endTime: currentProgram.stop
+                futurePercentage: futurePercentage
             };
         } else {
             return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
@@ -112,14 +110,10 @@ function getCurrentProgram(channelId) {
     return { title: 'Keine EPG-Daten verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
-// Funktion zum Aktualisieren des Players mit der Programmbeschreibung und Zeitangaben
-function updatePlayerDescription(title, description, startTime, endTime) {
+// Funktion zum Aktualisieren des Players mit der Programmbeschreibung
+function updatePlayerDescription(title, description) {
     document.getElementById('program-title').textContent = title;
     document.getElementById('program-desc').textContent = description;
-
-    const startTimeFormatted = startTime ? startTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) : '??:??';
-    const endTimeFormatted = endTime ? endTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) : '??:??';
-    document.getElementById('program-time').textContent = ` (${startTimeFormatted} - ${endTimeFormatted})`;
 }
 
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
@@ -231,13 +225,10 @@ document.addEventListener('DOMContentLoaded', function () {
             setCurrentChannel(channelInfo.querySelector('.sender-name').textContent, streamURL);
             playStream(streamURL);
 
-            // Aktualisieren der Programmbeschreibung und Zeiten
-            updatePlayerDescription(programInfo.title, programInfo.description, programInfo.startTime, programInfo.endTime);
+            // Aktualisieren der Programmbeschreibung
+            updatePlayerDescription(programInfo.title, programInfo.description);
         }
     });
-
-    setInterval(checkStreamStatus, 60000);
-});
 
     setInterval(checkStreamStatus, 60000);
 
