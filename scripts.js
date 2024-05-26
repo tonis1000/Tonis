@@ -102,12 +102,13 @@ function getCurrentProgram(channelId) {
 
 
 
-            return {
-                title: `${currentProgram.title} (${start} - ${end})`, // Titel mit Start- und Enddatum
-                description: description,
-                pastPercentage: pastPercentage,
-                futurePercentage: futurePercentage
-            };
+return {
+    title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
+    description: description,
+    pastPercentage: pastPercentage,
+    futurePercentage: futurePercentage
+};
+
         } else {
             return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
         }
