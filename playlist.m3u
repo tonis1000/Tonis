@@ -52,7 +52,7 @@ https://livestar.siliconweb.com/media/star1/star1.m3u8
 https://s2.cystream.net/galanos/star/chunks.m3u8?nimblesessiontvg-id=783489&wmsAuthSign=c2VydmVyX3RpbWU9MTEvMjAvMjAyMyAxMDoyNTozOCBQTSZoYXNoX3ZhbHVlPWNrMUg2TjRVWlZGR0t4V1k2QXVhWFE9PSZ2YWxpZG1pbnV0ZXM9MjA=
 
 #EXTINF:-1 tvg-id="action24" tvg-logo="https://i.imgur.com/Fsnz8GK.png", Action 24
-http://actionlive.siliconweb.com/actionabr/actiontv/playlist.m3u8
+https://actionlive.siliconweb.com/actionabr/actiontv/playlist.m3u8
 
 #EXTINF:-1 tvg-id="kontra" tvg-logo="https://i.imgur.com/ZqEovqx.png", Kontra
 https://kontralive.siliconweb.com/live/kontratv/playlist.m3u8
@@ -61,10 +61,10 @@ https://kontralive.siliconweb.com/live/kontratv/playlist.m3u8
 https://live.fm100.gr/hls/tv100/1_2/index.m3u8
 
 #EXTINF:-1 tvg-id="GroovyTV.gr" tvg-logo="https://i.imgur.com/5kAPGz5.png", Groovy TV
-https://web.onair-radio.eu:1935/groovytv/groovytv/playlist.m3u8
+https://web.onair-radio.eu/groovytv/groovytv/chunklist_w2146395179.m3u8
 
 #EXTINF:-1 tvg-id="NetMaxTV.gr" tvg-logo="https://i.imgur.com/ZHfGJyD.png", NetMaxTV
-https://live.netmaxtv.com:8080/live/live/playlist.m3u8
+https://live.netmaxtv.com:8081/live/live/chunklist_w1335266248.m3u8
 
 #EXTINF:-1 tvg-id="MakTV.gr" tvg-logo="https://i.imgur.com/Vd4tPqE.png", Mak TV
 https://dlm34ll53zqql.cloudfront.net/out/v1/d4177931deff4c7ba994b8126d153d9f/maktv.m3u8
