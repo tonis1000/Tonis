@@ -96,19 +96,16 @@ function getCurrentProgram(channelId) {
             const pastPercentage = (pastTime / totalTime) * 100;
             const futurePercentage = (futureTime / totalTime) * 100;
             const description = currentProgram.desc || 'Keine Beschreibung verfügbar';
-            const start = currentProgram.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Startzeit des laufenden Programms
-            const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des laufenden Programms
-            const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
+            const start = currentProgram.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, '');
 
-
-
-return {
-    title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
-    description: description,
-    pastPercentage: pastPercentage,
-    futurePercentage: futurePercentage
-};
-
+            return {
+                title: `${title} (${start} - ${end})`,
+                description: description,
+                pastPercentage: pastPercentage,
+                futurePercentage: futurePercentage
+            };
         } else {
             return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
         }
@@ -121,7 +118,6 @@ function updatePlayerDescription(title, description) {
     document.getElementById('program-title').textContent = title;
     document.getElementById('program-desc').textContent = description;
 }
-
 
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURLs(data) {
@@ -140,7 +136,6 @@ function extractStreamURLs(data) {
     });
     return streamURLs;
 }
-
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
@@ -189,7 +184,6 @@ function updateSidebarFromM3U(data) {
     checkStreamStatus();
 }
 
-
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
@@ -201,186 +195,99 @@ function checkStreamStatus() {
                     if (response.ok) {
                         channel.querySelector('.sender-name').classList.add('online');
                     } else {
-                        channel.querySelector('.sender-name').classList.remove('online');
+                        channel.querySelector('.sender-name').classList.add('offline');
                     }
                 })
                 .catch(error => {
-                    console.error('Fehler beim Überprüfen des Stream-Status:', error);
-                    channel.querySelector('.sender-name').classList.remove('online');
+                    channel.querySelector('.sender-name').classList.add('offline');
                 });
         }
     });
 }
 
-// Ereignisbehandler für Klicks auf Sender
-document.addEventListener('DOMContentLoaded', function () {
-    loadEPGData();
-    updateClock();
-    setInterval(updateClock, 1000);
-    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
-    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
-    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
+// Hauptfunktion zum Initialisieren des Players
+function initializePlayer() {
+    const videoPlayer = document.getElementById('video-player');
+    const playButton = document.getElementById('play-button');
 
-    const sidebarList = document.getElementById('sidebar-list');
-    sidebarList.addEventListener('click', function (event) {
+    // Event-Listener für Play-Button
+    playButton.addEventListener('click', () => {
+        const streamURL = document.getElementById('stream-url').value.trim();
+        if (streamURL) {
+            playStream(streamURL);
+        }
+    });
+
+    // Event-Listener für Auswahl eines Kanals aus der Sidebar
+    document.getElementById('sidebar-list').addEventListener('click', event => {
         const channelInfo = event.target.closest('.channel-info');
         if (channelInfo) {
             const streamURL = channelInfo.dataset.stream;
             const channelId = channelInfo.dataset.channelId;
             const programInfo = getCurrentProgram(channelId);
-
-            setCurrentChannel(channelInfo.querySelector('.sender-name').textContent, streamURL);
-            playStream(streamURL);
-
-            // Aktualisieren der Programmbeschreibung
             updatePlayerDescription(programInfo.title, programInfo.description);
+            playStream(streamURL);
         }
     });
 
-    setInterval(checkStreamStatus, 60000);
-
-    const playButton = document.getElementById('play-button');
-    const streamUrlInput = document.getElementById('stream-url');
-
-    const playStreamFromInput = () => {
-        const streamUrl = streamUrlInput.value;
-        if (streamUrl) {
-            playStream(streamUrl);
-        }
-    };
-
-    playButton.addEventListener('click', playStreamFromInput);
-
-    streamUrlInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            playStreamFromInput();
+    // Event-Listener für Auswahl einer Untertiteldatei
+    document.getElementById('subtitle-file').addEventListener('change', event => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const subtitleTrack = document.getElementById('subtitle-track');
+                subtitleTrack.src = 'data:text/vtt;charset=utf-8,' + convertSrtToVtt(e.target.result);
+                videoPlayer.textTracks[0].mode = 'showing';
+            };
+            reader.readAsText(file);
         }
     });
-});
 
+    // Uhrzeit- und Datumsanzeige aktualisieren
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('uhrzeit').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('datum').textContent = now.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }, 1000);
 
+    // Funktionen zum Laden der Playlists
+    document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
+    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
+    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 
-// Funktion zum Setzen des aktuellen Sendernamens und der URL
-function setCurrentChannel(channelName, streamUrl) {
-    const currentChannelName = document.getElementById('current-channel-name');
-    const streamUrlInput = document.getElementById('stream-url');
-    currentChannelName.textContent = channelName; // Nur der Sendername
-    streamUrlInput.value = streamUrl;
+    // EPG-Daten laden
+    loadEPGData();
 }
 
-// Aktualisierung der Uhrzeit
-function updateClock() {
-    const now = new Date();
-    const tag = now.toLocaleDateString('de-DE', { weekday: 'long' });
-    const datum = now.toLocaleDateString('de-DE');
-    const uhrzeit = now.toLocaleTimeString('de-DE', { hour12: false });
-    document.getElementById('tag').textContent = tag;
-    document.getElementById('datum').textContent = datum;
-    document.getElementById('uhrzeit').textContent = uhrzeit;
-}
-
-
-
-
-
-        // Funktion zum Abspielen eines Streams im Video-Player
-function playStream(streamURL, subtitleURL) {
+// Funktion zum Abspielen des Streams
+function playStream(streamURL) {
     const videoPlayer = document.getElementById('video-player');
-    const subtitleTrack = document.getElementById('subtitle-track');
-
-    if (subtitleURL) {
-        subtitleTrack.src = subtitleURL;
-        subtitleTrack.track.mode = 'showing'; // Untertitel anzeigen
-    } else {
-        subtitleTrack.src = '';
-        subtitleTrack.track.mode = 'hidden'; // Untertitel ausblenden
-    }
-
     if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
         const hls = new Hls();
         hls.loadSource(streamURL);
         hls.attachMedia(videoPlayer);
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
             videoPlayer.play();
         });
-    } else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
-        const dashPlayer = dashjs.MediaPlayer().create();
-        dashPlayer.initialize(videoPlayer, streamURL, true);
-    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-        videoPlayer.src = streamURL;
-        videoPlayer.addEventListener('loadedmetadata', function () {
-            videoPlayer.play();
-        });
-    } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
-        videoPlayer.src = streamURL;
-        videoPlayer.play();
+    } else if (dashjs.MediaPlayer().isSupported() && streamURL.endsWith('.mpd')) {
+        const player = dashjs.MediaPlayer().create();
+        player.initialize(videoPlayer, streamURL, true);
     } else {
-        console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
+        videoPlayer.src = streamURL;
+        videoPlayer.addEventListener('loadedmetadata', () => {
+            videoPlayer.play();
+        });
     }
 }
 
-
-
-// Funktion zum Lesen der SRT-Datei und Anzeigen der griechischen Untertitel
-function handleSubtitleFile(file) {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        const srtContent = event.target.result;
-        const vttContent = convertSrtToVtt(srtContent);
-        const blob = new Blob([vttContent], { type: 'text/vtt' });
-        const url = URL.createObjectURL(blob);
-        const track = document.getElementById('subtitle-track');
-        track.src = url;
-        track.label = 'Griechisch';
-        track.srclang = 'el';
-        track.default = true;
-    };
-    reader.readAsText(file);
+// Funktion zum Konvertieren von SRT zu VTT
+function convertSrtToVtt(srt) {
+    const vtt = srt.replace(/(\d+)\n(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})/g, (match, p1, p2, p3, p4, p5, p6, p7, p8, p9) => {
+        return `${p1}\n${p2}:${p3}:${p4}.${p5} --> ${p6}:${p7}:${p8}.${p9}`;
+    });
+    return 'WEBVTT\n\n' + vtt;
 }
 
-// Funktion zum Konvertieren von SRT in VTT
-function convertSrtToVtt(srtContent) {
-    // SRT-Untertitelzeilen in VTT-Format konvertieren
-    const vttContent = 'WEBVTT\n\n' + srtContent
-        // Ersetze Trennzeichen
-        .replace(/\r\n|\r|\n/g, '\n')
-        // Ersetze Zeitformate von SRT in VTT
-        .replace(/(\d{2}):(\d{2}):(\d{2}),(\d{3})/g, '$1:$2:$3.$4');
-
-    return vttContent;
-}
-
-
-
-        // Event-Listener für den Play-Button und Datei-Eingabe
-        document.addEventListener('DOMContentLoaded', function () {
-            const playButton = document.getElementById('play-button');
-            const streamUrlInput = document.getElementById('stream-url');
-            const subtitleFileInput = document.getElementById('subtitle-file');
-
-            const playStreamFromInput = () => {
-                const streamUrl = streamUrlInput.value;
-                const subtitleFile = subtitleFileInput.files[0];
-                if (streamUrl) {
-                    if (subtitleFile) {
-                        handleSubtitleFile(subtitleFile);
-                    }
-                    playStream(streamUrl, subtitleFile ? document.getElementById('subtitle-track').src : null);
-                }
-            };
-
-            playButton.addEventListener('click', playStreamFromInput);
-
-            streamUrlInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    playStreamFromInput();
-                }
-            });
-
-            subtitleFileInput.addEventListener('change', (event) => {
-                const subtitleFile = event.target.files[0];
-                if (subtitleFile) {
-                    handleSubtitleFile(subtitleFile);
-                }
-            });
-        });
+// Initialisierung des Players beim Laden der Seite
+document.addEventListener('DOMContentLoaded', initializePlayer);
