@@ -264,6 +264,10 @@ button:hover {
     margin-bottom: 2px; /* Ändere den Abstand zwischen den Programmen nach Bedarf */
 }
 
+div.next-program p {
+    margin-top: 5px;
+}
+
 .next-program-title {
     font-weight: bold;
     margin-bottom: 2px;
