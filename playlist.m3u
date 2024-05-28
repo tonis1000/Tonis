@@ -1,16 +1,13 @@
 #EXTM3U
 
 #EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/nMHKG3A.png", ERT1
-https://cbd537474fbad4634b64787657ff6456.msvdn.net/ert1/ert_ev1_main/mainabr/playlist_dvr.m3u8
-
-#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/nMHKG3A.png", ERT1
-https://88.99.254.101/ert1/mono.m3u8
+https://cdn1.smart-tv-data.com/vid/ert-1-hbbtv/playlist.m3u8
 
 #EXTINF:-1 tvg-id="ert2" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/5/50/%CE%95%CE%A1%CE%A42.png", ERT2
-https://cbd537474fbad4634b64787657ff6456.msvdn.net/ert2/ert_ev2_main/mainabr/playlist_dvr.m3u8
+http://cdn1.smart-tv-data.com/vid/ert-2-hbbtv/playlist.m3u8
 
 #EXTINF:-1 tvg-id="ert3" tvg-logo="https://i.imgur.com/f2l9bDR.png", ERT3
-http://cbd537474fbad4634b64787657ff6456.msvdn.net/ert3/ert_ev3_main/mainabr/playlist_dvr.m3u8
+http://cdn1.smart-tv-data.com/vid/ert-3-hbbtv/playlist.m3u8
 
 #EXTINF:-1 tvg-id="ertnews" tvg-logo="https://i.imgur.com/XwLTzaF.jpg", ERT News
 https://ertflix.s.llnwi.net/ertlive/ertnews/default/index.m3u8
