@@ -116,6 +116,42 @@ return {
     return { title: 'Keine EPG-Daten verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
+
+
+// Funktion zum Aktualisieren der nächsten Programme
+function updateNextPrograms(channelId) {
+    const nextProgramsContainer = document.getElementById('next-programs');
+    nextProgramsContainer.innerHTML = ''; // Leert den Container, um die neuen Programme einzufügen
+
+    if (epgData[channelId]) {
+        const now = new Date();
+        const upcomingPrograms = epgData[channelId]
+            .filter(prog => prog.start > now) // Filtert nur Programme, die in der Zukunft liegen
+            .slice(0, 4); // Begrenzt auf die nächsten 4 Programme
+
+        upcomingPrograms.forEach(program => {
+            const nextProgramDiv = document.createElement('div');
+            nextProgramDiv.classList.add('next-program');
+
+            const nextProgramTitle = document.createElement('h4');
+            nextProgramTitle.classList.add('next-program-title');
+            nextProgramTitle.textContent = program.title;
+
+            const nextProgramDesc = document.createElement('p');
+            nextProgramDesc.classList.add('next-program-desc');
+            nextProgramDesc.textContent = program.desc || 'Keine Beschreibung verfügbar';
+
+            nextProgramDiv.appendChild(nextProgramTitle);
+            nextProgramDiv.appendChild(nextProgramDesc);
+
+            nextProgramsContainer.appendChild(nextProgramDiv);
+        });
+    }
+}
+
+
+
+
 // Funktion zum Aktualisieren des Players mit der Programmbeschreibung
 function updatePlayerDescription(title, description) {
     document.getElementById('program-title').textContent = title;
