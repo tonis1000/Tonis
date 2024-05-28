@@ -148,15 +148,16 @@ function updateNextPrograms(channelId) {
             nextProgramDiv.appendChild(nextProgramTitle);
             nextProgramDiv.appendChild(nextProgramDesc);
 
-            nextProgramDesc.addEventListener('click', function() {
+            nextProgramTitle.addEventListener('click', function() {
                 // Toggle für das Aufklappen der Beschreibung
-                this.classList.toggle('expanded');
+                nextProgramDesc.classList.toggle('expanded');
             });
 
             nextProgramsContainer.appendChild(nextProgramDiv);
         });
     }
 }
+
 
 
 // Im Event-Handler für den Klick auf einen Sender
