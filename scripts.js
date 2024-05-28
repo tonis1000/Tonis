@@ -134,15 +134,14 @@ function updateNextPrograms(channelId) {
             nextProgramDiv.classList.add('next-program');
 
             const nextProgramTitle = document.createElement('h4');
-            nextProgramTitle.classList.add('program-title');
+            nextProgramTitle.classList.add('next-program-title'); // Korrigierte CSS-Klasse
             const start = program.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Startzeit des nächsten Programms
             const end = program.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des nächsten Programms
             const title = program.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
             nextProgramTitle.textContent = `${title} (${start} - ${end})`;
-            nextProgramTitle.style.cursor = 'pointer';
 
             const nextProgramDesc = document.createElement('p');
-            nextProgramDesc.classList.add('program-desc');
+            nextProgramDesc.classList.add('next-program-desc'); // Korrigierte CSS-Klasse
             nextProgramDesc.classList.add('expandable'); // Fügt die Klasse für das Aufklappen hinzu
             nextProgramDesc.textContent = program.desc || 'Keine Beschreibung verfügbar';
 
@@ -158,6 +157,7 @@ function updateNextPrograms(channelId) {
         });
     }
 }
+
 
 
 
