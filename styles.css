@@ -257,3 +257,17 @@ button:hover {
 #stream-url {
     width: 750px;
 }
+
+
+.next-program {
+    margin-top: 10px;
+}
+
+.next-program-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.next-program-desc {
+    margin-bottom: 10px;
+}
