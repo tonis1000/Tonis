@@ -259,12 +259,13 @@ button:hover {
 }
 
 
+
+
 .next-program {
     margin-top: 10px;
     margin-bottom: 2px; /* Ändere den Abstand zwischen den Programmen nach Bedarf */
 }
 
-}
 
 .next-program-title {
     font-weight: bold;
