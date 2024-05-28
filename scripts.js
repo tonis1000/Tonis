@@ -139,6 +139,7 @@ function updateNextPrograms(channelId) {
             const end = program.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des nächsten Programms
             const title = program.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
             nextProgramTitle.textContent = `${title} (${start} - ${end})`;
+            nextProgramTitle.style.cursor = 'pointer';
 
             const nextProgramDesc = document.createElement('p');
             nextProgramDesc.classList.add('program-desc');
