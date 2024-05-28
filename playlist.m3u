@@ -4,10 +4,10 @@
 https://cdn1.smart-tv-data.com/vid/ert-1-hbbtv/playlist.m3u8
 
 #EXTINF:-1 tvg-id="ert2" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/5/50/%CE%95%CE%A1%CE%A42.png", ERT2
-http://cdn1.smart-tv-data.com/vid/ert-2-hbbtv/playlist.m3u8
+https://cdn1.smart-tv-data.com/vid/ert-2-hbbtv/playlist.m3u8
 
 #EXTINF:-1 tvg-id="ert3" tvg-logo="https://i.imgur.com/f2l9bDR.png", ERT3
-http://cdn1.smart-tv-data.com/vid/ert-3-hbbtv/playlist.m3u8
+https://cdn1.smart-tv-data.com/vid/ert-3-hbbtv/playlist.m3u8
 
 #EXTINF:-1 tvg-id="ertnews" tvg-logo="https://i.imgur.com/XwLTzaF.jpg", ERT News
 https://ertflix.s.llnwi.net/ertlive/ertnews/default/index.m3u8
