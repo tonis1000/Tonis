@@ -1,6 +1,6 @@
 #EXTM3U
 
-#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/nMHKG3A.png", ERT1
+#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/slE8U5m.png", ERT1
 https://cdn1.smart-tv-data.com/vid/ert-1-hbbtv/playlist.m3u8
 
 #EXTINF:-1 tvg-id="ert2" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/5/50/%CE%95%CE%A1%CE%A42.png", ERT2
