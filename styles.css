@@ -271,3 +271,12 @@ button:hover {
 .next-program-desc {
     margin-bottom: 10px;
 }
+.expandable {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.expandable.expanded {
+    max-height: 1000px; /* oder eine andere geeignete Höhe */
+}
