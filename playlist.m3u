@@ -15,7 +15,7 @@ https://ertflix.s.llnwi.net/ertlive/ertnews/default/index.m3u8
 #EXTINF:-1 tvg-id="ant1" tvg-logo="https://i.imgur.com/g0jPOcC.png", Ant1
 https://d1nfykbwa3n98t.cloudfront.net/out/v1/6e5667da5a6843899a337dea72adb61b/antenna.m3u8
 
-#EXTINF:-1 tvg-id="alfa" tvg-logo="https://i.imgur.com/6twzd38.png", AlphaTV
+#EXTINF:-1 tvg-id="alpha" tvg-logo="https://i.imgur.com/6twzd38.png", AlphaTV
 https://alphatvlive.siliconweb.com/1/Y2Rsd1lUcUVoajcv/UVdCN25h/hls/live/playlist.m3u8
 
 #EXTINF:-1 tvg-id="skai" tvg-logo="https://i.imgur.com/mrKRFnf.png", Skai
