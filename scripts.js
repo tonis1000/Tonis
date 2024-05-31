@@ -281,13 +281,17 @@ function checkStreamStatus() {
 
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
+    // Laden der EPG-Daten und Aktualisierung der Uhr
     loadEPGData();
     updateClock();
     setInterval(updateClock, 1000);
+
+    // Laden der Playlists bei Klick auf die entsprechenden Buttons
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
 
+    // Hinzufügen des Klick-Event-Listeners für die Senderliste
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.addEventListener('click', function (event) {
         const channelInfo = event.target.closest('.channel-info');
@@ -297,22 +301,35 @@ document.addEventListener('DOMContentLoaded', function () {
             const programInfo = getCurrentProgram(channelId);
 
             setCurrentChannel(channelInfo.querySelector('.sender-name').textContent, streamURL);
-            playStream(streamURL);
-
+            
+            // Hier wird der Video-Player aktualisiert, um das Streaming zu starten
+            const player = document.getElementById('video-player');
+            player.pause(); // Stopp des aktuellen Videos
+            player.setSrc(streamURL); // Setzen der Stream-URL
+            player.load(); // Laden des neuen Videos
+            player.play(); // Starten des neuen Videos
+            
             // Aktualisieren der Programmbeschreibung
             updatePlayerDescription(programInfo.title, programInfo.description);
         }
     });
 
+    // Periodische Überprüfung des Stream-Status
     setInterval(checkStreamStatus, 60000);
 
+    // Hinzufügen des Event-Listeners für den Play-Button und die Stream-URL-Eingabe
     const playButton = document.getElementById('play-button');
     const streamUrlInput = document.getElementById('stream-url');
 
     const playStreamFromInput = () => {
         const streamUrl = streamUrlInput.value;
         if (streamUrl) {
-            playStream(streamUrl);
+            // Hier wird der Video-Player aktualisiert, um das Streaming zu starten
+            const player = document.getElementById('video-player');
+            player.pause(); // Stopp des aktuellen Videos
+            player.setSrc(streamUrl); // Setzen der Stream-URL
+            player.load(); // Laden des neuen Videos
+            player.play(); // Starten des neuen Videos
         }
     };
 
@@ -324,6 +341,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
 
 
 
