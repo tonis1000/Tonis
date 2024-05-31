@@ -230,7 +230,6 @@ button:hover {
     font-size: 26px;
 }
 
-
 /* Wrapper für den Player und zusätzlichen Inhalt, um sie nebeneinander zu platzieren */
 .content-wrapper {
     display: flex;
@@ -252,11 +251,9 @@ button:hover {
     height: 500px; /* Feste Höhe für das Iframe */
 }
 
-
 #stream-url {
     width: 750px;
 }
-
 
 .next-program {
     margin-top: 2px;
