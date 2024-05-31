@@ -178,8 +178,21 @@ sidebarList.addEventListener('click', function (event) {
 
         // Aktualisiert die nächsten Programme
         updateNextPrograms(channelId);
+
+        // Zeigt das Logo des ausgewählten Senders an
+        const logoContainer = document.querySelector('.player-header .logo-container');
+        const logoImg = document.createElement('img');
+        logoImg.src = channelInfo.querySelector('.logo-container img').src;
+        logoImg.alt = 'Senderlogo';
+        logoContainer.innerHTML = ''; // Löscht alle vorhandenen Inhalte
+        logoContainer.appendChild(logoImg);
+
+        // Setzt den Namen des aktuellen Senders über dem Stream-URL-Eingabefeld
+        const currentChannelName = document.getElementById('current-channel-name');
+        currentChannelName.textContent = channelInfo.querySelector('.sender-name').textContent;
     }
 });
+
 
 
 
