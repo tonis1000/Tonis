@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub TV</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <!-- Einbindung von MediaElement.js -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.13/mediaelementplayer.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.13/mediaelement-and-player.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.13/renderers/silverlightmediaelement.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.13/renderers/flashmediaelement.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 </head>
-
 <body>
     <div class="main-container">
         <div class="container">
@@ -48,15 +44,9 @@
                 <input type="file" id="subtitle-file" accept=".srt" style="display: none;">
                 <button id="play-button">Play</button>
             </div>
-<video id="video-player" class="video-player" controls>
-    <!-- Fallback-Inhalt für Browser, die kein HTML5-Video unterstützen -->
-    <source src="" type="video/mp4"> <!-- Standard-Format -->
-    <source src="" type="video/webm"> <!-- WebM-Format -->
-    <source src="" type="video/ogg"> <!-- Ogg-Format -->
-    <!-- Untertitel -->
-    <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
-</video>
-
+            <video id="video-player" controls>
+                <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
+            </video>
             <div id="program-info">
                 <h4 id="program-title"></h4>
                 <p id="program-desc"></p>
