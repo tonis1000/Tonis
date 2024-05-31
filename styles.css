@@ -225,7 +225,10 @@ button:hover {
 }
 
 #current-channel-name {
-    font-size: 26px;
+    font-size: 18px; /* Größe des Sendernamens */
+    color: #ffffff; /* Farbe des Sendernamens */
+    width: 70px;
+    margin-right: 10px; /* Abstand zwischen dem Senderlogo und dem Sendername */
 }
 
 
