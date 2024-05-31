@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub TV</title>
+    <link rel="stylesheet" href="https://vjs.zencdn.net/7.17.0/video-js.css">
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 </head>
-<body>
+<body class="base-background text-white">
     <div class="main-container">
         <div class="container">
             <div class="info-panel">
@@ -44,17 +46,15 @@
                 <input type="file" id="subtitle-file" accept=".srt" style="display: none;">
                 <button id="play-button">Play</button>
             </div>
-            <video id="video-player" controls>
+            <video id="video-player" class="video-js vjs-default-skin" controls preload="auto" width="900" height="400">
                 <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
             </video>
             <div id="program-info">
                 <h4 id="program-title"></h4>
                 <p id="program-desc"></p>
             </div>
-           
             <div id="next-programs">
-        <!-- Container für die nächsten Programme -->
-                        <div class="next-program">
+                <div class="next-program">
                     <h4 class="next-program-title">Next Program 1 (09:00 - 10:00)</h4>
                     <p class="next-program-desc" style="display: none;">Description of next program 1</p>
                 </div>
@@ -70,12 +70,9 @@
                     <h4 class="next-program-title">Next Program 4 (12:00 - 13:00)</h4>
                     <p class="next-program-desc" style="display: none;">Description of next program 4</p>
                 </div>
-    </div>
-
-            
+            </div>
         </div>
         <div id="additionalContent">
-            
             <iframe src="https://foothubhd.xyz/" frameborder="0"></iframe>
         </div>
     </div>
