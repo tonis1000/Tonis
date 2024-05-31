@@ -281,9 +281,6 @@ function checkStreamStatus() {
 
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
-    loadEPGData();
-    updateClock();
-    setInterval(updateClock, 1000);
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
@@ -303,8 +300,6 @@ document.addEventListener('DOMContentLoaded', function () {
             updatePlayerDescription(programInfo.title, programInfo.description);
         }
     });
-
-    setInterval(checkStreamStatus, 60000);
 
     const playButton = document.getElementById('play-button');
     const streamUrlInput = document.getElementById('stream-url');
@@ -326,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-
+// Funktion zum Setzen des aktuellen Sendernamens und der URL
 function setCurrentChannel(channelName, streamUrl) {
     const currentChannelName = document.getElementById('current-channel-name');
     const streamUrlInput = document.getElementById('stream-url');
