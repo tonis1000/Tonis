@@ -281,6 +281,9 @@ function checkStreamStatus() {
 
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
+    loadEPGData();
+    updateClock();
+    setInterval(updateClock, 1000);
     document.getElementById('myPlaylist').addEventListener('click', loadMyPlaylist);
     document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
     document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
@@ -300,6 +303,8 @@ document.addEventListener('DOMContentLoaded', function () {
             updatePlayerDescription(programInfo.title, programInfo.description);
         }
     });
+
+    setInterval(checkStreamStatus, 60000);
 
     const playButton = document.getElementById('play-button');
     const streamUrlInput = document.getElementById('stream-url');
@@ -321,20 +326,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+
 // Funktion zum Setzen des aktuellen Sendernamens und der URL
 function setCurrentChannel(channelName, streamUrl) {
     const currentChannelName = document.getElementById('current-channel-name');
     const streamUrlInput = document.getElementById('stream-url');
     currentChannelName.textContent = channelName; // Nur der Sendername
     streamUrlInput.value = streamUrl;
-
-    // Player-Steuerungen sichtbar machen
-    const videoPlayer = document.getElementById('video-player');
-    videoPlayer.controls = true; // Steuerungen anzeigen
-    videoPlayer.load(); // Player mit neuer Quelle neu laden
 }
-
-
 
 // Aktualisierung der Uhrzeit
 function updateClock() {
@@ -349,13 +348,12 @@ function updateClock() {
 
 
 
-// Funktion zum Abspielen eines Streams im Video-Player
+
+
+        // Funktion zum Abspielen eines Streams im Video-Player
 function playStream(streamURL, subtitleURL) {
     const videoPlayer = document.getElementById('video-player');
     const subtitleTrack = document.getElementById('subtitle-track');
-
-    // Debugging URL
-    console.log('Versuche Stream abzuspielen:', streamURL);
 
     if (subtitleURL) {
         subtitleTrack.src = subtitleURL;
@@ -365,33 +363,28 @@ function playStream(streamURL, subtitleURL) {
         subtitleTrack.track.mode = 'hidden'; // Untertitel ausblenden
     }
 
-    // Debugging Formatunterstützung
-    console.log('HLS unterstützt:', Hls.isSupported());
-
-    if (Hls.isSupported()) {
+    if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
         const hls = new Hls();
         hls.loadSource(streamURL);
         hls.attachMedia(videoPlayer);
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            console.log('HLS Manifest geladen, starte Wiedergabe');
             videoPlayer.play();
         });
-        hls.on(Hls.Events.ERROR, function (event, data) {
-            console.error('HLS Fehler:', data);
-        });
+    } else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
+        const dashPlayer = dashjs.MediaPlayer().create();
+        dashPlayer.initialize(videoPlayer, streamURL, true);
     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
         videoPlayer.src = streamURL;
         videoPlayer.addEventListener('loadedmetadata', function () {
-            console.log('HLS über native Unterstützung geladen, starte Wiedergabe');
             videoPlayer.play();
         });
+    } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
+        videoPlayer.src = streamURL;
+        videoPlayer.play();
     } else {
-        console.error('HLS wird vom aktuellen Browser nicht unterstützt:', streamURL);
+        console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
 }
-
-
-
 
 
 
