@@ -290,3 +290,26 @@ div.next-program h4 {
 .expandable.expanded {
     max-height: 1000px; /* oder eine andere geeignete Höhe */
 }
+
+
+
+/* Für Smartphones im Hochformat */
+@media only screen and (max-width: 480px) {
+    /* CSS-Regeln für Smartphones im Hochformat */
+}
+
+/* Für Smartphones im Querformat */
+@media only screen and (min-width: 481px) and (max-width: 800px) {
+    /* CSS-Regeln für Smartphones im Querformat */
+}
+
+/* Für Tablets */
+@media only screen and (min-width: 801px) and (max-width: 1024px) {
+    /* CSS-Regeln für Tablets */
+}
+
+/* Für Desktops und größere Bildschirme */
+@media only screen and (min-width: 1025px) {
+    /* CSS-Regeln für Desktops und größere Bildschirme */
+}
+
