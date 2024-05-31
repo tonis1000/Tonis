@@ -451,3 +451,13 @@ function convertSrtToVtt(srtContent) {
                 }
             });
         });
+// Beispielcode, wie das Logo des aktuellen Senders hinzugefügt werden kann
+function loadCurrentChannelLogo() {
+    // Hier den JavaScript-Code einfügen, um das Logo des aktuellen Senders zu laden
+    var currentChannelLogoUrl = "pfad-zum-logo.png"; // Beispiel-URL zum Logo des aktuellen Senders
+    var logoContainer = document.getElementById("current-channel-logo");
+    logoContainer.innerHTML = `<img src="${currentChannelLogoUrl}" alt="Senderlogo">`;
+}
+
+// Rufe die Funktion zum Laden des aktuellen Senderlogos auf
+loadCurrentChannelLogo();
