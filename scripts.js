@@ -326,14 +326,18 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-
-// Funktion zum Setzen des aktuellen Sendernamens und der URL
 function setCurrentChannel(channelName, streamUrl) {
     const currentChannelName = document.getElementById('current-channel-name');
     const streamUrlInput = document.getElementById('stream-url');
     currentChannelName.textContent = channelName; // Nur der Sendername
     streamUrlInput.value = streamUrl;
+
+    // Player-Steuerungen sichtbar machen
+    const videoPlayer = document.getElementById('video-player');
+    videoPlayer.controls = true; // Steuerungen anzeigen
+    videoPlayer.load(); // Player mit neuer Quelle neu laden
 }
+
 
 // Aktualisierung der Uhrzeit
 function updateClock() {
@@ -349,11 +353,13 @@ function updateClock() {
 
 
 
-
-        // Funktion zum Abspielen eines Streams im Video-Player
+// Funktion zum Abspielen eines Streams im Video-Player
 function playStream(streamURL, subtitleURL) {
     const videoPlayer = document.getElementById('video-player');
     const subtitleTrack = document.getElementById('subtitle-track');
+
+    // Debugging URL
+    console.log('Versuche Stream abzuspielen:', streamURL);
 
     if (subtitleURL) {
         subtitleTrack.src = subtitleURL;
@@ -362,6 +368,10 @@ function playStream(streamURL, subtitleURL) {
         subtitleTrack.src = '';
         subtitleTrack.track.mode = 'hidden'; // Untertitel ausblenden
     }
+
+    // Debugging Formatunterstützung
+    console.log('HLS unterstützt:', Hls.isSupported());
+    console.log('DASH unterstützt:', typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined');
 
     if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
         const hls = new Hls();
@@ -378,13 +388,17 @@ function playStream(streamURL, subtitleURL) {
         videoPlayer.addEventListener('loadedmetadata', function () {
             videoPlayer.play();
         });
-    } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
+    } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm') || videoPlayer.canPlayType('video/mp2t')) {
         videoPlayer.src = streamURL;
-        videoPlayer.play();
+        videoPlayer.addEventListener('loadedmetadata', function () {
+            videoPlayer.play();
+        });
     } else {
-        console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
+        console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt:', streamURL);
     }
 }
+
+
 
 
 
