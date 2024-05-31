@@ -216,6 +216,7 @@ function updateSidebarFromM3U(data) {
 
     const streamURLs = extractStreamURLs(data);
     const lines = data.split('\n');
+    const promises = [];
 
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
@@ -231,53 +232,73 @@ function updateSidebarFromM3U(data) {
                 const streamURL = streamURLs[channelId] && streamURLs[channelId].shift(); // Nächste URL für den Channel
 
                 if (streamURL) {
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `
-                        <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
-                            <div class="logo-container">
-                                <img src="${imgURL}" alt="${name} Logo">
-                            </div>
-                            <span class="sender-name">${name}</span>
-                            <span class="epg-channel">
-                                <span>${programInfo.title}</span>
-                                <div class="epg-timeline">
-                                    <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
-                                    <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
-                                </div>
-                            </span>
-                        </div>
-                    `;
-                    sidebarList.appendChild(listItem);
+                    promises.push(
+                        fetch(streamURL)
+                            .then(response => response.ok ? 'online' : 'offline')
+                            .catch(error => {
+                                console.error('Fehler beim Überprüfen des Stream-Status:', error);
+                                return 'offline';
+                            })
+                            .then(status => {
+                                const listItem = document.createElement('li');
+                                listItem.innerHTML = `
+                                    <div class="channel-info ${status === 'online' ? 'online' : ''}" data-stream="${streamURL}" data-channel-id="${channelId}">
+                                        <div class="logo-container">
+                                            <img src="${imgURL}" alt="${name} Logo">
+                                        </div>
+                                        <span class="sender-name">${name}</span>
+                                        <span class="epg-channel">
+                                            <span>${programInfo.title}</span>
+                                            <div class="epg-timeline">
+                                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                `;
+                                sidebarList.appendChild(listItem);
+                            })
+                    );
                 }
             }
         }
     });
 
-    checkStreamStatus();
+    Promise.all(promises)
+        .then(() => checkStreamStatus());
 }
+
 
 
 // Funktion zum Überprüfen des Status der Streams
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
+    const promises = [];
+
     sidebarChannels.forEach(channel => {
         const streamURL = channel.dataset.stream;
         if (streamURL) {
-            fetch(streamURL)
-                .then(response => {
-                    if (response.ok) {
-                        channel.querySelector('.sender-name').classList.add('online');
-                    } else {
+            promises.push(
+                fetch(streamURL)
+                    .then(response => {
+                        if (response.ok) {
+                            channel.querySelector('.sender-name').classList.add('online');
+                        } else {
+                            channel.querySelector('.sender-name').classList.remove('online');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fehler beim Überprüfen des Stream-Status:', error);
                         channel.querySelector('.sender-name').classList.remove('online');
-                    }
-                })
-                .catch(error => {
-                    console.error('Fehler beim Überprüfen des Stream-Status:', error);
-                    channel.querySelector('.sender-name').classList.remove('online');
-                });
+                    })
+            );
         }
     });
+
+    Promise.all(promises)
+        .then(() => console.log('Stream-Status aktualisiert.'));
 }
+
 
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
