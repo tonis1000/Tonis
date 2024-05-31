@@ -176,6 +176,10 @@ button:hover {
     background-color: #333;
     color: #fff;
     border-bottom: 1px solid #ccc;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-bottom-width: 0px;
+    height: 79px;
 }
 
 .player-header input {
