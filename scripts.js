@@ -326,6 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+
 function setCurrentChannel(channelName, streamUrl) {
     const currentChannelName = document.getElementById('current-channel-name');
     const streamUrlInput = document.getElementById('stream-url');
@@ -339,6 +340,7 @@ function setCurrentChannel(channelName, streamUrl) {
 }
 
 
+
 // Aktualisierung der Uhrzeit
 function updateClock() {
     const now = new Date();
@@ -349,7 +351,6 @@ function updateClock() {
     document.getElementById('datum').textContent = datum;
     document.getElementById('uhrzeit').textContent = uhrzeit;
 }
-
 
 
 
@@ -371,32 +372,29 @@ function playStream(streamURL, subtitleURL) {
 
     // Debugging Formatunterstützung
     console.log('HLS unterstützt:', Hls.isSupported());
-    console.log('DASH unterstützt:', typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined');
 
-    if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
+    if (Hls.isSupported()) {
         const hls = new Hls();
         hls.loadSource(streamURL);
         hls.attachMedia(videoPlayer);
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            console.log('HLS Manifest geladen, starte Wiedergabe');
             videoPlayer.play();
         });
-    } else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
-        const dashPlayer = dashjs.MediaPlayer().create();
-        dashPlayer.initialize(videoPlayer, streamURL, true);
+        hls.on(Hls.Events.ERROR, function (event, data) {
+            console.error('HLS Fehler:', data);
+        });
     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
         videoPlayer.src = streamURL;
         videoPlayer.addEventListener('loadedmetadata', function () {
-            videoPlayer.play();
-        });
-    } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm') || videoPlayer.canPlayType('video/mp2t')) {
-        videoPlayer.src = streamURL;
-        videoPlayer.addEventListener('loadedmetadata', function () {
+            console.log('HLS über native Unterstützung geladen, starte Wiedergabe');
             videoPlayer.play();
         });
     } else {
-        console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt:', streamURL);
+        console.error('HLS wird vom aktuellen Browser nicht unterstützt:', streamURL);
     }
 }
+
 
 
 
