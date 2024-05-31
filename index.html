@@ -44,13 +44,15 @@
                 <input type="file" id="subtitle-file" accept=".srt" style="display: none;">
                 <button id="play-button">Play</button>
             </div>
-        <video id="video-player" class="video-player" controls>
-            <!-- Fallback-Inhalt für Browser, die kein HTML5-Video unterstützen -->
-            <source src="" type="video/mp4"> <!-- Standard-Format -->
-            <source src="" type="video/webm"> <!-- WebM-Format -->
-            <source src="" type="video/ogg"> <!-- Ogg-Format -->
-            <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
-      </video>
+<video id="video-player" class="video-player" controls>
+    <!-- Fallback-Inhalt für Browser, die kein HTML5-Video unterstützen -->
+    <source src="" type="video/mp4"> <!-- Standard-Format -->
+    <source src="" type="video/webm"> <!-- WebM-Format -->
+    <source src="" type="video/ogg"> <!-- Ogg-Format -->
+    <!-- Untertitel -->
+    <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
+</video>
+
             <div id="program-info">
                 <h4 id="program-title"></h4>
                 <p id="program-desc"></p>
