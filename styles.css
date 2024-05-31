@@ -16,20 +16,18 @@
     border-top: 5px solid transparent;
     font-size: 16px;
     background-color: #333;
-    margin-right: 10px;
+    border-top-width: 0px;
+    padding-top: 5px;
 }
 
 /* Styling für Informationen und Button-Reihen innerhalb des Containers */
 .info-panel, .button-row {
     display: flex;
-    width: 310px;  /* Etwas schmaler als der Hauptcontainer für visuelle Trennung */
     padding-left: 15px;
 }
 
 .info-panel {
-    font-size: 21px;
     font-style: italic;
-    font-weight: 500;
 }
 
 .button-row {
@@ -60,11 +58,7 @@ button:hover {
 
 /* Sidebar-Styling mit spezifischen Maßen und Layout-Einstellungen */
 .sidebar {
-    width: 350px;
     height: 740px;
-    padding: 10px;
-    margin-top: 2px;
-    margin-bottom: 5px;
 }
 
 .sidebar h2 {
@@ -110,7 +104,6 @@ button:hover {
 
 .logo-container {
     width: 35px; /* Breite des Logo-Containers */
-    display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
@@ -136,6 +129,7 @@ button:hover {
     font-size: 12px;
     color: #ffffff;
     flex: 1; /* Alle inneren Elemente gleichmäßig verteilen */
+    width: 120px;
 }
 
 .epg-channel span {
