@@ -103,7 +103,7 @@ button:hover {
 }
 
 .logo-container {
-    width: 35px; /* Breite des Logo-Containers */
+    width: 50px; /* Breite des Logo-Containers */
     justify-content: center;
     align-items: center;
     overflow: hidden;
@@ -229,6 +229,7 @@ button:hover {
     color: #ffffff; /* Farbe des Sendernamens */
     width: 70px;
     margin-right: 10px; /* Abstand zwischen dem Senderlogo und dem Sendername */
+    padding-left: 10px;
 }
 
 
@@ -236,7 +237,6 @@ button:hover {
 .content-wrapper {
     display: flex;
     gap: 20px; /* Abstand zwischen dem Player und dem zusätzlichen Inhalt */
-    margin-top: 20px;
 }
 
 /* Zusätzlicher Inhalt rechts neben dem Player */
