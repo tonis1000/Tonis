@@ -183,6 +183,7 @@ sidebarList.addEventListener('click', function (event) {
 
 
 
+
 // Funktion zum Aktualisieren des Players mit der Programmbeschreibung
 function updatePlayerDescription(title, description) {
     document.getElementById('program-title').textContent = title;
