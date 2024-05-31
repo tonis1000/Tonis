@@ -237,6 +237,7 @@ button:hover {
 .content-wrapper {
     display: flex;
     gap: 20px; /* Abstand zwischen dem Player und dem zusätzlichen Inhalt */
+    padding-left: 5px;
 }
 
 /* Zusätzlicher Inhalt rechts neben dem Player */
