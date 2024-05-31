@@ -350,7 +350,13 @@ function updateClock() {
 
 
 
-        // Funktion zum Abspielen eines Streams im Video-Player
+// Video.js Player Konfiguration
+var videoPlayer = videojs('video-player');
+videoPlayer.ready(function() {
+    console.log('Video.js player is ready');
+});
+
+// Funktion zum Abspielen eines Streams im Video-Player
 function playStream(streamURL, subtitleURL) {
     const videoPlayer = document.getElementById('video-player');
     const subtitleTrack = document.getElementById('subtitle-track');
@@ -405,6 +411,7 @@ function handleSubtitleFile(file) {
     reader.readAsText(file);
 }
 
+
 // Funktion zum Konvertieren von SRT in VTT
 function convertSrtToVtt(srtContent) {
     // SRT-Untertitelzeilen in VTT-Format konvertieren
@@ -417,37 +424,35 @@ function convertSrtToVtt(srtContent) {
     return vttContent;
 }
 
+// Event-Listener für den Play-Button und Datei-Eingabe
+document.addEventListener('DOMContentLoaded', function () {
+    const playButton = document.getElementById('play-button');
+    const streamUrlInput = document.getElementById('stream-url');
+    const subtitleFileInput = document.getElementById('subtitle-file');
 
+    const playStreamFromInput = () => {
+        const streamUrl = streamUrlInput.value;
+        const subtitleFile = subtitleFileInput.files[0];
+        if (streamUrl) {
+            if (subtitleFile) {
+                handleSubtitleFile(subtitleFile);
+            }
+            playStream(streamUrl, subtitleFile ? document.getElementById('subtitle-track').src : null);
+        }
+    };
 
-        // Event-Listener für den Play-Button und Datei-Eingabe
-        document.addEventListener('DOMContentLoaded', function () {
-            const playButton = document.getElementById('play-button');
-            const streamUrlInput = document.getElementById('stream-url');
-            const subtitleFileInput = document.getElementById('subtitle-file');
+    playButton.addEventListener('click', playStreamFromInput);
 
-            const playStreamFromInput = () => {
-                const streamUrl = streamUrlInput.value;
-                const subtitleFile = subtitleFileInput.files[0];
-                if (streamUrl) {
-                    if (subtitleFile) {
-                        handleSubtitleFile(subtitleFile);
-                    }
-                    playStream(streamUrl, subtitleFile ? document.getElementById('subtitle-track').src : null);
-                }
-            };
+    streamUrlInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            playStreamFromInput();
+        }
+    });
 
-            playButton.addEventListener('click', playStreamFromInput);
-
-            streamUrlInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    playStreamFromInput();
-                }
-            });
-
-            subtitleFileInput.addEventListener('change', (event) => {
-                const subtitleFile = event.target.files[0];
-                if (subtitleFile) {
-                    handleSubtitleFile(subtitleFile);
-                }
-            });
-        });
+    subtitleFileInput.addEventListener('change', (event) => {
+        const subtitleFile = event.target.files[0];
+        if (subtitleFile) {
+            handleSubtitleFile(subtitleFile);
+        }
+    });
+});
