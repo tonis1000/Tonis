@@ -173,18 +173,15 @@ button:hover {
     flex-direction: column; /* Ändert das Layout zu einer Spalte */
 }
 
+/* Grundlegende Stile für die Player-Header */
 .player-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 10px;
     background-color: #333;
     color: #fff;
     border-bottom: 1px solid #ccc;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    border-bottom-width: 0px;
-    height: 79px;
+    height: auto;
 }
 
 .player-header input {
@@ -306,14 +303,16 @@ div.next-program h4 {
 
 /* Spezifische Stile für das Logo im Player-Bereich */
 .player-logo-container {
-    width: 100px; /* Breite des Logos im Player-Bereich */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;  /* Breite des Logos im Player-Bereich */
     height: 100px; /* Höhe des Logos im Player-Bereich */
 }
 
 .player-logo-container img {
     width: 100%;
     height: 100%;
-    padding-bottom: 20px;
     object-fit: contain;
 }
 
