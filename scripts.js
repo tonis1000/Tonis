@@ -459,14 +459,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Event-Listener für die neuen Buttons
-    const clearButton = document.getElementById('clear-button');
-    const pasteButton = document.getElementById('paste-button');
-    const extraButton = document.getElementById('extra-button');
+// Event-Listener für die neuen Buttons
+const clearButton = document.getElementById('clear-button');
+const pasteButton = document.getElementById('paste-button');
+const copyButton = document.getElementById('copy-button'); // Umbenennung des Extra-Buttons
 
-    clearButton.addEventListener('click', function() {
-        streamUrlInput.value = '';
-    });
+clearButton.addEventListener('click', function() {
+    streamUrlInput.value = '';
+});
 
 pasteButton.addEventListener('click', function() {
     navigator.clipboard.readText().then(text => {
@@ -477,9 +477,13 @@ pasteButton.addEventListener('click', function() {
     });
 });
 
-
-    extraButton.addEventListener('click', function() {
-        // Hier die Funktionalität für den Extra-Button implementieren
-        alert('Extra-Button wurde geklickt!');
+copyButton.addEventListener('click', function() {
+    const textToCopy = streamUrlInput.value;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        console.log('Text kopiert:', textToCopy);
+        alert('Text wurde erfolgreich kopiert!');
+    }).catch(err => {
+        console.error('Fehler beim Kopieren des Textes:', err);
+        alert('Fehler beim Kopieren des Textes. Bitte versuchen Sie es erneut.');
     });
 });
