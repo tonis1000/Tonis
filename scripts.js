@@ -37,14 +37,20 @@ document.getElementById('clear-button').addEventListener('click', function() {
 });
 
 // Einfügen Button
-document.getElementById('insert-button').addEventListener('click', function() {
-    const clipboardData = navigator.clipboard.readText();
-    clipboardData.then(text => {
-        document.getElementById('stream-url').value = text;
-    }).catch(err => {
-        console.error('Fehler beim Lesen der Zwischenablage:', err);
-    });
+document.getElementById('insert-button').addEventListener('click', async function() {
+    try {
+        const clipboardData = await navigator.clipboard.read();
+        if (clipboardData && clipboardData.length > 0 && clipboardData[0].types.includes('text/plain')) {
+            const text = await clipboardData[0].getType('text/plain');
+            document.getElementById('stream-url').value = text;
+        } else {
+            console.error('Kein Text in der Zwischenablage gefunden.');
+        }
+    } catch (error) {
+        console.error('Fehler beim Lesen der Zwischenablage:', error);
+    }
 });
+
 
 
 // Kopieren Button
