@@ -40,22 +40,26 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 
 
-// Einfügen Button
+// Event-Handler für das Einfügen des kopierten Textes
 document.getElementById('insert-button').addEventListener('click', function() {
-    // Hier könnte zusätzlicher Code stehen, falls gewünscht
+    // Erstellen eines unsichtbaren Textfelds
+    const clipboardInput = document.createElement('input');
+    clipboardInput.style.position = 'absolute';
+    clipboardInput.style.left = '-1000px';
+    clipboardInput.style.top = '-1000px';
+    document.body.appendChild(clipboardInput);
+
+    // Fokus auf das unsichtbare Textfeld setzen und den Inhalt einfügen
+    clipboardInput.focus();
+    document.execCommand('paste');
+
+    // Wert des unsichtbaren Textfelds in das Eingabefeld einfügen
+    document.getElementById('stream-url').value = clipboardInput.value;
+
+    // Unsichtbares Textfeld entfernen
+    document.body.removeChild(clipboardInput);
 });
 
-// Event-Handler für das Einfügen von Text aus der Zwischenablage
-function handlePaste(event) {
-    // Text aus dem Event abrufen
-    const pastedText = (event.clipboardData || window.clipboardData).getData('text');
-    
-    // Einfügen des Textes in das Eingabefeld
-    document.getElementById('stream-url').value = pastedText;
-}
-
-// Einfügen des Event-Handlers für das 'paste'-Ereignis
-document.getElementById('stream-url').addEventListener('paste', handlePaste);
 
 
 
