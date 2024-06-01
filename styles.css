@@ -13,11 +13,6 @@ body {
     font-weight: bold;
 }
 
-/* CSS-Styling für den Senderstatus "online" */
-.channel-info.online .sender-name {
-        color: lightgreen;
-        font-weight: bold;
-}
 
 .text-white {
     color: #ffffff;  /* Weiße Schriftfarbe für übergreifende Textelemente */
