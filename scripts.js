@@ -503,15 +503,15 @@ function convertSrtToVtt(srtContent) {
             });
         });
 
-// JavaScript-Code, um das Klicken auf die Überschrift zu ermöglichen
-const foothubTitle = document.getElementById('foothub-title');
-const foothubContent = document.getElementById('foothub-content');
-
-foothubTitle.addEventListener('click', function() {
-    if (foothubContent.style.display === 'none') {
-        foothubContent.style.display = 'block';
-    } else {
-        foothubContent.style.display = 'none';
-    }
-});
-
+function toggleContent() {
+            var contentBody = document.getElementById("contentBody");
+            if (contentBody.style.display === "none") {
+                contentBody.style.display = "block";
+                contentBody.style.width = "300px"; /* Breite des Inhalts nach dem Aufklappen */
+                contentBody.style.height = "700px"; /* Höhe des Inhalts nach dem Aufklappen */
+            } else {
+                contentBody.style.display = "none";
+                contentBody.style.width = "0"; /* Verstecke den Inhalt */
+                contentBody.style.height = "0"; /* Verstecke den Inhalt */
+            }
+        }
