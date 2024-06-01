@@ -18,61 +18,79 @@ function loadExternalPlaylist() {
 
 
 
+
+
+
+
 // Funktion zum Laden der Sport-Playlist und Aktualisieren der Sidebar
-function loadSportPlaylist() {   
-    const corsProxy = 'https://api.allorigins.win/raw?url=';
-    const playlistURL = 'https://foothubhd.xyz/program.txt';
-
-    fetch(corsProxy + encodeURIComponent(playlistURL))
+// Funktion zum Laden der Sport-Playlist
+function loadSportPlaylist(url) {
+    fetch(url)
         .then(response => response.text())
-        .then(data => {
-            const sportPlaylist = document.getElementById('sportPlaylist');
-            sportPlaylist.innerHTML = ''; // Bestehende Liste leeren
-
-            const lines = data.split('\n');
-            let currentDate = '';
-
-            lines.forEach(line => {
-                if (line.includes('ΠΡΟΓΡΑΜΜΑ')) {
-                    currentDate = line.trim();
-                    const dateHeader = document.createElement('h3');
-                    dateHeader.textContent = currentDate;
-                    dateHeader.style.color = 'blue';
-                    sportPlaylist.appendChild(dateHeader);
-                } else if (line.trim() && !line.includes('ΚΑΝΤΕ ΑΝΤΙΓΡΑΦΗ') && !line.includes('ΑΜΑ ΘΕΛΕΤΕ ΝΑ ΒΑΛΕΤΕ ΤΟΥΣ ΑΓΩΝΕΣ ΣΕ ΔΙΚΟ ΣΑΣ SITE')) {
-                    const gameInfo = document.createElement('div');
-                    const gameTitle = document.createElement('p');
-                    gameTitle.textContent = line.split('https')[0].trim();
-                    gameInfo.appendChild(gameTitle);
-
-                    const urls = line.match(/https?:\/\/\S+/g) || [];
-                    urls.forEach((url, index) => {
-                        const link = document.createElement('a');
-                        link.textContent = `Link${index + 1}`;
-                        link.href = url;
-                        link.target = '_blank';
-                        link.style.color = 'yellow'; // Standardfarbe Gelb
-                        link.style.marginRight = '10px';
-                        gameInfo.appendChild(link);
-
-                        // Überprüfen, ob der Link online ist
-                        checkLinkStatus(link);
-                    });
-
-                    sportPlaylist.appendChild(gameInfo);
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Fehler beim Laden der Sport-Playlist:', error);
-        });
+        .then(data => parseSportPlaylist(data))
+        .catch(error => console.error('Fehler beim Laden der Sport-Playlist:', error));
 }
+
+// Funktion zum Parsen der Sport-Playlist
+function parseSportPlaylist(data) {
+    const lines = data.split('\n');
+    let currentDay = '';
+    let events = [];
+    for (const line of lines) {
+        if (line.startsWith('ΠΡΟΓΡΑΜΜΑ')) {
+            currentDay = line;
+        } else if (line.trim() !== '') {
+            events.push(parseEvent(line));
+        }
+    }
+    generateSidebar(events);
+}
+
+// Funktion zum Parsen eines einzelnen Events
+function parseEvent(eventLine) {
+    const [timeAndEvent, ...links] = eventLine.split(/\s+/);
+    const timeAndEventParts = timeAndEvent.split(' ');
+    const time = timeAndEventParts.shift();
+    const event = timeAndEventParts.join(' ');
+    return { time, event, links };
+}
+
+// Funktion zum Generieren der Sidebar
+function generateSidebar(events) {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.innerHTML = ''; // Leeren der Sidebar
+    events.forEach(event => {
+        const eventDiv = document.createElement('div');
+        eventDiv.innerHTML = `<strong>${event.time}</strong> ${event.event}`;
+        event.links.forEach((link, index) => {
+            const linkButton = document.createElement('button');
+            linkButton.textContent = `Link${index + 1}`;
+            linkButton.addEventListener('click', () => playVideo(link));
+            eventDiv.appendChild(linkButton);
+        });
+        sidebar.appendChild(eventDiv);
+    });
+}
+
+// Funktion zum Abspielen des Videos im Player
+function playVideo(videoUrl) {
+    // Hier implementiere den Code, um das Video im Player abzuspielen
+    console.log('Video wird abgespielt:', videoUrl);
+}
+
+// Starten des Ladens der Sport-Playlist
+loadSportPlaylist('https://foothubhd.xyz/program.txt');
 
 
 
 document.getElementById('sportPlaylist').addEventListener('click', function() {
     loadSportPlaylist();
 });
+
+
+
+
+
 
 
 
