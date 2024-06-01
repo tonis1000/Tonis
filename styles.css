@@ -316,11 +316,6 @@ label[for="subtitle-file"] {
     overflow: auto; /* Falls der Inhalt zu groß ist */
 }
 
-.content-body iframe {
-    width: 100%;
-    height: 500px;
-}
-
 
 /* Stil für Programminformationen */
 #program-info {
