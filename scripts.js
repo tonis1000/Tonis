@@ -38,38 +38,7 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 
 
-
-
-document.getElementById('insert-button').addEventListener('click', function() {
-    const hiddenInput = document.getElementById('hidden-input');
-    const streamUrlInput = document.getElementById('stream-url');
-
-    // Fokus auf das versteckte Textfeld setzen
-    hiddenInput.style.position = 'absolute';
-    hiddenInput.style.left = '0px';
-    hiddenInput.focus();
-
-    // 'paste' Event-Listener auf das versteckte Textfeld setzen
-    hiddenInput.addEventListener('paste', function(event) {
-        // Prevent the default paste action
-        event.preventDefault();
-
-        // Get the clipboard text
-        const clipboardData = event.clipboardData || window.clipboardData;
-        const pastedData = clipboardData.getData('Text');
-
-        // Set the value of the visible input field to the pasted text
-        streamUrlInput.value = pastedData;
-
-        // Hide the hidden input field again
-        hiddenInput.style.position = 'absolute';
-        hiddenInput.style.left = '-9999px';
-    }, { once: true });
-
-    // Simulate a paste action (this may not work due to browser security restrictions)
-    document.execCommand('paste');
-});
-
+// Einfügen Button noch nichts
 
 
 
