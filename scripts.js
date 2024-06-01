@@ -427,35 +427,57 @@ function convertSrtToVtt(srtContent) {
 
 
         // Event-Listener für den Play-Button und Datei-Eingabe
-        document.addEventListener('DOMContentLoaded', function () {
-            const playButton = document.getElementById('play-button');
-            const streamUrlInput = document.getElementById('stream-url');
-            const subtitleFileInput = document.getElementById('subtitle-file');
+document.addEventListener('DOMContentLoaded', function () {
+    // Event-Listener für den Play-Button und Datei-Eingabe
+    const playButton = document.getElementById('play-button');
+    const streamUrlInput = document.getElementById('stream-url');
+    const subtitleFileInput = document.getElementById('subtitle-file');
 
-            const playStreamFromInput = () => {
-                const streamUrl = streamUrlInput.value;
-                const subtitleFile = subtitleFileInput.files[0];
-                if (streamUrl) {
-                    if (subtitleFile) {
-                        handleSubtitleFile(subtitleFile);
-                    }
-                    playStream(streamUrl, subtitleFile ? document.getElementById('subtitle-track').src : null);
-                }
-            };
+    const playStreamFromInput = () => {
+        const streamUrl = streamUrlInput.value;
+        const subtitleFile = subtitleFileInput.files[0];
+        if (streamUrl) {
+            if (subtitleFile) {
+                handleSubtitleFile(subtitleFile);
+            }
+            playStream(streamUrl, subtitleFile ? document.getElementById('subtitle-track').src : null);
+        }
+    };
 
-            playButton.addEventListener('click', playStreamFromInput);
+    playButton.addEventListener('click', playStreamFromInput);
 
-            streamUrlInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    playStreamFromInput();
-                }
-            });
+    streamUrlInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            playStreamFromInput();
+        }
+    });
 
-            subtitleFileInput.addEventListener('change', (event) => {
-                const subtitleFile = event.target.files[0];
-                if (subtitleFile) {
-                    handleSubtitleFile(subtitleFile);
-                }
-            });
+    subtitleFileInput.addEventListener('change', (event) => {
+        const subtitleFile = event.target.files[0];
+        if (subtitleFile) {
+            handleSubtitleFile(subtitleFile);
+        }
+    });
+
+    // Event-Listener für die neuen Buttons
+    const clearButton = document.getElementById('clear-button');
+    const pasteButton = document.getElementById('paste-button');
+    const extraButton = document.getElementById('extra-button');
+
+    clearButton.addEventListener('click', function() {
+        streamUrlInput.value = '';
+    });
+
+    pasteButton.addEventListener('click', function() {
+        navigator.clipboard.readText().then(text => {
+            streamUrlInput.value = text;
+        }).catch(err => {
+            console.error('Failed to read clipboard contents: ', err);
         });
+    });
 
+    extraButton.addEventListener('click', function() {
+        // Hier die Funktionalität für den Extra-Button implementieren
+        alert('Extra-Button wurde geklickt!');
+    });
+});
