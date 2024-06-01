@@ -292,29 +292,30 @@ label[for="subtitle-file"] {
 }
 
 /* Zusätzlicher Inhalt rechts neben dem Player */
-.additional-content {
-    margin-top: 20px;
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    overflow: hidden;
-    width: 300px; /* Breite der Überschrift */
-    height: 50px; /* Höhe der Überschrift */
-}
 
-.content-title {
-    padding: 10px;
-    cursor: pointer;
-}
+        .additional-content {
+            margin-top: 20px;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 300px; /* Breite der Überschrift */
+            height: 50px; /* Höhe der Überschrift */
+        }
 
-.content-body {
-    padding: 0 10px;
-    display: none; /* Verstecke den Inhalt standardmäßig */
-    width: 300px; /* Breite des Inhalts nach dem Aufklappen */
-    height: 700px; /* Höhe des Inhalts nach dem Aufklappen */
-    overflow: auto; /* Falls der Inhalt zu groß ist */
-}
+        .content-title {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .content-body {
+            padding: 0 10px;
+            display: none; /* Verstecke den Inhalt standardmäßig */
+            width: 300px; /* Breite des Inhalts nach dem Aufklappen */
+            height: 700px; /* Höhe des Inhalts nach dem Aufklappen */
+            overflow: auto; /* Falls der Inhalt zu groß ist */
+        }
 
 
 /* Stil für Programminformationen */
