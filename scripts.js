@@ -295,7 +295,7 @@ function updateSidebarFromM3U(data) {
 }
 
 
-// Funktion zum Überprüfen des Status der Streams
+// Funktion zum Überprüfen des Status der Streams und Markieren der gesamten Sidebar-Einträge
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
     sidebarChannels.forEach(channel => {
@@ -304,18 +304,25 @@ function checkStreamStatus() {
             fetch(streamURL)
                 .then(response => {
                     if (response.ok) {
-                        channel.querySelector('.sender-name').classList.add('online');
+                        channel.classList.add('online'); // Markiere den gesamten Sidebar-Eintrag
+                        channel.querySelector('.sender-name').style.color = 'lightgreen'; // Ändere die Textfarbe des Sendernamens
+                        channel.querySelector('.sender-name').style.fontWeight = 'bold'; // Ändere die Schriftstärke des Sendernamens
                     } else {
-                        channel.querySelector('.sender-name').classList.remove('online');
+                        channel.classList.remove('online'); // Entferne die Markierung
+                        channel.querySelector('.sender-name').style.color = ''; // Setze die Textfarbe des Sendernamens zurück
+                        channel.querySelector('.sender-name').style.fontWeight = ''; // Setze die Schriftstärke des Sendernamens zurück
                     }
                 })
                 .catch(error => {
                     console.error('Fehler beim Überprüfen des Stream-Status:', error);
-                    channel.querySelector('.sender-name').classList.remove('online');
+                    channel.classList.remove('online'); // Entferne die Markierung bei einem Fehler
+                    channel.querySelector('.sender-name').style.color = ''; // Setze die Textfarbe des Sendernamens zurück
+                    channel.querySelector('.sender-name').style.fontWeight = ''; // Setze die Schriftstärke des Sendernamens zurück
                 });
         }
     });
 }
+
 
 
 // Ereignisbehandler für Klicks auf Sender
