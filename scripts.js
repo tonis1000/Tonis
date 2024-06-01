@@ -35,7 +35,7 @@ function parseSportPlaylist(data) {
     const lines = data.split('\n');
     let currentDay = '';
     let events = [];
-    const allEvents = []; // Speichert alle Events, um sie später zu generieren
+    const allEvents = [];
 
     for (const line of lines) {
         if (line.startsWith('ΠΡΟΓΡΑΜΜΑ')) {
@@ -49,7 +49,6 @@ function parseSportPlaylist(data) {
         }
     }
 
-    // Füge das letzte Tagesprogramm hinzu
     if (currentDay && events.length) {
         allEvents.push({ day: currentDay, events });
     }
@@ -59,12 +58,18 @@ function parseSportPlaylist(data) {
 
 // Funktion zum Parsen eines einzelnen Events
 function parseEvent(eventLine) {
-    const parts = eventLine.split(' ');
-    const time = parts.shift();
-    const event = parts.join(' ');
+    const timeAndEvent = eventLine.match(/^\d{2}:\d{2} .+/);
     const links = eventLine.match(/https?:\/\/\S+(?=\s|$)/g) || [];
-    const validLinks = links.filter(link => !link.endsWith('η'));
-    return { time, event, links: validLinks };
+    const validLinks = links.filter(link => !link.includes('η'));
+
+    if (timeAndEvent) {
+        const parts = timeAndEvent[0].split(' ');
+        const time = parts.shift();
+        const event = parts.join(' ');
+        return { time, event, links: validLinks };
+    }
+
+    return { time: '', event: eventLine.trim(), links: validLinks };
 }
 
 // Funktion zum Generieren der Sidebar
@@ -78,32 +83,32 @@ function generateSidebar(allEvents) {
         sidebar.appendChild(dayDiv);
 
         dayEvent.events.forEach(event => {
-            const eventDiv = document.createElement('div');
-            eventDiv.innerHTML = `<strong>${event.time}</strong> ${event.event}`;
-            event.links.forEach((link, index) => {
-                const linkButton = document.createElement('button');
-                linkButton.textContent = `Link${index + 1}`;
-                linkButton.addEventListener('click', () => playVideo(link));
-                eventDiv.appendChild(linkButton);
+            if (event.time && event.event) {
+                const eventDiv = document.createElement('div');
+                eventDiv.innerHTML = `<strong>${event.time}</strong> ${event.event}`;
+                sidebar.appendChild(eventDiv);
+            }
+            event.links.forEach(link => {
+                const linkElement = document.createElement('a');
+                linkElement.href = link;
+                linkElement.target = "_blank";
+                linkElement.textContent = link;
+                sidebar.appendChild(linkElement);
             });
-            sidebar.appendChild(eventDiv);
         });
     });
 }
 
 // Funktion zum Abspielen des Videos im Player
 function playVideo(videoUrl) {
-    // Hier implementiere den Code, um das Video im Player abzuspielen
     console.log('Video wird abgespielt:', videoUrl);
 }
 
 // Sport Playlist Button Event-Handler
 document.getElementById('sportPlaylist').addEventListener('click', function() {
-    // Leere die Sidebar, bevor die Sport-Playlist geladen wird
     const sidebar = document.getElementById('sidebar');
     sidebar.innerHTML = ''; // Sidebar leeren
 
-    // Lade die Sport-Playlist mit der entsprechenden URL
     loadSportPlaylist('https://foothubhd.xyz/program.txt');
 });
 
