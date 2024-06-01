@@ -26,17 +26,16 @@ function loadExternalPlaylist() {
 
 
 
-// Funktion zum Laden der Sport-Playlist
-function loadSportPlaylist() {
-    fetch('https://foothubhd.xyz/program.txt')
+// Funktion zum Laden der Playlist
+function loadPlaylist(url) {
+    fetch(url)
         .then(response => response.text())
-        .then(data => parseSportPlaylist(data))
-        .catch(error => console.error('Fehler beim Laden der Sport-Playlist:', error));
+        .then(data => parsePlaylist(data))
+        .catch(error => console.error('Fehler beim Laden der Playlist:', error));
 }
 
-
-// Funktion zum Parsen der Sport-Playlist
-function parseSportPlaylist(data) {
+// Funktion zum Parsen der Playlist
+function parsePlaylist(data) {
     const lines = data.split('\n');
     let currentDay = '';
     let events = [];
@@ -80,46 +79,37 @@ function parseEvent(eventLine) {
 // Funktion zum Generieren der Sidebar
 function generateSidebar(allEvents) {
     const sidebar = document.getElementById('sidebar');
-
-    // Sidebar erst leeren, wenn neue Daten geladen und verarbeitet wurden
-    sidebar.innerHTML = '';
+    sidebar.innerHTML = ''; // Leeren der Sidebar
 
     allEvents.forEach(dayEvent => {
         const dayDiv = document.createElement('div');
         dayDiv.innerHTML = `<strong>${dayEvent.day}</strong>`;
         sidebar.appendChild(dayDiv);
 
-        dayEvent.events.forEach(event => {
-            if (event.time && event.event) {
-                const eventDiv = document.createElement('div');
-                eventDiv.innerHTML = `<strong>${event.time}</strong> ${event.event}`;
-                sidebar.appendChild(eventDiv);
+        dayEvent.events.forEach((event, eventIndex) => {
+            const eventDiv = document.createElement('div');
+            eventDiv.innerHTML = `<strong>${event.time}</strong> ${event.event}`;
+            sidebar.appendChild(eventDiv);
 
-                event.links.forEach((link, index) => {
-                    const linkElement = document.createElement('a');
-                    linkElement.href = link;
-                    linkElement.target = "_blank";
-                    linkElement.textContent = `Link${index + 1}`;
-                    sidebar.appendChild(linkElement);
-                });
-            }
+            const linkDiv = document.createElement('div');
+            sidebar.appendChild(linkDiv);
+
+            event.links.forEach((link, linkIndex) => {
+                const linkElement = document.createElement('a');
+                linkElement.href = link;
+                linkElement.target = "_blank";
+                linkElement.textContent = `Link${eventIndex + 1}${linkIndex + 1}`;
+                linkDiv.appendChild(linkElement);
+            });
         });
     });
 }
 
-
-
-
-// Funktion zum Abspielen des Videos im Player
-function playVideo(videoUrl) {
-    console.log('Video wird abgespielt:', videoUrl);
-}
-
-// Sport Playlist Button Event-Handler
+// Event-Handler für den Sport-Playlist-Button
 document.getElementById('sportPlaylist').addEventListener('click', function() {
-    // Leere die Sidebar erst nach dem Laden der neuen Daten
-    loadSportPlaylist();
+    loadPlaylist('https://foothubhd.xyz/program.txt');
 });
+
 
 
 
