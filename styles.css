@@ -308,8 +308,7 @@ div.next-program h4 {
 
 /* Spezifische Stile für die Logos in der Sidebar */
 .sidebar-content .logo-container {
-    width: 50px; /* Breite des Logos in der Sidebar */
-    height: 50px; /* Höhe des Logos in der Sidebar */
+    width: 30px; /* Breite des Logos in der Sidebar */
 }
 
 .sidebar-content .logo-container img {
