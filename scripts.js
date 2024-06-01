@@ -19,6 +19,37 @@ function loadSportPlaylist() {
     alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
 
+// Playlist Button
+document.getElementById('playlist-button').addEventListener('click', function() {
+    const playlistURL = document.getElementById('stream-url').value;
+    if (playlistURL) {
+        fetch(playlistURL)
+            .then(response => response.text())
+            .then(data => updateSidebarFromM3U(data))
+            .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+    }
+});
+
+
+// Leeren Button
+document.getElementById('clear-button').addEventListener('click', function() {
+    document.getElementById('stream-url').value = ''; // Setzt den Wert des Eingabefelds auf leer
+});
+
+// Einfügen Button
+document.getElementById('insert-button').addEventListener('click', function() {
+    // Hier würdest du den kopierten Text aus der Zwischenablage einfügen
+    // Zum Beispiel: document.getElementById('stream-url').value = 'Kopierter Text';
+});
+
+// Kopieren Button
+document.getElementById('copy-button').addEventListener('click', function() {
+    var streamUrlInput = document.getElementById('stream-url');
+    streamUrlInput.select(); // Markiert den Text im Eingabefeld
+    document.execCommand('copy'); // Kopiert den markierten Text in die Zwischenablage
+});
+
+
 // Globales Objekt für EPG-Daten
 let epgData = {};
 
