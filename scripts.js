@@ -317,6 +317,7 @@ function checkStreamStatus() {
     });
 }
 
+
 // Ereignisbehandler für Klicks auf Sender
 document.addEventListener('DOMContentLoaded', function () {
     loadEPGData();
