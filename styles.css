@@ -54,10 +54,10 @@ body {
 
 /* Einheitliche Button-Stile */
 button {
-    background-color: #007bff;  /* Blaue Farbe für Buttons */
+    background-color: #444;  /* Dunkelgraue Farbe für Buttons */
     color: #fff;
     padding: 10px 20px;
-    border: none;
+    border: 1px solid #ccc;  /* Dezente Umrandung */
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -65,12 +65,12 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;  /* Dunklerer Blauton bei Hover */
+    background-color: #555;  /* Dunklerer Grauton bei Hover */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
 button:active {
-    background-color: #004080;  /* Noch dunklerer Blauton bei Aktivierung */
+    background-color: #666;  /* Noch dunklerer Grauton bei Aktivierung */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(2px);  /* Leichte Verschiebung nach unten bei Aktivierung */
 }
@@ -287,7 +287,7 @@ label[for="subtitle-file"] {
 .content-wrapper {
     display: flex;
     gap: 20px; /* Abstand zwischen dem Player und dem zusätzlichen Inhalt */
-    padding-left: 5px;
+    padding-left
 }
 
 /* Zusätzlicher Inhalt rechts neben dem Player */
