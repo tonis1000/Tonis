@@ -1,7 +1,6 @@
 /* Grundlegende Farben und Schriftgrößen als wiederverwendbare Klassen */
-
 body {
-background-color: #333;
+    background-color: #333;
 }
 
 .base-background {
@@ -184,123 +183,6 @@ button:hover {
     height: auto;
 }
 
-.player-header input {
-    flex: 1;
-    margin-left: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.player-header button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.player-header button:hover {
-    background-color: #0056b3;
-}
-
-.play-button {
-    margin-bottom: 10px;
-    margin-left: 10px;
-}
-
-.video-player {
-    width: 900px;
-    position: fixed;
-    bottom: 5px;
-    right: 5px;
-    z-index: 1000;
-    display: flex;
-    height: 700px;
-}
-
-.online {
-    color: lightgreen;
-    font-weight: bold;
-}
-
-#current-channel-name {
-    font-size: 18px; /* Größe des Sendernamens */
-    color: #ffffff; /* Farbe des Sendernamens */
-    width: 70px;
-    margin-right: 10px; /* Abstand zwischen dem Senderlogo und dem Sendername */
-    padding-left: 10px;
-}
-
-
-/* Wrapper für den Player und zusätzlichen Inhalt, um sie nebeneinander zu platzieren */
-.content-wrapper {
-    display: flex;
-    gap: 20px; /* Abstand zwischen dem Player und dem zusätzlichen Inhalt */
-    padding-left: 5px;
-}
-
-/* Zusätzlicher Inhalt rechts neben dem Player */
-#additionalContent {
-    width: 400px; /* Breite des zusätzlichen Inhalts */
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-#additionalContent iframe {
-    width: 100%; /* Iframe passt sich der Breite des Containers an */
-    height: 500px; /* Feste Höhe für das Iframe */
-}
-
-
-#stream-url {
-    width: 750px;
-}
-#program-info {
-  color: #ffffff;
-}
-
-
-
-.next-program {
-    margin-top: 2px;
-    margin-bottom: 2px; /* Ändere den Abstand zwischen den Programmen nach Bedarf */
-    color: #ffffff;
-}
-
-div.next-program p {
-    margin-top: 0px;
-}
-
-div.next-program h4 {
-    margin-top: 0px;
-}
-
-.next-program-title {
-    font-weight: bold;
-    margin-bottom: 2px;
-    cursor: pointer;
-}
-
-.next-program-desc {
-    margin-bottom: 2px;
-}
-
-.expandable {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-}
-
-.expandable.expanded {
-    max-height: 1000px; /* oder eine andere geeignete Höhe */
-}
-
 /* Spezifische Stile für das Logo im Player-Bereich */
 .player-logo-container {
     display: flex;
@@ -314,17 +196,6 @@ div.next-program h4 {
     width: 100%;
     height: 100%;
     object-fit: contain;
-}
-
-/* Spezifische Stile für die Logos in der Sidebar */
-.sidebar-content .logo-container {
-    width: 30px; /* Breite des Logos in der Sidebar */
-}
-
-.sidebar-content .logo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
 /* Container für Sendername, SRT-Label und Eingabefeld */
@@ -343,6 +214,7 @@ div.next-program h4 {
     width: 100%;
     margin-bottom: 5px;
 }
+
 /* Stil für den Sendername */
 #current-channel-name {
     font-size: 18px; /* Größe des Sendernamens */
@@ -388,6 +260,68 @@ label[for="subtitle-file"] {
     background-color: #0056b3;
 }
 
+/* Wrapper für den Player und zusätzlichen Inhalt, um sie nebeneinander zu platzieren */
+.content-wrapper {
+    display: flex;
+    gap: 20px; /* Abstand zwischen dem Player und dem zusätzlichen Inhalt */
+    padding-left: 5px;
+}
+
+/* Zusätzlicher Inhalt rechts neben dem Player */
+#additionalContent {
+    width: 400px; /* Breite des zusätzlichen Inhalts */
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#additionalContent iframe {
+    width: 100%; /* Iframe passt sich der Breite des Containers an */
+    height: 500px; /* Feste Höhe für das Iframe */
+}
+
+/* Stil für Programminformationen */
+#program-info {
+    color: #ffffff;
+}
+
+/* Stil für das nächste Programm */
+.next-program {
+    margin-top: 2px;
+    margin-bottom: 2px; /* Ändere den Abstand zwischen den Programmen nach Bedarf */
+    color: #ffffff;
+}
+
+div.next-program p {
+    margin-top: 0px;
+}
+
+div.next-program h4 {
+    margin-top: 0px;
+}
+
+.next-program-title {
+    font-weight: bold;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.next-program-desc {
+    margin-bottom: 2px;
+}
+
+.expandable {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.expandable.expanded {
+    max-height: 1000px; /* oder eine andere geeignete Höhe */
+}
+
 /* Für Smartphones im Hochformat */
 @media only screen and (max-width: 480px) {
     /* CSS-Regeln für Smartphones im Hochformat */
@@ -407,4 +341,3 @@ label[for="subtitle-file"] {
 @media only screen and (min-width: 1025px) {
     /* CSS-Regeln für Desktops und größere Bildschirme */
 }
-
