@@ -19,15 +19,15 @@ function loadExternalPlaylist() {
 
 
 // Funktion zum Laden der Sport-Playlist und Aktualisieren der Sidebar
-function loadSportPlaylist() {
-const corsProxy = 'https://api.allorigins.win/raw?url=';
-    const targetUrl = 'https://foothubhd.xyz/program.txt';
+function loadSportPlaylist() {   
+    const corsProxy = 'https://api.allorigins.win/raw?url=';
+    const playlistURL = 'https://foothubhd.xyz/program.txt';
 
-    fetch(corsProxy + encodeURIComponent(targetUrl))
+    fetch(corsProxy + encodeURIComponent(playlistURL))
         .then(response => response.text())
         .then(data => {
-            const channelList = document.getElementById('channelList');
-            channelList.innerHTML = ''; // Bestehende Liste leeren
+            const sportPlaylist = document.getElementById('sportPlaylist');
+            sportPlaylist.innerHTML = ''; // Bestehende Liste leeren
 
             const lines = data.split('\n');
             let currentDate = '';
@@ -38,7 +38,7 @@ const corsProxy = 'https://api.allorigins.win/raw?url=';
                     const dateHeader = document.createElement('h3');
                     dateHeader.textContent = currentDate;
                     dateHeader.style.color = 'blue';
-                    channelList.appendChild(dateHeader);
+                    sportPlaylist.appendChild(dateHeader);
                 } else if (line.trim() && !line.includes('ΚΑΝΤΕ ΑΝΤΙΓΡΑΦΗ') && !line.includes('ΑΜΑ ΘΕΛΕΤΕ ΝΑ ΒΑΛΕΤΕ ΤΟΥΣ ΑΓΩΝΕΣ ΣΕ ΔΙΚΟ ΣΑΣ SITE')) {
                     const gameInfo = document.createElement('div');
                     const gameTitle = document.createElement('p');
@@ -59,14 +59,17 @@ const corsProxy = 'https://api.allorigins.win/raw?url=';
                         checkLinkStatus(link);
                     });
 
-                    channelList.appendChild(gameInfo);
+                    sportPlaylist.appendChild(gameInfo);
                 }
             });
         })
         .catch(error => {
-            console.error('Error loading the games:', error);
+            console.error('Fehler beim Laden der Sport-Playlist:', error);
         });
 }
+
+
+
 document.getElementById('sportPlaylist').addEventListener('click', function() {
     loadSportPlaylist();
 });
