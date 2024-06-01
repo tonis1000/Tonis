@@ -38,17 +38,14 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 // Einfügen Button
 document.getElementById('insert-button').addEventListener('click', function() {
-    // Hier würdest du den kopierten Text aus der Zwischenablage einfügen
-    // Zum Beispiel: document.getElementById('stream-url').value = 'Kopierter Text';
+    const clipboardData = navigator.clipboard.readText();
+    clipboardData.then(text => {
+        document.getElementById('stream-url').value = text;
+    }).catch(err => {
+        console.error('Fehler beim Lesen der Zwischenablage:', err);
+    });
 });
 
-// Ereignisbehandler für das Einfügen von Text aus der Zwischenablage
-document.addEventListener('paste', function(event) {
-    const clipboardData = event.clipboardData || window.clipboardData;
-    const pastedText = clipboardData.getData('text');
-    const streamUrlInput = document.getElementById('stream-url');
-    streamUrlInput.value = pastedText;
-});
 
 // Kopieren Button
 document.getElementById('copy-button').addEventListener('click', function() {
