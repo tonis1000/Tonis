@@ -37,14 +37,15 @@
     </div>
     <div class="content-wrapper">
         <div class="player-container">
-    <div class="player-header">
-        <div class="logo-container" id="current-channel-logo"></div>
-        <span id="current-channel-name">Aktueller Sender</span>
-        <input type="text" id="stream-url" placeholder="Stream URL eingeben">
-        <label for="subtitle-file" style="cursor: pointer;">SRT</label>
-        <input type="file" id="subtitle-file" accept=".srt" style="display: none;">
-        <button id="play-button">Play</button>
-    </div>
+   <div class="player-header">
+    <div class="logo-container" id="current-channel-logo"></div>
+    <span id="current-channel-name">Aktueller Sender</span>
+    <input type="text" id="stream-url" placeholder="Stream URL eingeben">
+    <label for="subtitle-file" style="cursor: pointer;">SRT</label>
+    <input type="file" id="subtitle-file" accept=".srt" style="display: none;">
+    <button id="play-button">Play</button>
+</div>
+
             <video id="video-player" controls>
                 <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
             </video>
