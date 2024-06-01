@@ -289,7 +289,6 @@ label[for="subtitle-file"] {
     display: flex;
     gap: 20px; /* Abstand zwischen dem Player und dem zusätzlichen Inhalt */
     padding-left
-    padding-left: 10px;
 }
 
 /* Zusätzlicher Inhalt rechts neben dem Player */
