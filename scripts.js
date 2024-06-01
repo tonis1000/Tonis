@@ -180,7 +180,7 @@ sidebarList.addEventListener('click', function (event) {
         updateNextPrograms(channelId);
 
         // Zeigt das Logo des ausgewählten Senders an
-        const logoContainer = document.querySelector('.player-header .logo-container');
+        const logoContainer = document.getElementById('current-channel-logo');
         const logoImg = document.createElement('img');
         logoImg.src = channelInfo.querySelector('.logo-container img').src;
         logoImg.alt = 'Senderlogo';
