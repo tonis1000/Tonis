@@ -14,10 +14,63 @@ function loadExternalPlaylist() {
         .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
 }
 
+
+
+
+
 // Funktion zum Laden der Sport-Playlist und Aktualisieren der Sidebar
 function loadSportPlaylist() {
-    alert("Funktionalität für Sport-Playlist wird implementiert...");
+const corsProxy = 'https://api.allorigins.win/raw?url=';
+    const targetUrl = 'https://foothubhd.xyz/program.txt';
+
+    fetch(corsProxy + encodeURIComponent(targetUrl))
+        .then(response => response.text())
+        .then(data => {
+            const channelList = document.getElementById('channelList');
+            channelList.innerHTML = ''; // Bestehende Liste leeren
+
+            const lines = data.split('\n');
+            let currentDate = '';
+
+            lines.forEach(line => {
+                if (line.includes('ΠΡΟΓΡΑΜΜΑ')) {
+                    currentDate = line.trim();
+                    const dateHeader = document.createElement('h3');
+                    dateHeader.textContent = currentDate;
+                    dateHeader.style.color = 'blue';
+                    channelList.appendChild(dateHeader);
+                } else if (line.trim() && !line.includes('ΚΑΝΤΕ ΑΝΤΙΓΡΑΦΗ') && !line.includes('ΑΜΑ ΘΕΛΕΤΕ ΝΑ ΒΑΛΕΤΕ ΤΟΥΣ ΑΓΩΝΕΣ ΣΕ ΔΙΚΟ ΣΑΣ SITE')) {
+                    const gameInfo = document.createElement('div');
+                    const gameTitle = document.createElement('p');
+                    gameTitle.textContent = line.split('https')[0].trim();
+                    gameInfo.appendChild(gameTitle);
+
+                    const urls = line.match(/https?:\/\/\S+/g) || [];
+                    urls.forEach((url, index) => {
+                        const link = document.createElement('a');
+                        link.textContent = `Link${index + 1}`;
+                        link.href = url;
+                        link.target = '_blank';
+                        link.style.color = 'yellow'; // Standardfarbe Gelb
+                        link.style.marginRight = '10px';
+                        gameInfo.appendChild(link);
+
+                        // Überprüfen, ob der Link online ist
+                        checkLinkStatus(link);
+                    });
+
+                    channelList.appendChild(gameInfo);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading the games:', error);
+        });
 }
+
+
+
+
 
 // Playlist Button
 document.getElementById('playlist-button').addEventListener('click', function() {
