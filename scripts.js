@@ -83,9 +83,16 @@ loadSportPlaylist('https://foothubhd.xyz/program.txt');
 
 
 
+// Sport Playlist Button Event-Handler
 document.getElementById('sportPlaylist').addEventListener('click', function() {
-    loadSportPlaylist();
+    // Leere die Sidebar, bevor die Sport-Playlist geladen wird
+    const sidebar = document.getElementById('sidebar');
+    sidebar.innerHTML = ''; // Sidebar leeren
+
+    // Lade die Sport-Playlist mit der entsprechenden URL
+    loadSportPlaylist('https://foothubhd.xyz/program.txt');
 });
+
 
 
 
