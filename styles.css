@@ -103,7 +103,7 @@ button:hover {
 }
 
 .logo-container {
-    width: 50px; /* Breite des Logo-Containers */
+    width: 30px; /* Breite des Logo-Containers */
     justify-content: center;
     align-items: center;
     overflow: hidden;
