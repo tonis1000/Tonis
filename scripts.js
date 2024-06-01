@@ -87,14 +87,15 @@ function generateSidebar(allEvents) {
                 const eventDiv = document.createElement('div');
                 eventDiv.innerHTML = `<strong>${event.time}</strong> ${event.event}`;
                 sidebar.appendChild(eventDiv);
+
+                event.links.forEach((link, index) => {
+                    const linkElement = document.createElement('a');
+                    linkElement.href = link;
+                    linkElement.target = "_blank";
+                    linkElement.textContent = `Link${index + 1}`;
+                    sidebar.appendChild(linkElement);
+                });
             }
-            event.links.forEach((link, index) => {
-                const linkElement = document.createElement('a');
-                linkElement.href = link;
-                linkElement.target = "_blank";
-                linkElement.textContent = `Link${index + 1}`;
-                sidebar.appendChild(linkElement);
-            });
         });
     });
 }
@@ -111,6 +112,7 @@ document.getElementById('sportPlaylist').addEventListener('click', function() {
 
     loadSportPlaylist('https://foothubhd.xyz/program.txt');
 });
+
 
 
 
