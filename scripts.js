@@ -40,25 +40,36 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 
 
-// Event-Handler für das Einfügen des kopierten Textes
 document.getElementById('insert-button').addEventListener('click', function() {
-    // Erstellen eines unsichtbaren Textfelds
-    const clipboardInput = document.createElement('input');
-    clipboardInput.style.position = 'absolute';
-    clipboardInput.style.left = '-1000px';
-    clipboardInput.style.top = '-1000px';
-    document.body.appendChild(clipboardInput);
+    const hiddenInput = document.getElementById('hidden-input');
+    const streamUrlInput = document.getElementById('stream-url');
 
-    // Fokus auf das unsichtbare Textfeld setzen und den Inhalt einfügen
-    clipboardInput.focus();
+    // Fokus auf das versteckte Textfeld setzen
+    hiddenInput.style.position = 'absolute';
+    hiddenInput.style.left = '0px';
+    hiddenInput.focus();
+
+    // 'paste' Event-Listener auf das versteckte Textfeld setzen
+    hiddenInput.addEventListener('paste', function(event) {
+        // Prevent the default paste action
+        event.preventDefault();
+
+        // Get the clipboard text
+        const clipboardData = event.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('Text');
+
+        // Set the value of the visible input field to the pasted text
+        streamUrlInput.value = pastedData;
+
+        // Hide the hidden input field again
+        hiddenInput.style.position = 'absolute';
+        hiddenInput.style.left = '-9999px';
+    }, { once: true });
+
+    // Simulate a paste action (this may not work due to browser security restrictions)
     document.execCommand('paste');
-
-    // Wert des unsichtbaren Textfelds in das Eingabefeld einfügen
-    document.getElementById('stream-url').value = clipboardInput.value;
-
-    // Unsichtbares Textfeld entfernen
-    document.body.removeChild(clipboardInput);
 });
+
 
 
 
