@@ -219,6 +219,22 @@ button:hover {
 #current-channel-name {
     font-size: 18px; /* Größe des Sendernamens */
     color: #ffffff; /* Farbe des Sendernamens */
+    margin-right: 10px; /* Abstand zwischen dem Sendername und den Buttons */
+}
+
+/* Stil für die player-info-button */
+.player-info-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px; /* Abstand zwischen den Buttons */
+}
+
+.player-info-button:hover {
+    background-color: #0056b3;
 }
 
 /* Stil für den SRT-Label */
@@ -258,68 +274,6 @@ label[for="subtitle-file"] {
 
 #play-button:hover {
     background-color: #0056b3;
-}
-
-/* Wrapper für den Player und zusätzlichen Inhalt, um sie nebeneinander zu platzieren */
-.content-wrapper {
-    display: flex;
-    gap: 20px; /* Abstand zwischen dem Player und dem zusätzlichen Inhalt */
-    padding-left: 5px;
-}
-
-/* Zusätzlicher Inhalt rechts neben dem Player */
-#additionalContent {
-    width: 400px; /* Breite des zusätzlichen Inhalts */
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-#additionalContent iframe {
-    width: 100%; /* Iframe passt sich der Breite des Containers an */
-    height: 500px; /* Feste Höhe für das Iframe */
-}
-
-/* Stil für Programminformationen */
-#program-info {
-    color: #ffffff;
-}
-
-/* Stil für das nächste Programm */
-.next-program {
-    margin-top: 2px;
-    margin-bottom: 2px; /* Ändere den Abstand zwischen den Programmen nach Bedarf */
-    color: #ffffff;
-}
-
-div.next-program p {
-    margin-top: 0px;
-}
-
-div.next-program h4 {
-    margin-top: 0px;
-}
-
-.next-program-title {
-    font-weight: bold;
-    margin-bottom: 2px;
-    cursor: pointer;
-}
-
-.next-program-desc {
-    margin-bottom: 2px;
-}
-
-.expandable {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-}
-
-.expandable.expanded {
-    max-height: 1000px; /* oder eine andere geeignete Höhe */
 }
 
 /* Für Smartphones im Hochformat */
