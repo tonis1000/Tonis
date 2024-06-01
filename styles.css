@@ -299,9 +299,7 @@ label[for="subtitle-file"] {
             color: #fff;
             border: 1px solid #ccc;
             border-radius: 5px;
-            overflow: hidden;
             width: 300px; /* Breite der Überschrift */
-            height: 50px; /* Höhe der Überschrift */
         }
 
         .content-title {
@@ -311,12 +309,15 @@ label[for="subtitle-file"] {
 
         .content-body {
             padding: 0 10px;
-            display: none; /* Verstecke den Inhalt standardmäßig */
-            width: 300px; /* Breite des Inhalts nach dem Aufklappen */
-            height: 700px; /* Höhe des Inhalts nach dem Aufklappen */
             overflow: auto; /* Falls der Inhalt zu groß ist */
+            transition: height 0.3s ease; /* Animiere die Höhe beim Aufklappen und Zuklappen */
+            height: 0; /* Verstecke den Inhalt standardmäßig */
+            width: 300px; /* Breite des Inhalts nach dem Aufklappen */
         }
 
+        .expanded {
+            height: 700px !important; /* Höhe des Inhalts nach dem Aufklappen */
+        }
 
 /* Stil für Programminformationen */
 #program-info {
