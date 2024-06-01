@@ -36,15 +36,15 @@ document.getElementById('clear-button').addEventListener('click', function() {
     document.getElementById('stream-url').value = ''; // Setzt den Wert des Eingabefelds auf leer
 });
 
+
 // Einfügen Button
 document.getElementById('insert-button').addEventListener('click', async function() {
     try {
-        const clipboardData = await navigator.clipboard.read();
-        if (clipboardData && clipboardData.length > 0 && clipboardData[0].types.includes('text/plain')) {
-            const text = await clipboardData[0].getType('text/plain');
+        if (navigator.clipboard && navigator.clipboard.readText) {
+            const text = await navigator.clipboard.readText();
             document.getElementById('stream-url').value = text;
         } else {
-            console.error('Kein Text in der Zwischenablage gefunden.');
+            console.error('navigator.clipboard.readText() wird nicht unterstützt.');
         }
     } catch (error) {
         console.error('Fehler beim Lesen der Zwischenablage:', error);
