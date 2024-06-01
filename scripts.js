@@ -14,91 +14,10 @@ function loadExternalPlaylist() {
         .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
 }
 
-
-
-
-
-
-
-
-
 // Funktion zum Laden der Sport-Playlist und Aktualisieren der Sidebar
-// Funktion zum Laden der Sport-Playlist
-function loadSportPlaylist(url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(data => parseSportPlaylist(data))
-        .catch(error => console.error('Fehler beim Laden der Sport-Playlist:', error));
+function loadSportPlaylist() {
+    alert("Funktionalität für Sport-Playlist wird implementiert...");
 }
-
-// Funktion zum Parsen der Sport-Playlist
-function parseSportPlaylist(data) {
-    const lines = data.split('\n');
-    let currentDay = '';
-    let events = [];
-    for (const line of lines) {
-        if (line.startsWith('ΠΡΟΓΡΑΜΜΑ')) {
-            currentDay = line;
-        } else if (line.trim() !== '') {
-            events.push(parseEvent(line));
-        }
-    }
-    generateSidebar(events);
-}
-
-// Funktion zum Parsen eines einzelnen Events
-function parseEvent(eventLine) {
-    const [timeAndEvent, ...links] = eventLine.split(/\s+/);
-    const timeAndEventParts = timeAndEvent.split(' ');
-    const time = timeAndEventParts.shift();
-    const event = timeAndEventParts.join(' ');
-    return { time, event, links };
-}
-
-// Funktion zum Generieren der Sidebar
-function generateSidebar(events) {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.innerHTML = ''; // Leeren der Sidebar
-    events.forEach(event => {
-        const eventDiv = document.createElement('div');
-        eventDiv.innerHTML = `<strong>${event.time}</strong> ${event.event}`;
-        event.links.forEach((link, index) => {
-            const linkButton = document.createElement('button');
-            linkButton.textContent = `Link${index + 1}`;
-            linkButton.addEventListener('click', () => playVideo(link));
-            eventDiv.appendChild(linkButton);
-        });
-        sidebar.appendChild(eventDiv);
-    });
-}
-
-// Funktion zum Abspielen des Videos im Player
-function playVideo(videoUrl) {
-    // Hier implementiere den Code, um das Video im Player abzuspielen
-    console.log('Video wird abgespielt:', videoUrl);
-}
-
-// Starten des Ladens der Sport-Playlist
-loadSportPlaylist('https://foothubhd.xyz/program.txt');
-
-
-
-// Sport Playlist Button Event-Handler
-document.getElementById('sportPlaylist').addEventListener('click', function() {
-    // Leere die Sidebar, bevor die Sport-Playlist geladen wird
-    const sidebar = document.getElementById('sidebar');
-    sidebar.innerHTML = ''; // Sidebar leeren
-
-    // Lade die Sport-Playlist mit der entsprechenden URL
-    loadSportPlaylist('https://foothubhd.xyz/program.txt');
-});
-
-
-
-
-
-
-
 
 
 
