@@ -103,7 +103,7 @@ button:hover {
 }
 
 .logo-container {
-    width: 50px; /* Breite des Logo-Containers */
+    width: 35px; /* Breite des Logo-Containers */
     justify-content: center;
     align-items: center;
     overflow: hidden;
@@ -223,6 +223,10 @@ button:hover {
     color: lightgreen;
     font-weight: bold;
 }
+#current-channel-logo {
+ width: 70px;
+}
+
 
 #current-channel-name {
     font-size: 18px; /* Größe des Sendernamens */
