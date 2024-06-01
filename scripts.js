@@ -42,6 +42,14 @@ document.getElementById('insert-button').addEventListener('click', function() {
     // Zum Beispiel: document.getElementById('stream-url').value = 'Kopierter Text';
 });
 
+// Ereignisbehandler für das Einfügen von Text aus der Zwischenablage
+document.addEventListener('paste', function(event) {
+    const clipboardData = event.clipboardData || window.clipboardData;
+    const pastedText = clipboardData.getData('text');
+    const streamUrlInput = document.getElementById('stream-url');
+    streamUrlInput.value = pastedText;
+});
+
 // Kopieren Button
 document.getElementById('copy-button').addEventListener('click', function() {
     var streamUrlInput = document.getElementById('stream-url');
