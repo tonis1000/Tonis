@@ -75,7 +75,9 @@ function parseEvent(eventLine) {
 // Funktion zum Generieren der Sidebar
 function generateSidebar(allEvents) {
     const sidebar = document.getElementById('sidebar');
-    sidebar.innerHTML = ''; // Leeren der Sidebar
+
+    // Sidebar erst leeren, wenn neue Daten geladen und verarbeitet wurden
+    sidebar.innerHTML = '';
 
     allEvents.forEach(dayEvent => {
         const dayDiv = document.createElement('div');
@@ -102,6 +104,7 @@ function generateSidebar(allEvents) {
 
 
 
+
 // Funktion zum Abspielen des Videos im Player
 function playVideo(videoUrl) {
     console.log('Video wird abgespielt:', videoUrl);
@@ -109,9 +112,7 @@ function playVideo(videoUrl) {
 
 // Sport Playlist Button Event-Handler
 document.getElementById('sportPlaylist').addEventListener('click', function() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.innerHTML = ''; // Sidebar leeren
-
+    // Leere die Sidebar erst nach dem Laden der neuen Daten
     loadSportPlaylist('https://foothubhd.xyz/program.txt');
 });
 
