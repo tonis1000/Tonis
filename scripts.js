@@ -38,18 +38,20 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 
 // Einfügen Button
-document.getElementById('insert-button').addEventListener('click', async function() {
-    try {
-        if (navigator.clipboard && navigator.clipboard.readText) {
-            const text = await navigator.clipboard.readText();
-            document.getElementById('stream-url').value = text;
-        } else {
-            console.error('navigator.clipboard.readText() wird nicht unterstützt.');
-        }
-    } catch (error) {
-        console.error('Fehler beim Lesen der Zwischenablage:', error);
-    }
+document.getElementById('insert-button').addEventListener('click', function() {
+    // Hier kannst du den Inhalt der Zwischenablage einfügen, wenn das paste Ereignis aufgerufen wird
+    document.addEventListener('paste', function(event) {
+        // Lese den Text aus der Zwischenablage
+        const text = (event.clipboardData || window.clipboardData).getData('text');
+        
+        // Füge den Text in das Eingabefeld ein
+        document.getElementById('stream-url').value = text;
+        
+        // Entferne das paste Ereignis, um die Wiederholung zu verhindern
+        document.removeEventListener('paste', null);
+    });
 });
+
 
 
 
