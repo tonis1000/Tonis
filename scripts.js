@@ -67,6 +67,11 @@ const corsProxy = 'https://api.allorigins.win/raw?url=';
             console.error('Error loading the games:', error);
         });
 }
+document.getElementById('sportPlaylist').addEventListener('click', function() {
+    loadSportPlaylist();
+});
+
+
 
 
 
