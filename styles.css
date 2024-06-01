@@ -232,7 +232,7 @@ button:disabled {
 /* Container für den Sendername und das SRT-Label */
 .player-info-top {
     display: flex;
-    justify-content: space-between;
+    gap: 15px;
     align-items: center;
     width: 100%;
     margin-bottom: 5px;
@@ -240,7 +240,7 @@ button:disabled {
 
 /* Stil für den Sendername */
 #current-channel-name {
-    font-size: 18px; /* Größe des Sendernamens */
+    font-size: 35px; /* Größe des Sendernamens */
     color: #ffffff; /* Farbe des Sendernamens */
 }
 
@@ -258,6 +258,7 @@ label[for="subtitle-file"] {
 .player-info-bottom {
     display: flex;
     align-items: center;
+    margin-top: 15px;
 }
 
 /* Stil für den Stream URL Input */
