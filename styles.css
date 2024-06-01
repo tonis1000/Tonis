@@ -264,6 +264,10 @@ button:hover {
 #stream-url {
     width: 750px;
 }
+#program-info {
+  color: #ffffff;
+}
+
 
 
 .next-program {
