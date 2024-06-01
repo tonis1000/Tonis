@@ -88,11 +88,11 @@ function generateSidebar(allEvents) {
                 eventDiv.innerHTML = `<strong>${event.time}</strong> ${event.event}`;
                 sidebar.appendChild(eventDiv);
             }
-            event.links.forEach(link => {
+            event.links.forEach((link, index) => {
                 const linkElement = document.createElement('a');
                 linkElement.href = link;
                 linkElement.target = "_blank";
-                linkElement.textContent = link;
+                linkElement.textContent = `Link${index + 1}`;
                 sidebar.appendChild(linkElement);
             });
         });
@@ -111,7 +111,6 @@ document.getElementById('sportPlaylist').addEventListener('click', function() {
 
     loadSportPlaylist('https://foothubhd.xyz/program.txt');
 });
-
 
 
 
