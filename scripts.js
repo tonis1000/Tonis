@@ -502,3 +502,16 @@ function convertSrtToVtt(srtContent) {
                 }
             });
         });
+
+// JavaScript-Code, um das Klicken auf die Überschrift zu ermöglichen
+const foothubTitle = document.getElementById('foothub-title');
+const foothubContent = document.getElementById('foothub-content');
+
+foothubTitle.addEventListener('click', function() {
+    if (foothubContent.style.display === 'none') {
+        foothubContent.style.display = 'block';
+    } else {
+        foothubContent.style.display = 'none';
+    }
+});
+
