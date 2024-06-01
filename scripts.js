@@ -21,14 +21,14 @@ function loadExternalPlaylist() {
 
 
 
-
 // Funktion zum Laden der Sport-Playlist
-function loadSportPlaylist(url) {
-    fetch(url)
+function loadSportPlaylist() {
+    fetch('https://foothubhd.xyz/program.txt')
         .then(response => response.text())
         .then(data => parseSportPlaylist(data))
         .catch(error => console.error('Fehler beim Laden der Sport-Playlist:', error));
 }
+
 
 // Funktion zum Parsen der Sport-Playlist
 function parseSportPlaylist(data) {
@@ -113,8 +113,9 @@ function playVideo(videoUrl) {
 // Sport Playlist Button Event-Handler
 document.getElementById('sportPlaylist').addEventListener('click', function() {
     // Leere die Sidebar erst nach dem Laden der neuen Daten
-    loadSportPlaylist('https://foothubhd.xyz/program.txt');
+    loadSportPlaylist();
 });
+
 
 
 
