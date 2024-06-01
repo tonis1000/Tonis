@@ -468,13 +468,15 @@ document.addEventListener('DOMContentLoaded', function () {
         streamUrlInput.value = '';
     });
 
-    pasteButton.addEventListener('click', function() {
-        navigator.clipboard.readText().then(text => {
-            streamUrlInput.value = text;
-        }).catch(err => {
-            console.error('Failed to read clipboard contents: ', err);
-        });
+pasteButton.addEventListener('click', function() {
+    navigator.clipboard.readText().then(text => {
+        streamUrlInput.value = text;
+        console.log('Text eingefügt:', text);
+    }).catch(err => {
+        console.error('Fehler beim Einfügen des Textes:', err);
     });
+});
+
 
     extraButton.addEventListener('click', function() {
         // Hier die Funktionalität für den Extra-Button implementieren
