@@ -21,6 +21,11 @@ function loadExternalPlaylist() {
 
 
 
+
+
+
+
+
 // Funktion zum Laden der Sport-Playlist
 function loadSportPlaylist() {
     fetch('https://foothubhd.xyz/program.txt')
@@ -59,8 +64,8 @@ function parseSportPlaylist(data) {
 // Funktion zum Parsen eines einzelnen Events
 function parseEvent(eventLine) {
     const timeAndEvent = eventLine.match(/^\d{2}:\d{2} .+/);
-    const links = eventLine.match(/https?:\/\/\S+(?=\s|$)/g) || [];
-    const validLinks = links.filter(link => !link.includes('η'));
+    const links = eventLine.match(/https?:\/\/\S+\.php/g) || [];
+    const validLinks = links.filter(link => link.startsWith('http') && link.endsWith('.php'));
 
     if (timeAndEvent) {
         const parts = timeAndEvent[0].split(' ');
@@ -115,6 +120,10 @@ document.getElementById('sportPlaylist').addEventListener('click', function() {
     // Leere die Sidebar erst nach dem Laden der neuen Daten
     loadSportPlaylist();
 });
+
+
+
+
 
 
 
