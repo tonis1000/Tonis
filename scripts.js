@@ -39,17 +39,24 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 // Einfügen Button
 document.getElementById('insert-button').addEventListener('click', function() {
-    // Hier kannst du den Inhalt der Zwischenablage einfügen, wenn das paste Ereignis aufgerufen wird
-    document.addEventListener('paste', function(event) {
-        // Lese den Text aus der Zwischenablage
-        const text = (event.clipboardData || window.clipboardData).getData('text');
-        
-        // Füge den Text in das Eingabefeld ein
-        document.getElementById('stream-url').value = text;
-        
-        // Entferne das paste Ereignis, um die Wiederholung zu verhindern
-        document.removeEventListener('paste', null);
-    });
+    // Text aus der Zwischenablage abrufen, wenn möglich
+    navigator.clipboard.readText()
+        .then(text => {
+            // Einfügen des Textes in das Eingabefeld
+            document.getElementById('stream-url').value = text;
+        })
+        .catch(error => {
+            // Fehlerbehandlung, falls das Lesen der Zwischenablage fehlschlägt
+            console.error('Fehler beim Lesen der Zwischenablage:', error);
+        });
+});
+
+// Event-Handler für das Einfügen von Text aus der Zwischenablage
+document.addEventListener('paste', function(event) {
+    // Text aus dem Event abrufen
+    const text = (event.clipboardData || window.clipboardData).getData('text');
+    // Einfügen des Textes in das Eingabefeld
+    document.getElementById('stream-url').value = text;
 });
 
 
