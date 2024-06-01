@@ -100,6 +100,7 @@ function generateSidebar(allEvents) {
     });
 }
 
+
 // Funktion zum Abspielen des Videos im Player
 function playVideo(videoUrl) {
     console.log('Video wird abgespielt:', videoUrl);
