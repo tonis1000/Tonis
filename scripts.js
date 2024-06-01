@@ -503,15 +503,11 @@ function convertSrtToVtt(srtContent) {
             });
         });
 
+
+
+
+// foothubhd
 function toggleContent() {
             var contentBody = document.getElementById("contentBody");
-            if (contentBody.style.display === "none") {
-                contentBody.style.display = "block";
-                contentBody.style.width = "300px"; /* Breite des Inhalts nach dem Aufklappen */
-                contentBody.style.height = "700px"; /* Höhe des Inhalts nach dem Aufklappen */
-            } else {
-                contentBody.style.display = "none";
-                contentBody.style.width = "0"; /* Verstecke den Inhalt */
-                contentBody.style.height = "0"; /* Verstecke den Inhalt */
-            }
+            contentBody.classList.toggle("expanded");
         }
