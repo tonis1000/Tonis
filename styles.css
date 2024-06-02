@@ -19,6 +19,7 @@ body {
 
 .main-container {
     float: left;
+    margin-right: 10px;
 }
 
 /* Hauptcontainer mit spezifischen Maßen und Layout-Einstellungen */
