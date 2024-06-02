@@ -520,3 +520,49 @@ function toggleContent() {
             var contentBody = document.getElementById("contentBody");
             contentBody.classList.toggle("expanded");
         }
+
+
+// script.js
+document.addEventListener('DOMContentLoaded', function () {
+    const videoPlayer = document.getElementById('video-player');
+    const playPauseButton = document.getElementById('play-pause-button');
+    const progressBar = document.getElementById('progress-bar');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const videoPreview = document.getElementById('video-preview');
+    const volumeSlider = document.getElementById('volume-slider');
+    const chromecastButton = document.getElementById('chromecast-button');
+
+    // Play/Pause-Funktion
+    playPauseButton.addEventListener('click', function () {
+        if (videoPlayer.paused) {
+            videoPlayer.play();
+        } else {
+            videoPlayer.pause();
+        }
+    });
+
+    // Fortschrittsbalken und Video-Vorschau
+    progressBar.addEventListener('mousemove', function (event) {
+        const boundingRect = progressBar.getBoundingClientRect();
+        const percentage = (event.clientX - boundingRect.left) / boundingRect.width;
+        const videoTime = percentage * videoPlayer.duration;
+        progressBarFill.style.width = percentage * 100 + '%';
+        videoPreview.style.left = event.clientX + 'px';
+        videoPreview.style.display = 'block';
+        videoPlayer.currentTime = videoTime;
+    });
+
+    progressBar.addEventListener('mouseleave', function () {
+        videoPreview.style.display = 'none';
+    });
+
+    // Lautstärkeregler
+    volumeSlider.addEventListener('input', function () {
+        videoPlayer.volume = volumeSlider.value;
+    });
+
+    // Chromecast-Funktion
+    chromecastButton.addEventListener('click', function () {
+        // Hier die Chromecast-Logik implementieren
+    });
+});
