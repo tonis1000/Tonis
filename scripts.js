@@ -408,9 +408,7 @@ function updateClock() {
 
 
 
-
-
-        // Funktion zum Abspielen eines Streams im Video-Player
+// Funktion zum Abspielen eines Streams im Video-Player
 function playStream(streamURL, subtitleURL) {
     const videoPlayer = document.getElementById('video-player');
     const subtitleTrack = document.getElementById('subtitle-track');
@@ -424,6 +422,7 @@ function playStream(streamURL, subtitleURL) {
     }
 
     if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
+        // HLS für Safari und andere Browser, die es unterstützen
         const hls = new Hls();
         hls.loadSource(streamURL);
         hls.attachMedia(videoPlayer);
@@ -431,20 +430,26 @@ function playStream(streamURL, subtitleURL) {
             videoPlayer.play();
         });
     } else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
+        // MPEG-DASH für Chrome, Firefox und andere Browser, die es unterstützen
         const dashPlayer = dashjs.MediaPlayer().create();
         dashPlayer.initialize(videoPlayer, streamURL, true);
     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        // Direktes HLS für Safari
         videoPlayer.src = streamURL;
         videoPlayer.addEventListener('loadedmetadata', function () {
             videoPlayer.play();
         });
     } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
+        // Direktes MP4- oder WebM-Streaming für andere Browser
         videoPlayer.src = streamURL;
         videoPlayer.play();
     } else {
         console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
 }
+
+
+
 
 
 
@@ -522,47 +527,3 @@ function toggleContent() {
         }
 
 
-// script.js
-document.addEventListener('DOMContentLoaded', function () {
-    const videoPlayer = document.getElementById('video-player');
-    const playPauseButton = document.getElementById('play-pause-button');
-    const progressBar = document.getElementById('progress-bar');
-    const progressBarFill = document.getElementById('progress-bar-fill');
-    const videoPreview = document.getElementById('video-preview');
-    const volumeSlider = document.getElementById('volume-slider');
-    const chromecastButton = document.getElementById('chromecast-button');
-
-    // Play/Pause-Funktion
-    playPauseButton.addEventListener('click', function () {
-        if (videoPlayer.paused) {
-            videoPlayer.play();
-        } else {
-            videoPlayer.pause();
-        }
-    });
-
-    // Fortschrittsbalken und Video-Vorschau
-    progressBar.addEventListener('mousemove', function (event) {
-        const boundingRect = progressBar.getBoundingClientRect();
-        const percentage = (event.clientX - boundingRect.left) / boundingRect.width;
-        const videoTime = percentage * videoPlayer.duration;
-        progressBarFill.style.width = percentage * 100 + '%';
-        videoPreview.style.left = event.clientX + 'px';
-        videoPreview.style.display = 'block';
-        videoPlayer.currentTime = videoTime;
-    });
-
-    progressBar.addEventListener('mouseleave', function () {
-        videoPreview.style.display = 'none';
-    });
-
-    // Lautstärkeregler
-    volumeSlider.addEventListener('input', function () {
-        videoPlayer.volume = volumeSlider.value;
-    });
-
-    // Chromecast-Funktion
-    chromecastButton.addEventListener('click', function () {
-        // Hier die Chromecast-Logik implementieren
-    });
-});
