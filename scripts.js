@@ -129,6 +129,11 @@ function parseDateTime(epgTime) {
     return date;
 }
 
+
+
+
+
+
 // Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
 function getCurrentProgram(channelId) {
     const now = new Date();
@@ -145,14 +150,12 @@ function getCurrentProgram(channelId) {
             const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des laufenden Programms
             const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
 
-
-
-return {
-    title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
-    description: description,
-    pastPercentage: pastPercentage,
-    futurePercentage: futurePercentage
-};
+            return {
+                title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
+                description: description,
+                pastPercentage: pastPercentage,
+                futurePercentage: futurePercentage
+            };
 
         } else {
             return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
@@ -161,13 +164,31 @@ return {
     return { title: 'Keine EPG-Daten verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
 
+// Laden der EPG-Daten und starten des Timers für die Uhr und das aktuelle Programm
+document.addEventListener('DOMContentLoaded', function () {
+    loadEPGData();
+    updateClock();
+    setInterval(updateClock, 1000);
+    setInterval(updateCurrentProgram, 180000); // Aktualisieren alle 10 Sekunden
+    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
+    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
+});
+
+
+
+
+
+
+
+
+
+
 
 // Funktion zum Aktualisieren der nächsten Programme
 function updateNextPrograms(channelId) {
     const nextProgramsContainer = document.getElementById('next-programs');
     nextProgramsContainer.innerHTML = ''; // Leert den Container, um die neuen Programme einzufügen
 
-    // Überprüfen, ob epgData[channelId] vorhanden ist
     if (epgData[channelId]) {
         const now = new Date();
         const upcomingPrograms = epgData[channelId]
@@ -201,12 +222,7 @@ function updateNextPrograms(channelId) {
             nextProgramsContainer.appendChild(nextProgramDiv);
         });
     }
-
-    // Aktualisiere alle 3 Minuten unabhängig davon, ob epgData[channelId] vorhanden ist oder nicht
-    setInterval(() => updateNextPrograms(channelId), 180000); 
 }
-
-
 
 
 
@@ -233,12 +249,6 @@ sidebarList.addEventListener('click', function (event) {
         const logoContainer = document.getElementById('current-channel-logo');
         const logoImg = channelInfo.querySelector('.logo-container img').src;
         logoContainer.src = logoImg;
-
-        // Füge diese Zeile hier ein, um das title-Feld alle 3 Minuten zu aktualisieren
-        setInterval(() => {
-            const programInfo = getCurrentProgram(channelId);
-            updatePlayerDescription(programInfo.title, programInfo.description);
-        }, 180000); // Aktualisiert alle 3 Minuten
     }
 });
 
@@ -250,17 +260,7 @@ sidebarList.addEventListener('click', function (event) {
 function updatePlayerDescription(title, description) {
     document.getElementById('program-title').textContent = title;
     document.getElementById('program-desc').textContent = description;
-
-    // Hier die Aktualisierung alle 3 Minuten hinzufügen
-    setInterval(() => {
-        const programInfo = getCurrentProgram(channelId); // Stelle sicher, dass channelId definiert ist
-        updatePlayerDescription(programInfo.title, programInfo.description);
-    }, 180000); // Aktualisiert alle 3 Minuten
 }
-
-
-
-
 
 
 // Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
@@ -280,10 +280,6 @@ function extractStreamURLs(data) {
     });
     return streamURLs;
 }
-
-
-
-
 
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
