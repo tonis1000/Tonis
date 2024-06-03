@@ -363,20 +363,45 @@ div.next-program h4 {
 
 /* Für Smartphones im Hochformat */
 @media only screen and (max-width: 480px) {
-    /* CSS-Regeln für Smartphones im Hochformat */
+    .player-container {
+        width: 100%; /* Breite auf 100% setzen */
+    }
+    .content-wrapper {
+        flex-direction: column; /* Anordnung in Spalte ändern */
+    }
 }
 
 /* Für Smartphones im Querformat */
 @media only screen and (min-width: 481px) and (max-width: 800px) {
-    /* CSS-Regeln für Smartphones im Querformat */
+    .player-container {
+        width: 100%; /* Breite auf 100% setzen */
+    }
+    .content-wrapper {
+        flex-direction: column; /* Anordnung in Spalte ändern */
+    }
 }
 
 /* Für Tablets */
 @media only screen and (min-width: 801px) and (max-width: 1024px) {
-    /* CSS-Regeln für Tablets */
+    .player-container {
+        width: 100%; /* Breite auf 100% setzen */
+    }
+    .content-wrapper {
+        flex-direction: column; /* Anordnung in Spalte ändern */
+    }
 }
 
 /* Für Desktops und größere Bildschirme */
 @media only screen and (min-width: 1025px) {
-    /* CSS-Regeln für Desktops und größere Bildschirme */
+    .player-container {
+        width: 900px; /* Feste Breite */
+    }
+    .content-wrapper {
+        flex-direction: row; /* Anordnung in Reihe */
+    }
+}
+.example {
+    -webkit-transform: rotate(30deg); /* Chrome, Safari */
+    -ms-transform: rotate(30deg); /* Internet Explorer */
+    transform: rotate(30deg);
 }
