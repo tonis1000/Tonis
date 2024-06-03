@@ -129,11 +129,6 @@ function parseDateTime(epgTime) {
     return date;
 }
 
-
-
-
-
-
 // Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
 function getCurrentProgram(channelId) {
     const now = new Date();
@@ -150,12 +145,14 @@ function getCurrentProgram(channelId) {
             const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des laufenden Programms
             const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
 
-            return {
-                title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
-                description: description,
-                pastPercentage: pastPercentage,
-                futurePercentage: futurePercentage
-            };
+
+
+return {
+    title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
+    description: description,
+    pastPercentage: pastPercentage,
+    futurePercentage: futurePercentage
+};
 
         } else {
             return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
@@ -163,24 +160,6 @@ function getCurrentProgram(channelId) {
     }
     return { title: 'Keine EPG-Daten verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
-
-// Laden der EPG-Daten und starten des Timers für die Uhr und das aktuelle Programm
-document.addEventListener('DOMContentLoaded', function () {
-    loadEPGData();
-    updateClock();
-    setInterval(updateClock, 1000);
-    setInterval(updateCurrentProgram, 180000); // Aktualisieren alle 10 Sekunden
-    document.getElementById('externalPlaylist').addEventListener('click', loadExternalPlaylist);
-    document.getElementById('sportPlaylist').addEventListener('click', loadSportPlaylist);
-});
-
-
-
-
-
-
-
-
 
 
 
