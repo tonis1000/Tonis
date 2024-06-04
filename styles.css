@@ -169,7 +169,6 @@ button:disabled {
 .epg-timeline {
     display: flex;
     height: 5px; /* Erhöhe die Höhe für eine bessere Sichtbarkeit */
-    background-color: #666; /* Hintergrundfarbe der Zeitachse für den Fall, dass keine Farben angezeigt werden */
     border-radius: 2px; /* Abrundung der Ecken */
     padding-right: 15px;
 }
