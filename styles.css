@@ -101,6 +101,8 @@ button:disabled {
     overflow-y: auto;
     height: calc(100% - 40px);
     background-color: #0f0e0e;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 /* Sidebar-Listenstil ohne Bullet Points */
