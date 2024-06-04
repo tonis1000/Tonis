@@ -112,6 +112,7 @@ button:disabled {
 #sidebar-list {
     list-style-type: none;
     padding: 0;
+    margin-top: 0px;
 }
 
 #sidebar-list li {
