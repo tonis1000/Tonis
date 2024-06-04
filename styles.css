@@ -103,13 +103,15 @@ button:disabled {
     background-color: #0f0e0e;
     padding-right: 5px;
     padding-left: 5px;
+    margin-top: 0px;
+    border-top-width: 5px;
+    border-top-style: solid;
 }
 
 /* Sidebar-Listenstil ohne Bullet Points */
 #sidebar-list {
     list-style-type: none;
     padding: 0;
-    margin-top: 5px;
 }
 
 #sidebar-list li {
