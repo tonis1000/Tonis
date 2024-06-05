@@ -333,12 +333,9 @@ label[for="subtitle-file"] {
     width: 300px; /* Breite des Inhalts nach dem Aufklappen */
 }
 
-.additional-content.expanded .content-body {
-    max-height: 700px; /* Passt die Höhe je nach Inhalt an */
-    padding: 10px;
+.expanded {
+    height: 700px !important; /* Höhe des Inhalts nach dem Aufklappen */
 }
-
-
 
 /* Stil für Programminformationen */
 #program-info {
@@ -377,8 +374,9 @@ div.next-program h4 {
 }
 
 .expandable.expanded {
-    height: 700px;
+    max-height: 1000px; /* oder eine andere geeignete Höhe */
 }
+
 /* Medienabfragen für verschiedene Geräte und Bildschirmgrößen */
 
 /* Für Smartphones im Hochformat */
