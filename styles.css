@@ -377,9 +377,8 @@ div.next-program h4 {
 }
 
 .expandable.expanded {
-    max-height: 1000px; /* oder eine andere geeignete Höhe */
+    height: 700px;
 }
-
 /* Medienabfragen für verschiedene Geräte und Bildschirmgrößen */
 
 /* Für Smartphones im Hochformat */
