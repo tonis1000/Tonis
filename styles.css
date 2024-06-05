@@ -333,9 +333,12 @@ label[for="subtitle-file"] {
     width: 300px; /* Breite des Inhalts nach dem Aufklappen */
 }
 
-.expanded {
-    height: 700px !important; /* Höhe des Inhalts nach dem Aufklappen */
+.additional-content.expanded .content-body {
+    max-height: 700px; /* Passt die Höhe je nach Inhalt an */
+    padding: 10px;
 }
+
+
 
 /* Stil für Programminformationen */
 #program-info {
