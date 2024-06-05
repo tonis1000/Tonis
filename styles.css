@@ -305,13 +305,25 @@ label[for="subtitle-file"] {
     color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 300px; /* Breite der Überschrift */
+    width: 400px; /* Breite der Überschrift */
 }
 
+/* Stil für die Überschriften "Foothubhd" und "Wetter" */
 .content-title {
     padding: 10px;
     cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff; /* Weiße Schriftfarbe */
+    background-color: #007bff; /* Blaue Hintergrundfarbe */
+    border-radius: 5px;
+    margin-bottom: 10px; /* Abstand zum nächsten Inhalt */
 }
+
+.content-title:hover {
+    background-color: #0056b3; /* Dunklere Blauton bei Hover */
+}
+
 
 .content-body {
     padding: 0 10px;
