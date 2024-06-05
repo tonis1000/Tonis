@@ -517,6 +517,8 @@ function convertSrtToVtt(srtContent) {
             });
         });
 
+
+
 var currentOpenContent = null;
 
 function toggleContent(contentId) {
