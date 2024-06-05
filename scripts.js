@@ -520,16 +520,8 @@ function convertSrtToVtt(srtContent) {
 
 
 
-function toggleContent(contentId) {
-    const content = document.getElementById(contentId);
-    const allContents = document.querySelectorAll('.content-body');
-
-    allContents.forEach((item) => {
-        if (item !== content) {
-            item.classList.remove('expanded');
+// foothubhd
+function toggleContent() {
+            var contentBody = document.getElementById("contentBody");
+            contentBody.classList.toggle("expanded");
         }
-    });
-
-    content.classList.toggle('expanded');
-}
-
