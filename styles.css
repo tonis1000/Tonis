@@ -295,29 +295,27 @@ label[for="subtitle-file"] {
 /* Wrapper für den Player und zusätzlichen Inhalt, um sie nebeneinander zu platzieren */
 .content-wrapper {
     display: flex;
-    gap: 20px; /* Abstand zwischen dem Player und dem zusätzlichen Inhalt */
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 }
 
 /* Zusätzlicher Inhalt rechts neben dem Player */
 .additional-content {
-    margin-top: 20px;
     background-color: #333;
-    color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 400px; /* Breite der Überschrift */
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
 }
 
 /* Stil für die Überschriften "Foothubhd" und "Wetter" */
 .content-title {
+    background-color: #444;
     padding: 10px;
     cursor: pointer;
-    font-size: 20px;
-    font-weight: bold;
-    color: #fff; /* Weiße Schriftfarbe */
-    background-color: #007bff; /* Blaue Hintergrundfarbe */
-    border-radius: 5px;
-    margin-bottom: 10px; /* Abstand zum nächsten Inhalt */
+    user-select: none;
 }
 
 .content-title:hover {
@@ -326,11 +324,10 @@ label[for="subtitle-file"] {
 
 
 .content-body {
-    padding: 0 10px;
-    overflow: auto; /* Falls der Inhalt zu groß ist */
-    transition: height 0.3s ease; /* Animiere die Höhe beim Aufklappen und Zuklappen */
-    height: 0; /* Verstecke den Inhalt standardmäßig */
-    width: 300px; /* Breite des Inhalts nach dem Aufklappen */
+    padding: 10px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    max-height: 0;
 }
 
 .expanded {
@@ -374,7 +371,7 @@ div.next-program h4 {
 }
 
 .expandable.expanded {
-    max-height: 1000px; /* oder eine andere geeignete Höhe */
+    max-height: 700px; /* oder eine andere geeignete Höhe */
 }
 
 /* Medienabfragen für verschiedene Geräte und Bildschirmgrößen */
