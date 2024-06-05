@@ -520,8 +520,15 @@ function convertSrtToVtt(srtContent) {
 
 
 
-// foothubhd
-function toggleContent() {
-            var contentBody = document.getElementById("contentBody");
-            contentBody.classList.toggle("expanded");
+// foothubhd-Wetter
+function toggleContent(contentId) {
+    const allContents = document.querySelectorAll('.content-body');
+    allContents.forEach(content => {
+        if (content.id === contentId) {
+            content.classList.toggle('expanded');
+        } else {
+            content.classList.remove('expanded');
         }
+    });
+}
+
