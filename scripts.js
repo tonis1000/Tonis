@@ -520,14 +520,16 @@ function convertSrtToVtt(srtContent) {
 
 
 
-function toggleContent(sectionId) {
-    const allSections = document.querySelectorAll('.additional-content');
-    allSections.forEach(section => {
-        if (section.id === sectionId) {
-            section.classList.toggle('expanded');
-        } else {
-            section.classList.remove('expanded');
+function toggleContent(contentId) {
+    const content = document.getElementById(contentId);
+    const allContents = document.querySelectorAll('.content-body');
+
+    allContents.forEach((item) => {
+        if (item !== content) {
+            item.classList.remove('expanded');
         }
     });
+
+    content.classList.toggle('expanded');
 }
 
