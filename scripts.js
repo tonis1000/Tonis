@@ -519,31 +519,9 @@ function convertSrtToVtt(srtContent) {
 
 
 
-var currentOpenContent = null;
-
-function toggleContent(contentId) {
-    var content = document.getElementById(contentId);
-    if (currentOpenContent && currentOpenContent !== content) {
-        currentOpenContent.querySelector(".content-body").style.display = "none";
-    }
-    var body = content.querySelector(".content-body");
-    if (body.style.display === "block") {
-        body.style.display = "none";
-        currentOpenContent = null;
-    } else {
-        body.style.display = "block";
-        currentOpenContent = content;
-    }
-}
-
 
 // foothubhd
 function toggleContent() {
             var contentBody = document.getElementById("contentBody");
             contentBody.classList.toggle("expanded");
         }
-// Wetter
-function toggleWeather() {
-    var weatherContent = document.getElementById("weatherContent");
-    weatherContent.classList.toggle("expanded");
-}
