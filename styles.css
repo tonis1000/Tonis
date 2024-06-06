@@ -198,10 +198,11 @@ button:disabled {
 
 /* Container für den Video-Player und Steuerungsleiste */
 .player-container {
-    width: 900px;
+    width: 1000px;
     display: flex;
     flex-direction: column; /* Ändert das Layout zu einer Spalte */
     margin-right: 10px;
+    min-width: 1000px;
 }
 
 /* Grundlegende Stile für die Player-Header */
