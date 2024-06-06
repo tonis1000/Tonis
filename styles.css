@@ -201,6 +201,7 @@ button:disabled {
     width: 900px;
     display: flex;
     flex-direction: column; /* Ändert das Layout zu einer Spalte */
+    margin-right: 10px;
 }
 
 /* Grundlegende Stile für die Player-Header */
@@ -295,9 +296,6 @@ label[for="subtitle-file"] {
 /* Wrapper für den Player und zusätzlichen Inhalt, um sie nebeneinander zu platzieren */
 .content-wrapper {
     display: flex;
-    flex-direction: column;
-    #align-items: center;
-    padding: 20px;
 }
 
 /* Zusätzlicher Inhalt rechts neben dem Player */
