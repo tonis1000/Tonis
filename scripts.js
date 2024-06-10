@@ -544,7 +544,6 @@ function toggleContent(contentId) {
 
 
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const sidebar = document.getElementById("sidebar");
     const sidebarListItems = sidebar.querySelectorAll("li");
@@ -601,9 +600,10 @@ document.addEventListener("DOMContentLoaded", function() {
         miniPlayer.innerHTML = ''; // entferne den Inhalt des Players
     }
 
+    // Funktionen, um den Player zu erstellen und zu positionieren
     function createMiniPlayer(streamUrl) {
         const smallPlayer = document.createElement("div");
-        smallPlayer.id = "smallPlayer";
+        smallPlayer.className = "mini-player";
         smallPlayer.innerHTML = `
             <video controls autoplay>
                 <source src="${streamUrl}" type="video/mp4">
