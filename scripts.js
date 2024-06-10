@@ -534,5 +534,36 @@ function toggleContent(contentId) {
 
 
 
+document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.getElementById("sidebar");
+    const sidebarListItems = sidebar.querySelectorAll("li");
+
+    sidebarListItems.forEach(item => {
+        const channelInfo = item.querySelector(".channel-info");
+        const streamUrl = channelInfo.dataset.stream;
+
+        item.addEventListener("mouseover", function(event) {
+            if (streamUrl) {
+                const smallPlayer = document.createElement("div");
+                smallPlayer.id = "smallPlayer";
+                smallPlayer.innerHTML = `
+                    <video controls autoplay>
+                        <source src="${streamUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `;
+                smallPlayer.style.position = "fixed";
+                smallPlayer.style.top = `${event.clientY}px`;
+                smallPlayer.style.left = `${event.clientX}px`;
+                
+                document.body.appendChild(smallPlayer);
+
+                item.addEventListener("mouseleave", function() {
+                    document.body.removeChild(smallPlayer);
+                });
+            }
+        });
+    });
+});
 
 
