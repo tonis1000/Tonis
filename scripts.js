@@ -532,3 +532,21 @@ function toggleContent(contentId) {
     });
 }
 
+
+const sidebarList = document.getElementById('sidebar-list');
+
+sidebarList.addEventListener('mouseover', function(event) {
+    const senderId = event.target.dataset.senderId; // Annahme: Der tvg-id-Wert jedes Senders entspricht seiner ID
+    if (senderId) {
+        // Erzeuge und zeige den kleinen Player mit dem Inhalt des ausgewählten Senders
+        showMiniPlayer(senderId);
+    }
+});
+
+
+function showMiniPlayer(senderId) {
+    // Hier den Code zum Erzeugen und Anzeigen des Mini-Players einfügen
+    // Du könntest zum Beispiel ein Modal-Fenster verwenden oder einen Bereich direkt neben der Sidebar anzeigen
+}
+
+
