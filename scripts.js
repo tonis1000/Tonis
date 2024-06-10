@@ -533,15 +533,16 @@ function toggleContent(contentId) {
 }
 
 
-const sidebarList = document.getElementById('sidebar-list');
+const container = document.querySelector('.main-container'); // Annahme: .main-container umschließt sowohl Sidebar als auch Playlist
 
-sidebarList.addEventListener('mouseover', function(event) {
+container.addEventListener('mouseover', function(event) {
     const senderId = event.target.dataset.senderId; // Annahme: Der tvg-id-Wert jedes Senders entspricht seiner ID
     if (senderId) {
         // Erzeuge und zeige den kleinen Player mit dem Inhalt des ausgewählten Senders
         showMiniPlayer(senderId);
     }
 });
+
 
 
 function showMiniPlayer(senderId) {
