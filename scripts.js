@@ -534,6 +534,18 @@ function toggleContent(contentId) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
     const sidebar = document.getElementById("sidebar");
     const sidebarListItems = sidebar.querySelectorAll("li");
@@ -564,6 +576,39 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
+    const channelInfos = document.querySelectorAll('.channel-info');
+
+    // Erstelle den kleinen Player
+    const playerContainer = document.createElement('div');
+    playerContainer.className = 'mini-player';
+    document.body.appendChild(playerContainer);
+
+    // Füge Eventlistener hinzu, um den Player zu zeigen/verstecken
+    channelInfos.forEach(channelInfo => {
+        channelInfo.addEventListener('mouseover', function(event) {
+            const streamURL = this.dataset.stream;
+            const { clientX, clientY } = event;
+            showMiniPlayer(clientX, clientY, streamURL);
+        });
+
+        channelInfo.addEventListener('mouseout', function() {
+            hideMiniPlayer();
+        });
+    });
+
+    // Funktionen, um den Player zu zeigen/verstecken
+    function showMiniPlayer(x, y, streamURL) {
+        const miniPlayer = document.querySelector('.mini-player');
+        miniPlayer.style.top = `${y}px`;
+        miniPlayer.style.left = `${x + 20}px`; // etwas Abstand von der Maus
+        miniPlayer.innerHTML = `<video controls autoplay src="${streamURL}"></video>`;
+        miniPlayer.style.display = 'block';
+    }
+
+    function hideMiniPlayer() {
+        const miniPlayer = document.querySelector('.mini-player');
+        miniPlayer.style.display = 'none';
+        miniPlayer.innerHTML = ''; // entferne den Inhalt des Players
+    }
 });
-
-
