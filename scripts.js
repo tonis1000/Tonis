@@ -542,7 +542,6 @@ function toggleContent(contentId) {
 
 
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const sidebar = document.getElementById("sidebar");
     const sidebarListItems = sidebar.querySelectorAll("li");
@@ -552,58 +551,24 @@ document.addEventListener("DOMContentLoaded", function() {
         const streamUrl = channelInfo.dataset.stream;
 
         item.addEventListener("mouseover", function(event) {
-            console.log("Mouseover auf Sidebar-Element");
             if (streamUrl) {
                 const smallPlayer = createMiniPlayer(streamUrl);
-                positionMiniPlayer(smallPlayer, event.clientX, event.clientY);
                 document.body.appendChild(smallPlayer);
 
+                document.addEventListener("mousemove", function(event) {
+                    const x = event.clientX + 20;
+                    const y = event.clientY + 20;
+                    positionMiniPlayer(smallPlayer, x, y);
+                });
+
                 item.addEventListener("mouseleave", function() {
-                    console.log("Mouseleave auf Sidebar-Element");
                     document.body.removeChild(smallPlayer);
                 });
             }
         });
     });
 
-    const channelInfos = document.querySelectorAll('.channel-info');
-
-    // Erstelle den kleinen Player
-    const playerContainer = document.createElement('div');
-    playerContainer.className = 'mini-player';
-    document.body.appendChild(playerContainer);
-
-    // Füge Eventlistener hinzu, um den Player zu zeigen/verstecken
-    channelInfos.forEach(channelInfo => {
-        channelInfo.addEventListener('mouseover', function(event) {
-            console.log("Mouseover auf Channel-Info");
-            const streamURL = this.dataset.stream;
-            const { clientX, clientY } = event;
-            showMiniPlayer(clientX, clientY, streamURL);
-        });
-
-        channelInfo.addEventListener('mouseout', function() {
-            console.log("Mouseleave auf Channel-Info");
-            hideMiniPlayer();
-        });
-    });
-
-    // Funktionen, um den Player zu zeigen/verstecken
-    function showMiniPlayer(x, y, streamURL) {
-        const miniPlayer = document.querySelector('.mini-player');
-        miniPlayer.style.top = `${y}px`;
-        miniPlayer.style.left = `${x + 20}px`; // etwas Abstand von der Maus
-        miniPlayer.innerHTML = `<video controls autoplay src="${streamURL}"></video>`;
-        miniPlayer.style.display = 'block';
-    }
-
-    function hideMiniPlayer() {
-        const miniPlayer = document.querySelector('.mini-player');
-        miniPlayer.style.display = 'none';
-        miniPlayer.innerHTML = ''; // entferne den Inhalt des Players
-    }
-
-    // Funktionen, um den Player zu erstellen und zu positionieren
+    // Funktion zum Erstellen des Mini-Players
     function createMiniPlayer(streamUrl) {
         const smallPlayer = document.createElement("div");
         smallPlayer.className = "mini-player";
@@ -617,8 +582,9 @@ document.addEventListener("DOMContentLoaded", function() {
         return smallPlayer;
     }
 
+    // Funktion zum Positionieren des Mini-Players
     function positionMiniPlayer(player, x, y) {
-        player.style.top = `${y}px`;
         player.style.left = `${x}px`;
+        player.style.top = `${y}px`;
     }
 });
