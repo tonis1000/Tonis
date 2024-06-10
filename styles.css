@@ -436,34 +436,3 @@ div.next-program h4 {
 
 
 
-
-
-
-
-
-
-.mini-player {
-    position: fixed;
-    display: none;
-    width: 200px; /* Ändern Sie die Breite und Höhe je nach Bedarf */
-    height: 150px;
-    background-color: rgba(0, 0, 0, 0.7); /* Hintergrundfarbe des Mini-Players */
-    color: white; /* Textfarbe */
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 9999; /* Stellen Sie sicher, dass der Mini-Player über anderen Inhalten liegt */
-}
-
-.mini-player video {
-    width: 100%; /* Video auf die volle Breite des Mini-Players erstrecken */
-    height: 100%; /* Video auf die volle Höhe des Mini-Players erstrecken */
-}
-
-/* Optional: Animation, um den Mini-Player beim Erscheinen zu animieren */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-
-
