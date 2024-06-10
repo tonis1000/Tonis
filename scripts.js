@@ -536,39 +536,3 @@ function toggleContent(contentId) {
 
 
 
-// Diese Funktion wird aufgerufen, wenn der Mauszeiger über einen Sender in der Sidebar fährt
-function showMiniPlayer(streamURL) {
-    // Aktualisiere die Quelle des Mini-Players mit der Stream-URL des ausgewählten Senders
-    document.getElementById('mini-source').setAttribute('src', streamURL);
-    
-    // Spiele den Stream im Mini-Player ab
-    document.getElementById('mini-video').play();
-    
-    // Zeige den Mini-Player
-    document.getElementById('mini-player').style.display = 'block';
-}
-
-// Diese Funktion wird aufgerufen, wenn der Mauszeiger die Sidebar verlässt
-function hideMiniPlayer() {
-    // Stoppe den Mini-Player
-    document.getElementById('mini-video').pause();
-    
-    // Verstecke den Mini-Player
-    document.getElementById('mini-player').style.display = 'none';
-}
-
-// Füge Event-Listener für den Mauszeiger hinzu
-document.getElementById('sidebar').addEventListener('mouseover', function(e) {
-    // Überprüfe, ob der Mauszeiger über einen Sender in der Sidebar fährt
-    if (e.target && e.target.matches('li')) {
-        // Rufe die Funktion showMiniPlayer auf und übergebe die Stream-URL des Senders
-        showMiniPlayer(e.target.dataset.streamUrl);
-    }
-});
-
-// Füge Event-Listener hinzu, um den Mini-Player zu verstecken, wenn der Mauszeiger die Sidebar verlässt
-document.getElementById('sidebar').addEventListener('mouseleave', function() {
-    // Rufe die Funktion hideMiniPlayer auf, um den Mini-Player zu verstecken
-    hideMiniPlayer();
-});
-
