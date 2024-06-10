@@ -545,7 +545,6 @@ function toggleContent(contentId) {
 
 
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const sidebar = document.getElementById("sidebar");
     const sidebarListItems = sidebar.querySelectorAll("li");
@@ -556,18 +555,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         item.addEventListener("mouseover", function(event) {
             if (streamUrl) {
-                const smallPlayer = document.createElement("div");
-                smallPlayer.id = "smallPlayer";
-                smallPlayer.innerHTML = `
-                    <video controls autoplay>
-                        <source src="${streamUrl}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                `;
-                smallPlayer.style.position = "fixed";
-                smallPlayer.style.top = `${event.clientY}px`;
-                smallPlayer.style.left = `${event.clientX}px`;
-                
+                const smallPlayer = createMiniPlayer(streamUrl);
+                positionMiniPlayer(smallPlayer, event.clientX, event.clientY);
                 document.body.appendChild(smallPlayer);
 
                 item.addEventListener("mouseleave", function() {
@@ -610,5 +599,23 @@ document.addEventListener("DOMContentLoaded", function() {
         const miniPlayer = document.querySelector('.mini-player');
         miniPlayer.style.display = 'none';
         miniPlayer.innerHTML = ''; // entferne den Inhalt des Players
+    }
+
+    function createMiniPlayer(streamUrl) {
+        const smallPlayer = document.createElement("div");
+        smallPlayer.id = "smallPlayer";
+        smallPlayer.innerHTML = `
+            <video controls autoplay>
+                <source src="${streamUrl}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        `;
+        smallPlayer.style.position = "fixed";
+        return smallPlayer;
+    }
+
+    function positionMiniPlayer(player, x, y) {
+        player.style.top = `${y}px`;
+        player.style.left = `${x}px`;
     }
 });
