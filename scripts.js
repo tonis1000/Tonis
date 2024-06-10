@@ -533,21 +533,42 @@ function toggleContent(contentId) {
 }
 
 
-const container = document.querySelector('.main-container'); // Annahme: .main-container umschließt sowohl Sidebar als auch Playlist
 
-container.addEventListener('mouseover', function(event) {
-    const senderId = event.target.dataset.senderId; // Annahme: Der tvg-id-Wert jedes Senders entspricht seiner ID
-    if (senderId) {
-        // Erzeuge und zeige den kleinen Player mit dem Inhalt des ausgewählten Senders
-        showMiniPlayer(senderId);
+
+
+// Diese Funktion wird aufgerufen, wenn der Mauszeiger über einen Sender in der Sidebar fährt
+function showMiniPlayer(streamURL) {
+    // Aktualisiere die Quelle des Mini-Players mit der Stream-URL des ausgewählten Senders
+    document.getElementById('mini-source').setAttribute('src', streamURL);
+    
+    // Spiele den Stream im Mini-Player ab
+    document.getElementById('mini-video').play();
+    
+    // Zeige den Mini-Player
+    document.getElementById('mini-player').style.display = 'block';
+}
+
+// Diese Funktion wird aufgerufen, wenn der Mauszeiger die Sidebar verlässt
+function hideMiniPlayer() {
+    // Stoppe den Mini-Player
+    document.getElementById('mini-video').pause();
+    
+    // Verstecke den Mini-Player
+    document.getElementById('mini-player').style.display = 'none';
+}
+
+// Füge Event-Listener für den Mauszeiger hinzu
+document.getElementById('sidebar').addEventListener('mouseover', function(e) {
+    // Überprüfe, ob der Mauszeiger über einen Sender in der Sidebar fährt
+    if (e.target && e.target.matches('li')) {
+        // Rufe die Funktion showMiniPlayer auf und übergebe die Stream-URL des Senders
+        showMiniPlayer(e.target.dataset.streamUrl);
     }
 });
 
-
-
-function showMiniPlayer(senderId) {
-    // Hier den Code zum Erzeugen und Anzeigen des Mini-Players einfügen
-    // Du könntest zum Beispiel ein Modal-Fenster verwenden oder einen Bereich direkt neben der Sidebar anzeigen
-}
-
+// Füge Event-Listener hinzu, um den Mini-Player zu verstecken, wenn der Mauszeiger die Sidebar verlässt
+document.getElementById('sidebar').addEventListener('mouseleave', function() {
+    // Rufe die Funktion hideMiniPlayer auf, um den Mini-Player zu verstecken
+    hideMiniPlayer();
+});
 
