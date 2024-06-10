@@ -543,7 +543,6 @@ function toggleContent(contentId) {
 
 
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const sidebar = document.getElementById("sidebar");
     const sidebarListItems = sidebar.querySelectorAll("li");
@@ -553,12 +552,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const streamUrl = channelInfo.dataset.stream;
 
         item.addEventListener("mouseover", function(event) {
+            console.log("Mouseover auf Sidebar-Element");
             if (streamUrl) {
                 const smallPlayer = createMiniPlayer(streamUrl);
                 positionMiniPlayer(smallPlayer, event.clientX, event.clientY);
                 document.body.appendChild(smallPlayer);
 
                 item.addEventListener("mouseleave", function() {
+                    console.log("Mouseleave auf Sidebar-Element");
                     document.body.removeChild(smallPlayer);
                 });
             }
@@ -575,12 +576,14 @@ document.addEventListener("DOMContentLoaded", function() {
     // Füge Eventlistener hinzu, um den Player zu zeigen/verstecken
     channelInfos.forEach(channelInfo => {
         channelInfo.addEventListener('mouseover', function(event) {
+            console.log("Mouseover auf Channel-Info");
             const streamURL = this.dataset.stream;
             const { clientX, clientY } = event;
             showMiniPlayer(clientX, clientY, streamURL);
         });
 
         channelInfo.addEventListener('mouseout', function() {
+            console.log("Mouseleave auf Channel-Info");
             hideMiniPlayer();
         });
     });
