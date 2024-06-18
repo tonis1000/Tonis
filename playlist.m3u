@@ -12,6 +12,9 @@ https://cdn1.smart-tv-data.com/vid/ert-3-hbbtv/playlist.m3u8
 #EXTINF:-1 tvg-id="ertnews" tvg-logo="https://i.imgur.com/XwLTzaF.jpg", ERT News
 https://ertflix.s.llnwi.net/ertlive/ertnews/default/index.m3u8
 
+#EXTINF:-1 tvg-id="ertnews" tvg-logo="https://i.imgur.com/XwLTzaF.jpg", ERT News
+https://cdn1.smart-tv-data.com/vid/ertnews/playlist.m3u8
+
 #EXTINF:-1 tvg-id="ant1" tvg-logo="https://i.imgur.com/V1w22Or.png", Ant1
 https://d1nfykbwa3n98t.cloudfront.net/out/v1/6e5667da5a6843899a337dea72adb61b/antenna.m3u8
 
