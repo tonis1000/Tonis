@@ -1,0 +1,52 @@
+name: Update URLs
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        default: 'add'
+        type: choice
+        options:
+          - add
+          - delete
+      url:
+        description: 'URL to add or delete'
+        required: true
+        default: ''
+
+jobs:
+  update-urls:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Add URL to urls.txt
+      if: ${{ github.event.inputs.action == 'add' }}
+      run: |
+        echo "${{ github.event.inputs.url }}" >> urls.txt
+
+    - name: Delete URL from urls.txt
+      if: ${{ github.event.inputs.action == 'delete' }}
+      run: |
+        sed -i '/${{ github.event.inputs.url }}/d' urls.txt
+
+    - name: Commit changes
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git add urls.txt
+        git commit -m "Update urls.txt"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GH_TOKEN }}
