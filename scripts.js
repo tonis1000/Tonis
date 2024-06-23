@@ -534,5 +534,48 @@ function toggleContent(contentId) {
 
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    const insertButton = document.getElementById('insert-button');
+    const deleteButton = document.getElementById('delete-button');
+    const streamUrlInput = document.getElementById('stream-url');
+    const playlistUrls = document.getElementById('playlist-urls');
+
+    insertButton.addEventListener('click', function() {
+        const url = streamUrlInput.value.trim();
+        if (url && !isUrlInList(url)) {
+            const li = document.createElement('li');
+            li.textContent = url;
+            li.addEventListener('click', function() {
+                streamUrlInput.value = url;
+            });
+            playlistUrls.appendChild(li);
+        }
+    });
+
+    deleteButton.addEventListener('click', function() {
+        const url = streamUrlInput.value.trim();
+        if (url) {
+            const items = playlistUrls.getElementsByTagName('li');
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].textContent === url) {
+                    playlistUrls.removeChild(items[i]);
+                    break;
+                }
+            }
+        }
+    });
+
+    function isUrlInList(url) {
+        const items = playlistUrls.getElementsByTagName('li');
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].textContent === url) {
+                return true;
+            }
+        }
+        return false;
+    }
+});
+
+
 
 
