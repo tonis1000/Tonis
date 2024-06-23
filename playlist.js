@@ -1,13 +1,11 @@
-// playlist.js
-
 const fetch = require('node-fetch');
-const fs = require('fs');
 
 const GITHUB_API_URL = 'https://api.github.com';
-const REPO_OWNER = 'tonis1000';
-const REPO_NAME = 'Tonis';
-const FILE_PATH = 'urls.txt';
-const GITHUB_TOKEN = process.env.GH_TOKEN;
+const REPO_OWNER = 'tonis1000'; // Dein GitHub Benutzername
+const REPO_NAME = 'Tonis'; // Name deines Repositories
+const FILE_PATH = 'urls.txt'; // Pfad zur Datei in deinem Repository
+
+const GITHUB_TOKEN = process.env.GH_TOKEN; // Dein GitHub Access Token
 
 async function fetchUrls() {
     const response = await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
@@ -16,15 +14,20 @@ async function fetchUrls() {
             'Accept': 'application/vnd.github.v3.raw'
         }
     });
-    if (!response.ok) {
-        throw new Error(`Failed to fetch URLs: ${response.statusText}`);
-    }
     const text = await response.text();
-    return text.split('\n').filter(url => url.trim() !== '');
+    return text.split('\n').filter(url => url);
 }
 
 async function updateFile(content) {
     const response = await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
+    });
+    const fileData = await response.json();
+    const updatedContent = Buffer.from(content).toString('base64');
+
+    await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
         method: 'PUT',
         headers: {
             'Authorization': `token ${GITHUB_TOKEN}`,
@@ -32,28 +35,10 @@ async function updateFile(content) {
         },
         body: JSON.stringify({
             message: 'Update urls.txt',
-            content: Buffer.from(content).toString('base64'),
-            sha: await getSha()
+            content: updatedContent,
+            sha: fileData.sha
         })
     });
-    if (!response.ok) {
-        throw new Error(`Failed to update file: ${response.statusText}`);
-    }
-    console.log('File updated successfully.');
-}
-
-async function getSha() {
-    const response = await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
-        headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`,
-            'Accept': 'application/vnd.github.v3.raw'
-        }
-    });
-    if (!response.ok) {
-        throw new Error(`Failed to get file SHA: ${response.statusText}`);
-    }
-    const fileData = await response.json();
-    return fileData.sha;
 }
 
 async function addUrl(url) {
@@ -68,13 +53,4 @@ async function deleteUrl(url) {
     await updateFile(updatedUrls.join('\n'));
 }
 
-async function loadUrls() {
-    const urls = await fetchUrls();
-    console.log('Loaded URLs:');
-    urls.forEach(url => console.log(url));
-}
-
-// Example usage
-// loadUrls();  // Uncomment to load and display URLs
-// addUrl('https://example.com');  // Example to add a new URL
-// deleteUrl('https://example.com');  // Example to delete a URL
+module.exports = { fetchUrls, addUrl, deleteUrl };
