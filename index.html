@@ -46,9 +46,10 @@
                     <div class="player-info-top">
                         <span id="current-channel-name">Aktueller Sender</span>
                         <button id="clear-button">Leeren</button>
-                        <button id="insert-button">Einfügen</button>
                         <button id="copy-button">Kopieren</button>
                         <button id="playlist-button">Playlist</button>
+                        <button id="insert-button">Url Speichern</button>
+                        <button id="delete-button">URL Löschen</button>
                     </div>
                     <div class="player-info-bottom">
                         <input type="text" id="stream-url" placeholder="Stream URL eingeben">
@@ -107,7 +108,11 @@
                 <iframe src="https://programmatileorasis.gr" width="100%" height="100%"" frameborder="0"></iframe>
             </div>
 
-
+            <div class="content-title" onclick="toggleContent('Playliste-URLs')">Playliste URLs</div>
+            <div id="Playliste-URLs" class="content-body">
+            <ul id="playlist-urls"></ul>
+            </div>
+    
     
         </div>
 
