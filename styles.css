@@ -371,28 +371,31 @@ div.next-program h4 {
 
 
 
-/* Zusätzlicher Stil für die Playliste URLs */
-#playlist-urls {
+
+
+
+
+
+
+#playlist {
     list-style-type: none;
     padding: 0;
-    color: #ffffff; /* Weiße Schriftfarbe für die URLs */
-    margin: 0; /* Neuer Stil: Entfernen Sie den oberen und unteren Abstand, der Ihnen so gut gefällt */
+    margin: 0;
+    overflow-y: auto;
+    max-height: 200px; /* Beispielhafte Begrenzung für die Höhe der Playliste */
 }
 
- # in response
-
-
-#playlist-urls li {
-    margin: 5px 0;
-    cursor: pointer;
-    background-color: #444; /* Hintergrundfarbe für die URLs */
+#playlist li {
     padding: 5px;
-    border-radius: 5px;
+    cursor: pointer;
 }
 
-#playlist-urls li:hover {
-    background-color: #555; /* Dunklere Farbe beim Hover */
+#playlist li.selected {
+    background-color: #555; /* Beispielhafte Hervorhebung für ausgewählte URL */
 }
+
+
+
 
 
 
