@@ -530,23 +530,24 @@ function toggleContent(contentId) {
 
 
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const insertButton = document.getElementById('insert-button');
-            const deleteButton = document.getElementById('delete-button');
-            const streamUrlInput = document.getElementById('stream-url');
-            const playlistUrls = document.getElementById('playlist-urls');
+document.addEventListener('DOMContentLoaded', function() {
+    const insertButton = document.getElementById('insert-button');
+    const streamUrlInput = document.getElementById('stream-url');
+    const playlistUrls = document.getElementById('playlist-urls');
 
-            insertButton.addEventListener('click', function() {
-                const url = streamUrlInput.value.trim();
-                if (url && !isUrlInList(url)) {
-                    const li = document.createElement('li');
-                    li.textContent = url;
-                    li.addEventListener('click', function() {
-                        streamUrlInput.value = url;
-                    });
-                    playlistUrls.appendChild(li);
-                    streamUrlInput.value = ""; // Leert das Eingabefeld nach dem Hinzufügen der URL
-                }
+    insertButton.addEventListener('click', function() {
+        const url = streamUrlInput.value.trim();
+        if (url && !isUrlInList(url)) {
+            const li = document.createElement('li');
+            li.textContent = url;
+            li.addEventListener('click', function() {
+                streamUrlInput.value = url;
+            });
+            playlistUrls.appendChild(li);
+            streamUrlInput.value = ""; // Leert das Eingabefeld nach dem Hinzufügen der URL
+        } else {
+            console.log('URL ist entweder leer oder bereits in der Liste.');
+        }
     });
 
             deleteButton.addEventListener('click', function() {
