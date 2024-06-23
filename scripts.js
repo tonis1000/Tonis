@@ -43,7 +43,11 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 
 
-
+// Einfügen Button
+document.getElementById('insert-button').addEventListener('click', function() {
+    // Hier die Funktionalität für den Einfügen-Button implementieren
+    alert("Funktionalität für Einfügen-Button wird implementiert...");
+});
 
 
 
@@ -527,65 +531,3 @@ function toggleContent(contentId) {
         }
     });
 }
-
-
-
-
-
-
-
-
-
-
-// Array zur Speicherung der Playliste-URLs
-    let urlList = [];
-
-    function insertUrl() {
-        const urlInput = document.getElementById('stream-url').value;
-        if (urlInput.trim() !== '') {
-            if (!urlList.includes(urlInput)) {
-                urlList.push(urlInput);
-                updatePlaylist();
-            }
-        }
-    }
-
-    function deleteUrl() {
-        const selectedUrl = document.querySelector('#playlist li.selected');
-        if (selectedUrl) {
-            const urlToDelete = selectedUrl.textContent.trim();
-            urlList = urlList.filter(url => url !== urlToDelete);
-            updatePlaylist();
-            clearStreamUrlIfMatches(urlToDelete);
-        }
-    }
-
-    function updatePlaylist() {
-        const playlist = document.getElementById('playlist');
-        playlist.innerHTML = '';
-        urlList.forEach(url => {
-            const li = document.createElement('li');
-            li.textContent = url;
-            li.onclick = () => setStreamUrl(url);
-            playlist.appendChild(li);
-        });
-    }
-
-    function setStreamUrl(url) {
-        document.getElementById('stream-url').value = url;
-    }
-
-    function clearStreamUrlIfMatches(urlToDelete) {
-        const currentStreamUrl = document.getElementById('stream-url').value;
-        if (currentStreamUrl === urlToDelete) {
-            document.getElementById('stream-url').value = '';
-        }
-    }
-
-    function toggleContent(contentId) {
-        const content = document.getElementById(contentId);
-        content.classList.toggle('expanded');
-    }
-
-    // Event Listener für das Löschen einer URL
-    document.getElementById('delete-button').addEventListener('click', deleteUrl);
