@@ -363,6 +363,45 @@ div.next-program h4 {
     margin-bottom: 2px;
 }
 
+
+
+
+
+
+
+
+
+/* Zusätzlicher Stil für die Playliste URLs */
+#playlist-urls {
+    list-style-type: none;
+    padding: 0;
+    color: #ffffff; /* Weiße Schriftfarbe für die URLs */
+}
+
+#playlist-urls li {
+    margin: 5px 0;
+    cursor: pointer;
+    background-color: #444; /* Hintergrundfarbe für die URLs */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#playlist-urls li:hover {
+    background-color: #555; /* Dunklere Farbe beim Hover */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 .expandable {
     max-height: 0;
     overflow: hidden;
