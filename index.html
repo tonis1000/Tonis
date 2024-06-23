@@ -48,8 +48,8 @@
                         <button id="clear-button">Leeren</button>
                         <button id="copy-button">Kopieren</button>
                         <button id="playlist-button">Playlist</button>
-                        <button id="insert-button">Url Speichern</button>
-                        <button id="delete-button">URL Löschen</button>
+                        <button id="insert-button" onclick="insertUrl()">Einfügen</button>
+                        <button id="delete-button" onclick="deleteUrl()">Url Löschen</button>
                     </div>
                     <div class="player-info-bottom">
                         <input type="text" id="stream-url" placeholder="Stream URL eingeben">
@@ -109,8 +109,11 @@
             </div>
 
             <div class="content-title" onclick="toggleContent('Playliste-URLs')">Playliste URLs</div>
-            <div id="Playliste-URLs" class="content-body">
-            <ul id="playlist-urls"></ul>
+            <div id="playlist-content" class="content-body expandable">
+            <ul id="playlist">
+            <!-- Hier werden die URLs dynamisch eingefügt -->
+            </ul>
+
             </div>
     
     
