@@ -537,59 +537,55 @@ function toggleContent(contentId) {
 
 
 
-// JavaScript-Funktionen für die Playliste URLs
-        let urlList = [];
+// Array zur Speicherung der Playliste-URLs
+    let urlList = [];
 
-        function insertUrl() {
-            const urlInput = document.getElementById('stream-url').value;
-            if (urlInput.trim() !== '') {
-                if (!urlList.includes(urlInput)) {
-                    urlList.push(urlInput);
-                    updatePlaylist();
-                }
-            }
-        }
-
-        function deleteUrl() {
-            const selectedUrl = document.querySelector('#playlist li.selected');
-            if (selectedUrl) {
-                const urlToDelete = selectedUrl.textContent.trim();
-                urlList = urlList.filter(url => url !== urlToDelete);
+    function insertUrl() {
+        const urlInput = document.getElementById('stream-url').value;
+        if (urlInput.trim() !== '') {
+            if (!urlList.includes(urlInput)) {
+                urlList.push(urlInput);
                 updatePlaylist();
-                clearStreamUrlIfMatches(urlToDelete);
             }
         }
+    }
 
-        function updatePlaylist() {
-            const playlist = document.getElementById('playlist');
-            playlist.innerHTML = '';
-            urlList.forEach(url => {
-                const li = document.createElement('li');
-                li.textContent = url;
-                li.onclick = () => setStreamUrl(url);
-                playlist.appendChild(li);
-            });
+    function deleteUrl() {
+        const selectedUrl = document.querySelector('#playlist li.selected');
+        if (selectedUrl) {
+            const urlToDelete = selectedUrl.textContent.trim();
+            urlList = urlList.filter(url => url !== urlToDelete);
+            updatePlaylist();
+            clearStreamUrlIfMatches(urlToDelete);
         }
+    }
 
-        function setStreamUrl(url) {
-            document.getElementById('stream-url').value = url;
+    function updatePlaylist() {
+        const playlist = document.getElementById('playlist');
+        playlist.innerHTML = '';
+        urlList.forEach(url => {
+            const li = document.createElement('li');
+            li.textContent = url;
+            li.onclick = () => setStreamUrl(url);
+            playlist.appendChild(li);
+        });
+    }
+
+    function setStreamUrl(url) {
+        document.getElementById('stream-url').value = url;
+    }
+
+    function clearStreamUrlIfMatches(urlToDelete) {
+        const currentStreamUrl = document.getElementById('stream-url').value;
+        if (currentStreamUrl === urlToDelete) {
+            document.getElementById('stream-url').value = '';
         }
+    }
 
-        function clearStreamUrlIfMatches(urlToDelete) {
-            const currentStreamUrl = document.getElementById('stream-url').value;
-            if (currentStreamUrl === urlToDelete) {
-                document.getElementById('stream-url').value = '';
-            }
-        }
+    function toggleContent(contentId) {
+        const content = document.getElementById(contentId);
+        content.classList.toggle('expanded');
+    }
 
-        function toggleContent(contentId) {
-            const content = document.getElementById(contentId);
-            content.classList.toggle('expanded');
-        }
-
-
-
-
-
-
-
+    // Event Listener für das Löschen einer URL
+    document.getElementById('delete-button').addEventListener('click', deleteUrl);
