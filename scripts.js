@@ -537,64 +537,56 @@ function toggleContent(contentId) {
 
 
 
+// JavaScript-Funktionen für die Playliste URLs
+        let urlList = [];
 
-// JavaScript-Funktionen zum Hinzufügen, Löschen und Verwalten von URLs
-
-// Array für die gespeicherten URLs
-let urlList = [];
-
-// Funktion zum Ein- und Ausklappen des Inhalts
-function toggleContent(sectionId) {
-    const section = document.getElementById(sectionId);
-    section.classList.toggle('expanded');
-}
-
-// Funktion zum Hinzufügen der aktuellen URL aus stream-url in die Liste
-function insertUrl() {
-    const urlInput = document.getElementById('stream-url').value;
-    if (urlInput.trim() !== '') {
-        if (!urlList.includes(urlInput)) {
-            urlList.push(urlInput);
-            updatePlaylist();
+        function insertUrl() {
+            const urlInput = document.getElementById('stream-url').value;
+            if (urlInput.trim() !== '') {
+                if (!urlList.includes(urlInput)) {
+                    urlList.push(urlInput);
+                    updatePlaylist();
+                }
+            }
         }
-    }
-}
 
-// Funktion zum Löschen der ausgewählten URL aus der Liste und dem stream-url Feld
-function deleteUrl() {
-    const selectedUrl = document.querySelector('#playlist li.selected');
-    if (selectedUrl) {
-        const urlToDelete = selectedUrl.textContent;
-        urlList = urlList.filter(url => url !== urlToDelete);
-        updatePlaylist();
-        clearStreamUrlIfMatches(urlToDelete);
-    }
-}
+        function deleteUrl() {
+            const selectedUrl = document.querySelector('#playlist li.selected');
+            if (selectedUrl) {
+                const urlToDelete = selectedUrl.textContent.trim();
+                urlList = urlList.filter(url => url !== urlToDelete);
+                updatePlaylist();
+                clearStreamUrlIfMatches(urlToDelete);
+            }
+        }
 
-// Funktion zum Aktualisieren der angezeigten Playliste
-function updatePlaylist() {
-    const playlist = document.getElementById('playlist');
-    playlist.innerHTML = '';
-    urlList.forEach(url => {
-        const li = document.createElement('li');
-        li.textContent = url;
-        li.onclick = () => setStreamUrl(url);
-        playlist.appendChild(li);
-    });
-}
+        function updatePlaylist() {
+            const playlist = document.getElementById('playlist');
+            playlist.innerHTML = '';
+            urlList.forEach(url => {
+                const li = document.createElement('li');
+                li.textContent = url;
+                li.onclick = () => setStreamUrl(url);
+                playlist.appendChild(li);
+            });
+        }
 
-// Funktion zum Setzen des stream-url Felds auf eine ausgewählte URL
-function setStreamUrl(url) {
-    document.getElementById('stream-url').value = url;
-}
+        function setStreamUrl(url) {
+            document.getElementById('stream-url').value = url;
+        }
 
-// Funktion zum Löschen des stream-url Felds, wenn die URL gelöscht wird
-function clearStreamUrlIfMatches(urlToDelete) {
-    const currentStreamUrl = document.getElementById('stream-url').value;
-    if (currentStreamUrl === urlToDelete) {
-        document.getElementById('stream-url').value = '';
-    }
-}
+        function clearStreamUrlIfMatches(urlToDelete) {
+            const currentStreamUrl = document.getElementById('stream-url').value;
+            if (currentStreamUrl === urlToDelete) {
+                document.getElementById('stream-url').value = '';
+            }
+        }
+
+        function toggleContent(contentId) {
+            const content = document.getElementById(contentId);
+            content.classList.toggle('expanded');
+        }
+
 
 
 
