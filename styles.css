@@ -376,7 +376,7 @@ div.next-program h4 {
     list-style-type: none;
     padding: 0;
     color: #ffffff; /* Weiße Schriftfarbe für die URLs */
-    margin: 300; /* Neuer Stil: Entfernen Sie den oberen und unteren Abstand, der Ihnen so gut gefällt */
+    margin: 0; /* Neuer Stil: Entfernen Sie den oberen und unteren Abstand, der Ihnen so gut gefällt */
 }
 
  # in response
