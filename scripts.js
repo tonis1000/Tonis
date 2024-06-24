@@ -527,3 +527,105 @@ function toggleContent(contentId) {
         }
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Event-Listener für den Einfügen-Button
+    document.getElementById('insert-button').addEventListener('click', function() {
+        const streamUrlInput = document.getElementById('stream-url');
+        const streamUrl = streamUrlInput.value.trim();
+
+        if (streamUrl) {
+            addUrlToList(streamUrl);
+            saveUrlsToFile();
+            streamUrlInput.value = '';
+        }
+    });
+
+    // Event-Listener für den Löschen-Button
+    document.getElementById('delete-button').addEventListener('click', function() {
+        const streamUrlInput = document.getElementById('stream-url');
+        const streamUrl = streamUrlInput.value.trim();
+
+        if (streamUrl) {
+            removeUrlFromList(streamUrl);
+            saveUrlsToFile();
+        }
+    });
+
+    // Laden der URLs beim Start der Anwendung
+    loadUrlsFromFile();
+});
+
+// Funktion zum Hinzufügen einer URL zur Liste
+function addUrlToList(url) {
+    const urlList = document.getElementById('playlist-url-list');
+    const listItem = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = '#';
+    link.textContent = url;
+    link.addEventListener('click', function() {
+        document.getElementById('stream-url').value = url;
+    });
+    listItem.appendChild(link);
+    urlList.appendChild(listItem);
+}
+
+// Funktion zum Entfernen einer URL aus der Liste
+function removeUrlFromList(url) {
+    const urlList = document.getElementById('playlist-url-list');
+    const items = urlList.getElementsByTagName('li');
+    for (let i = 0; i < items.length; i++) {
+        if (items[i].textContent === url) {
+            urlList.removeChild(items[i]);
+            break;
+        }
+    }
+}
+
+// Funktion zum Speichern der URLs in einer Datei
+function saveUrlsToFile() {
+    const urlList = document.getElementById('playlist-url-list');
+    const urls = [];
+    const items = urlList.getElementsByTagName('li');
+    for (let i = 0; i < items.length; i++) {
+        urls.push(items[i].textContent);
+    }
+    const blob = new Blob([urls.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'urls.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// Funktion zum Laden der URLs aus einer Datei
+function loadUrlsFromFile() {
+    fetch('urls.txt')
+        .then(response => response.text())
+        .then(data => {
+            const urls = data.split('\n');
+            urls.forEach(url => {
+                if (url.trim()) {
+                    addUrlToList(url.trim());
+                }
+            });
+        })
+        .catch(error => console.error('Fehler beim Laden der URLs:', error));
+}
