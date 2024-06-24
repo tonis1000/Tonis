@@ -7,6 +7,9 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <style>
+        /* Hier können zusätzliche CSS-Stile definiert werden, falls erforderlich */
+    </style>
 </head>
 <body>
     <div class="main-container">
@@ -44,11 +47,11 @@
                 <div class="player-info-container">
                     <div class="player-info-top">
                         <span id="current-channel-name">Aktueller Sender</span>
-                        <button id="clear-button">Leeren</button>         
+                        <button id="clear-button">Leeren</button>
                         <button id="copy-button">Kopieren</button>
                         <button id="playlist-button">Playlist</button>
-                        <button id="insert-button">Einfügen</button>
-                        <button id="delete-button">URL Löschen</button>
+                        <button id="insert-button" onclick="insertUrl()">Einfügen</button>
+                        <button id="delete-button" onclick="deleteUrl()">Url Löschen</button>
                     </div>
                     <div class="player-info-bottom">
                         <input type="text" id="stream-url" placeholder="Stream URL eingeben">
@@ -66,7 +69,7 @@
                 <p id="program-desc"></p>
             </div>
             <div id="next-programs">
-                <!-- Container für die nächsten Programme -->
+                <!-- Beispiel für nächste Programme -->
                 <div class="next-program">
                     <h4 class="next-program-title">Nächstes Programm 1 (09:00 - 10:00)</h4>
                     <p class="next-program-desc" style="display: none;">Beschreibung des nächsten Programms 1</p>
@@ -98,12 +101,22 @@
             <div id="TV-Programm-content" class="content-body expandable">
                 <iframe src="https://programmatileorasis.gr" width="100%" height="100%" frameborder="0"></iframe>
             </div>
-            <div class="content-title" onclick="toggleContent('Playlist-URLs-content')">Playlist URLs</div>
-            <div id="Playlist-URLs-content" class="content-body expandable">
-                <ul id="playlist-url-list"></ul>
+            <div class="content-title" onclick="toggleContent('Playliste-URLs')">Playliste URLs</div>
+            <div id="Playliste-URLs" class="content-body expandable">
+                <ul id="playlist">
+                    <!-- Hier werden die URLs dynamisch eingefügt -->
+                </ul>
             </div>
         </div>
     </div>
-    <script src="scripts.js"></script>
+
+     <script src="playlist.js"></script>
+     <script src="scripts.js"></script>
+
+
+
+
+
+    
 </body>
 </html>
