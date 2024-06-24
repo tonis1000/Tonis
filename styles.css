@@ -363,6 +363,52 @@ div.next-program h4 {
     margin-bottom: 2px;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#playlist {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    max-height: 200px; /* Beispielhafte Begrenzung für die Höhe der Playliste */
+}
+
+#playlist li {
+    padding: 5px;
+    cursor: pointer;
+}
+
+#playlist li.selected {
+    background-color: #555; /* Beispielhafte Hervorhebung für ausgewählte URL */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .expandable {
     max-height: 0;
     overflow: hidden;
@@ -372,66 +418,6 @@ div.next-program h4 {
 .expandable.expanded {
     max-height: 600px; /* oder eine andere geeignete Höhe */
 }
-
-
-
-
-
-
-
-
-
-
-/* Stile für Playlist URLs */
-.playlist-urls {
-    margin-top: 20px;
-}
-
-.playlist-urls .content-title {
-    color: #3366cc; /* Blaue Farbe für den Titel */
-}
-
-.playlist-urls .content-body {
-    display: none; /* Standardmäßig ausgeblendet */
-    margin-top: 10px;
-}
-
-.playlist-urls.active .content-body {
-    display: block; /* Angezeigt, wenn active-Klasse vorhanden ist */
-}
-
-/* Stile für die Links innerhalb der Playlist URLs */
-.playlist-urls li {
-    margin-bottom: 5px;
-}
-
-.playlist-urls li a {
-    display: block;
-    color: #333;
-    text-decoration: none;
-    padding: 5px 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.playlist-urls li a:hover {
-    background-color: #e0e0e0;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* Medienabfragen für verschiedene Geräte und Bildschirmgrößen */
 
