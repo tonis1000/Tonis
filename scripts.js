@@ -552,6 +552,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const deleteButton = document.getElementById('delete-button');
     const playlistUrlsList = document.getElementById('playlist-urls-list');
 
+    // Beim Laden der Seite die URLs aus der Datei 'urls.txt' laden
+    fetchUrlsFromFile();
+
     // Eventlistener für den Einfügen-Button
     insertButton.addEventListener('click', function() {
         const streamUrl = document.getElementById('stream-url').value.trim(); // Wert von stream-url holen
@@ -604,6 +607,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Speichere die aktualisierte Liste in der 'urls.txt' Datei in GitHub
         updateUrlsFile();
+    }
+
+    // Funktion zum Laden der URLs aus der 'urls.txt' Datei
+    async function fetchUrlsFromFile() {
+        const repo = 'tonis1000/Tonis';
+        const path = 'urls.txt';
+        const apiUrl = `https://raw.githubusercontent.com/${repo}/main/${path}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error('Fehler beim Laden der Datei.');
+            }
+
+            const urlsContent = await response.text();
+            const urls = urlsContent.trim().split('\n');
+            urls.forEach(url => insertUrl(url.trim()));
+        } catch (error) {
+            console.error('Fehler beim Laden der URLs:', error);
+        }
     }
 
     // Funktion zum Aktualisieren der 'urls.txt' Datei in GitHub
