@@ -546,100 +546,80 @@ function toggleContent(contentId) {
 
 
 
-
 // script.js
+document.addEventListener('DOMContentLoaded', function() {
+    var insertButton = document.getElementById('insert-button');
+    var deleteButton = document.getElementById('delete-button');
+    var playlistUrlsList = document.getElementById('playlist-urls-list');
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Funktion zum Klicken auf den Titel, um den Inhalt aufzuklappen
-    function toggleContent(contentId) {
-        var contentBody = document.getElementById(contentId);
-        if (contentBody.style.display === 'block') {
-            contentBody.style.display = 'none';
-        } else {
-            contentBody.style.display = 'block';
+    insertButton.addEventListener('click', function() {
+        var streamUrlInput = document.getElementById('stream-url');
+        var url = streamUrlInput.value.trim();
+        if (url === '') return;
+
+        insertUrl(url);
+        streamUrlInput.value = '';
+    });
+
+    function insertUrl(url) {
+        var listItem = document.createElement('li');
+        var link = document.createElement('a');
+        link.href = url;
+        link.textContent = url;
+        listItem.appendChild(link);
+        playlistUrlsList.appendChild(listItem);
+
+        updateUrlsFile();
+    }
+
+    deleteButton.addEventListener('click', function() {
+        var streamUrlInput = document.getElementById('stream-url');
+        var url = streamUrlInput.value.trim();
+        if (url === '') return;
+
+        deleteUrl(url);
+        streamUrlInput.value = '';
+    });
+
+    function deleteUrl(url) {
+        var listItems = playlistUrlsList.getElementsByTagName('li');
+        for (var i = 0; i < listItems.length; i++) {
+            var listItem = listItems[i];
+            var link = listItem.querySelector('a');
+            if (link.href === url) {
+                listItem.remove();
+                updateUrlsFile();
+                break;
+            }
         }
     }
 
-    // Funktion zum Einfügen einer URL
-    document.getElementById('insert-button').addEventListener('click', function () {
-        var streamUrl = document.getElementById('stream-url').value.trim();
-        if (streamUrl !== '') {
-            insertUrl(streamUrl);
+    function updateUrlsFile() {
+        var urls = [];
+        var listItems = playlistUrlsList.getElementsByTagName('li');
+        for (var i = 0; i < listItems.length; i++) {
+            var link = listItems[i].querySelector('a');
+            urls.push(link.href);
         }
-    });
 
-    // Funktion zum Löschen einer URL
-    document.getElementById('delete-button').addEventListener('click', function () {
-        var streamUrl = document.getElementById('stream-url').value.trim();
-        if (streamUrl !== '') {
-            deleteUrl(streamUrl);
-        }
-    });
+        // Simulated update of 'urls.txt' file (since GitHub preview does not support file write)
+        console.log('Aktualisierte Playlist-URLs: ', urls);
+    }
 
-    // Initialisiere die Playlist URLs beim Laden der Seite
-    fetchUrlsFromFile();
+    // Load URLs from 'urls.txt' (simulated for GitHub preview)
+    loadUrlsFromTextFile();
 });
 
-// Funktion zum Einfügen einer URL in die Liste und in die Datei
-function insertUrl(url) {
-    var playlistUrlsList = document.getElementById('playlist-urls-list');
-    var listItem = document.createElement('li');
-    var link = document.createElement('a');
-    link.href = url;
-    link.textContent = url;
-    listItem.appendChild(link);
-    playlistUrlsList.appendChild(listItem);
+function loadUrlsFromTextFile() {
+    // Simulated function to load URLs from 'urls.txt'
+    var urls = [
+        'https://example.com/url1',
+        'https://example.com/url2',
+        'https://example.com/url3'
+    ];
 
-    // Füge die URL auch zur Datei hinzu
-    updateUrlsFile(url);
+    urls.forEach(function(url) {
+        insertUrl(url);
+    });
 }
 
-// Funktion zum Löschen einer URL aus der Liste und aus der Datei
-function deleteUrl(url) {
-    var playlistUrlsList = document.getElementById('playlist-urls-list');
-    var items = playlistUrlsList.getElementsByTagName('li');
-    for (var i = 0; i < items.length; i++) {
-        var link = items[i].querySelector('a');
-        if (link.href === url) {
-            items[i].parentNode.removeChild(items[i]);
-            // Lösche die URL auch aus der Datei
-            updateUrlsFile(url, true);
-            break;
-        }
-    }
-}
-
-// Funktion zum Laden der URLs aus der Datei
-function fetchUrlsFromFile() {
-    fetch('urls.txt')
-        .then(response => response.text())
-        .then(data => {
-            var urls = data.split('\n').filter(url => url.trim() !== '');
-            urls.forEach(url => insertUrl(url));
-        })
-        .catch(error => console.error('Fehler beim Laden der URLs:', error));
-}
-
-// Funktion zum Aktualisieren der Datei mit den URLs
-function updateUrlsFile(url, deleteUrl = false) {
-    fetch('urls.txt')
-        .then(response => response.text())
-        .then(data => {
-            var urls = data.split('\n').filter(url => url.trim() !== '');
-            if (deleteUrl) {
-                urls = urls.filter(u => u !== url);
-            } else {
-                urls.push(url);
-            }
-            var updatedContent = urls.join('\n');
-            return fetch('urls.txt', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'text/plain'
-                },
-                body: updatedContent
-            });
-        })
-        .then(() => console.log('URLs wurden aktualisiert.'))
-        .catch(error => console.error('Fehler beim Aktualisieren der URLs:', error));
-}
