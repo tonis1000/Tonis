@@ -544,6 +544,7 @@ function toggleContent(contentId) {
 
 
 
+
 document.addEventListener('DOMContentLoaded', function() {
     // Event-Listener für den Einfügen-Button
     document.getElementById('insert-button').addEventListener('click', function() {
@@ -565,6 +566,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (streamUrl) {
             removeUrlFromList(streamUrl);
             saveUrlsToFile();
+            streamUrlInput.value = '';
         }
     });
 
@@ -579,7 +581,8 @@ function addUrlToList(url) {
     const link = document.createElement('a');
     link.href = '#';
     link.textContent = url;
-    link.addEventListener('click', function() {
+    link.addEventListener('click', function(event) {
+        event.preventDefault(); // Verhindert das Scrollen zur Ankerposition
         document.getElementById('stream-url').value = url;
     });
     listItem.appendChild(link);
@@ -618,7 +621,12 @@ function saveUrlsToFile() {
 // Funktion zum Laden der URLs aus einer Datei
 function loadUrlsFromFile() {
     fetch('urls.txt')
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Fehler beim Laden der URLs: ' + response.status);
+            }
+            return response.text();
+        })
         .then(data => {
             const urls = data.split('\n');
             urls.forEach(url => {
@@ -627,5 +635,5 @@ function loadUrlsFromFile() {
                 }
             });
         })
-        .catch(error => console.error('Fehler beim Laden der URLs:', error));
+        .catch(error => console.error(error));
 }
