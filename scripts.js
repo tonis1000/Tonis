@@ -545,142 +545,100 @@ function toggleContent(contentId) {
 
 
 
+
 // script.js
 
-document.addEventListener('DOMContentLoaded', function() {
-    const insertButton = document.getElementById('insert-button');
-    const deleteButton = document.getElementById('delete-button');
-    const playlistUrlsList = document.getElementById('playlist-urls-list');
-
-    // Beim Laden der Seite die URLs aus der Datei 'urls.txt' laden
-    fetchUrlsFromFile();
-
-    // Eventlistener für den Einfügen-Button
-    insertButton.addEventListener('click', function() {
-        const streamUrl = document.getElementById('stream-url').value.trim(); // Wert von stream-url holen
-        if (streamUrl === '') {
-            alert('Bitte geben Sie eine URL ein.'); // Fehlermeldung, wenn kein URL eingegeben wurde
-            return;
+document.addEventListener('DOMContentLoaded', function () {
+    // Funktion zum Klicken auf den Titel, um den Inhalt aufzuklappen
+    function toggleContent(contentId) {
+        var contentBody = document.getElementById(contentId);
+        if (contentBody.style.display === 'block') {
+            contentBody.style.display = 'none';
+        } else {
+            contentBody.style.display = 'block';
         }
-
-        insertUrl(streamUrl);
-    });
-
-    // Eventlistener für den Löschen-Button
-    deleteButton.addEventListener('click', function() {
-        const streamUrl = document.getElementById('stream-url').value.trim(); // Wert von stream-url holen
-        if (streamUrl === '') {
-            alert('Bitte geben Sie eine URL ein.'); // Fehlermeldung, wenn kein URL eingegeben wurde
-            return;
-        }
-
-        deleteUrl(streamUrl);
-    });
-
-    // Funktion zum Hinzufügen einer URL
-    function insertUrl(url) {
-        const listItem = document.createElement('li');
-        const link = document.createElement('a');
-        link.textContent = url;
-        link.href = '#';
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('stream-url').value = url; // Setze den Wert von stream-url auf die geklickte URL
-        });
-        listItem.appendChild(link);
-        playlistUrlsList.appendChild(listItem);
-
-        // Speichere die URL in der 'urls.txt' Datei in GitHub
-        updateUrlsFile();
     }
+
+    // Funktion zum Einfügen einer URL
+    document.getElementById('insert-button').addEventListener('click', function () {
+        var streamUrl = document.getElementById('stream-url').value.trim();
+        if (streamUrl !== '') {
+            insertUrl(streamUrl);
+        }
+    });
 
     // Funktion zum Löschen einer URL
-    function deleteUrl(url) {
-        const items = playlistUrlsList.getElementsByTagName('li');
-        for (let i = 0; i < items.length; i++) {
-            const link = items[i].getElementsByTagName('a')[0];
-            if (link.textContent === url) {
-                playlistUrlsList.removeChild(items[i]);
-                break;
-            }
+    document.getElementById('delete-button').addEventListener('click', function () {
+        var streamUrl = document.getElementById('stream-url').value.trim();
+        if (streamUrl !== '') {
+            deleteUrl(streamUrl);
         }
+    });
 
-        // Speichere die aktualisierte Liste in der 'urls.txt' Datei in GitHub
-        updateUrlsFile();
-    }
-
-    // Funktion zum Laden der URLs aus der 'urls.txt' Datei
-    async function fetchUrlsFromFile() {
-        const repo = 'tonis1000/Tonis';
-        const path = 'urls.txt';
-        const apiUrl = `https://raw.githubusercontent.com/${repo}/main/${path}`;
-
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error('Fehler beim Laden der Datei.');
-            }
-
-            const urlsContent = await response.text();
-            const urls = urlsContent.trim().split('\n');
-            urls.forEach(url => insertUrl(url.trim()));
-        } catch (error) {
-            console.error('Fehler beim Laden der URLs:', error);
-        }
-    }
-
-    // Funktion zum Aktualisieren der 'urls.txt' Datei in GitHub
-    async function updateUrlsFile() {
-        const urls = Array.from(playlistUrlsList.getElementsByTagName('a')).map(link => link.textContent);
-        const urlsContent = urls.join('\n');
-
-        const repo = 'tonis1000/Tonis';
-        const branch = 'main';
-        const path = 'urls.txt';
-        const commitMessage = 'Update playlist URLs';
-
-        const token = 'YOUR_GITHUB_PERSONAL_ACCESS_TOKEN'; // Dein GitHub Personal Access Token
-        const apiUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
-
-        // Fetch-Anfrage an die GitHub API für den Dateiinhalt
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            headers: {
-                Authorization: `token ${token}`,
-            },
-        });
-
-        if (!response.ok) {
-            console.error('Fehler beim Abrufen der Datei von GitHub:', response.statusText);
-            return;
-        }
-
-        const fileData = await response.json();
-        const sha = fileData.sha;
-
-        // Daten für die PUT-Anfrage vorbereiten
-        const putData = {
-            message: commitMessage,
-            content: btoa(urlsContent), // In Base64 kodiert
-            sha: sha,
-            branch: branch,
-        };
-
-        // PUT-Anfrage zum Aktualisieren der Datei
-        const putResponse = await fetch(apiUrl, {
-            method: 'PUT',
-            headers: {
-                Authorization: `token ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(putData),
-        });
-
-        if (!putResponse.ok) {
-            console.error('Fehler beim Aktualisieren der Datei auf GitHub:', putResponse.statusText);
-            return;
-        }
-
-        console.log('Datei erfolgreich aktualisiert auf GitHub.');
-    }
+    // Initialisiere die Playlist URLs beim Laden der Seite
+    fetchUrlsFromFile();
 });
+
+// Funktion zum Einfügen einer URL in die Liste und in die Datei
+function insertUrl(url) {
+    var playlistUrlsList = document.getElementById('playlist-urls-list');
+    var listItem = document.createElement('li');
+    var link = document.createElement('a');
+    link.href = url;
+    link.textContent = url;
+    listItem.appendChild(link);
+    playlistUrlsList.appendChild(listItem);
+
+    // Füge die URL auch zur Datei hinzu
+    updateUrlsFile(url);
+}
+
+// Funktion zum Löschen einer URL aus der Liste und aus der Datei
+function deleteUrl(url) {
+    var playlistUrlsList = document.getElementById('playlist-urls-list');
+    var items = playlistUrlsList.getElementsByTagName('li');
+    for (var i = 0; i < items.length; i++) {
+        var link = items[i].querySelector('a');
+        if (link.href === url) {
+            items[i].parentNode.removeChild(items[i]);
+            // Lösche die URL auch aus der Datei
+            updateUrlsFile(url, true);
+            break;
+        }
+    }
+}
+
+// Funktion zum Laden der URLs aus der Datei
+function fetchUrlsFromFile() {
+    fetch('urls.txt')
+        .then(response => response.text())
+        .then(data => {
+            var urls = data.split('\n').filter(url => url.trim() !== '');
+            urls.forEach(url => insertUrl(url));
+        })
+        .catch(error => console.error('Fehler beim Laden der URLs:', error));
+}
+
+// Funktion zum Aktualisieren der Datei mit den URLs
+function updateUrlsFile(url, deleteUrl = false) {
+    fetch('urls.txt')
+        .then(response => response.text())
+        .then(data => {
+            var urls = data.split('\n').filter(url => url.trim() !== '');
+            if (deleteUrl) {
+                urls = urls.filter(u => u !== url);
+            } else {
+                urls.push(url);
+            }
+            var updatedContent = urls.join('\n');
+            return fetch('urls.txt', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: updatedContent
+            });
+        })
+        .then(() => console.log('URLs wurden aktualisiert.'))
+        .catch(error => console.error('Fehler beim Aktualisieren der URLs:', error));
+}
