@@ -392,8 +392,12 @@ div.next-program h4 {
 }
 
 .playlist-urls .content-body {
-    display: block; /* Standardmäßig anzeigen, da es eine Liste ist */
+    display: none; /* Standardmäßig ausgeblendet */
     margin-top: 10px;
+}
+
+.playlist-urls.active .content-body {
+    display: block; /* Angezeigt, wenn active-Klasse vorhanden ist */
 }
 
 /* Stile für die Links innerhalb der Playlist URLs */
