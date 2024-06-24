@@ -1,0 +1,50 @@
+name: Update URLs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      type:
+        description: 'Type of action (insert-url or delete-url)'
+        required: true
+        default: 'insert-url'
+      url:
+        description: 'URL to insert or delete'
+        required: true
+
+jobs:
+  update-urls:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Load URLs from urls.txt
+        id: load_urls
+        run: |
+          echo "::set-output name=urls::$(cat urls.txt)"
+
+      - name: Process Event Payload
+        id: process_payload
+        run: |
+          if [ "${{ github.event.inputs.type }}" == "insert-url" ]; then
+            echo "${{ github.event.inputs.url }}" >> urls.txt
+            echo "URL erfolgreich hinzugefügt."
+          elif [ "${{ github.event.inputs.type }}" == "delete-url" ]; then
+            sed -i "/${{ github.event.inputs.url }}/d" urls.txt
+            echo "URL erfolgreich gelöscht."
+          else
+            echo "Ungültiges Ereignis."
+            exit 1
+          fi
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add urls.txt
+          git commit -m "Update URLs via GitHub Actions"
+          git push
