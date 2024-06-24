@@ -43,7 +43,11 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 
 
-
+// Einfügen Button
+document.getElementById('insert-button').addEventListener('click', function() {
+    // Hier die Funktionalität für den Einfügen-Button implementieren
+    alert("Funktionalität für Einfügen-Button wird implementiert...");
+});
 
 
 
@@ -527,87 +531,3 @@ function toggleContent(contentId) {
         }
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Event Listener für den Einfügen-Button
-document.getElementById('insert-button').addEventListener('click', function() {
-    const streamUrl = document.getElementById('stream-url').value.trim();
-    if (streamUrl !== '') {
-        addUrl(streamUrl);
-    }
-});
-
-// Event Listener für den Löschen-Button
-document.getElementById('delete-button').addEventListener('click', function() {
-    const streamUrl = document.getElementById('stream-url').value.trim();
-    if (streamUrl !== '') {
-        deleteUrl(streamUrl);
-    }
-});
-
-// Funktion zum Hinzufügen einer URL
-function addUrl(url) {
-    const urls = loadUrlsFromLocalStorage();
-    if (!urls.includes(url)) {
-        urls.push(url);
-        saveUrlsToLocalStorage(urls);
-        renderUrlsList(urls);
-    }
-}
-
-// Funktion zum Löschen einer URL
-function deleteUrl(url) {
-    let urls = loadUrlsFromLocalStorage();
-    urls = urls.filter(u => u !== url);
-    saveUrlsToLocalStorage(urls);
-    renderUrlsList(urls);
-}
-
-// Funktion zum Laden der URLs aus localStorage
-function loadUrlsFromLocalStorage() {
-    const urls = localStorage.getItem('urls');
-    return urls ? JSON.parse(urls) : [];
-}
-
-// Funktion zum Speichern der URLs in localStorage
-function saveUrlsToLocalStorage(urls) {
-    localStorage.setItem('urls', JSON.stringify(urls));
-}
-
-// Funktion zum Rendern der URLs in der Liste
-function renderUrlsList(urls) {
-    const urlsList = document.getElementById('urls-list');
-    urlsList.innerHTML = '';
-    urls.forEach(url => {
-        const listItem = document.createElement('li');
-        listItem.textContent = url;
-        listItem.addEventListener('click', function() {
-            document.getElementById('stream-url').value = url;
-        });
-        urlsList.appendChild(listItem);
-    });
-}
-
-// Initial laden der URLs beim Seitenstart
-window.onload = function() {
-    const urls = loadUrlsFromLocalStorage();
-    renderUrlsList(urls);
-};
