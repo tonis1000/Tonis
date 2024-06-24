@@ -546,80 +546,68 @@ function toggleContent(contentId) {
 
 
 
-// script.js
-document.addEventListener('DOMContentLoaded', function() {
-    var insertButton = document.getElementById('insert-button');
-    var deleteButton = document.getElementById('delete-button');
-    var playlistUrlsList = document.getElementById('playlist-urls-list');
 
-    insertButton.addEventListener('click', function() {
-        var streamUrlInput = document.getElementById('stream-url');
-        var url = streamUrlInput.value.trim();
-        if (url === '') return;
-
-        insertUrl(url);
-        streamUrlInput.value = '';
-    });
-
-    function insertUrl(url) {
-        var listItem = document.createElement('li');
-        var link = document.createElement('a');
-        link.href = url;
-        link.textContent = url;
-        listItem.appendChild(link);
-        playlistUrlsList.appendChild(listItem);
-
-        updateUrlsFile();
+// Event Listener für den Einfügen-Button
+document.getElementById('insert-button').addEventListener('click', function() {
+    const streamUrl = document.getElementById('stream-url').value.trim();
+    if (streamUrl !== '') {
+        addUrl(streamUrl);
     }
-
-    deleteButton.addEventListener('click', function() {
-        var streamUrlInput = document.getElementById('stream-url');
-        var url = streamUrlInput.value.trim();
-        if (url === '') return;
-
-        deleteUrl(url);
-        streamUrlInput.value = '';
-    });
-
-    function deleteUrl(url) {
-        var listItems = playlistUrlsList.getElementsByTagName('li');
-        for (var i = 0; i < listItems.length; i++) {
-            var listItem = listItems[i];
-            var link = listItem.querySelector('a');
-            if (link.href === url) {
-                listItem.remove();
-                updateUrlsFile();
-                break;
-            }
-        }
-    }
-
-    function updateUrlsFile() {
-        var urls = [];
-        var listItems = playlistUrlsList.getElementsByTagName('li');
-        for (var i = 0; i < listItems.length; i++) {
-            var link = listItems[i].querySelector('a');
-            urls.push(link.href);
-        }
-
-        // Simulated update of 'urls.txt' file (since GitHub preview does not support file write)
-        console.log('Aktualisierte Playlist-URLs: ', urls);
-    }
-
-    // Load URLs from 'urls.txt' (simulated for GitHub preview)
-    loadUrlsFromTextFile();
 });
 
-function loadUrlsFromTextFile() {
-    // Simulated function to load URLs from 'urls.txt'
-    var urls = [
-        'https://example.com/url1',
-        'https://example.com/url2',
-        'https://example.com/url3'
-    ];
+// Event Listener für den Löschen-Button
+document.getElementById('delete-button').addEventListener('click', function() {
+    const streamUrl = document.getElementById('stream-url').value.trim();
+    if (streamUrl !== '') {
+        deleteUrl(streamUrl);
+    }
+});
 
-    urls.forEach(function(url) {
-        insertUrl(url);
+// Funktion zum Hinzufügen einer URL
+function addUrl(url) {
+    const urls = loadUrlsFromLocalStorage();
+    if (!urls.includes(url)) {
+        urls.push(url);
+        saveUrlsToLocalStorage(urls);
+        renderUrlsList(urls);
+    }
+}
+
+// Funktion zum Löschen einer URL
+function deleteUrl(url) {
+    let urls = loadUrlsFromLocalStorage();
+    urls = urls.filter(u => u !== url);
+    saveUrlsToLocalStorage(urls);
+    renderUrlsList(urls);
+}
+
+// Funktion zum Laden der URLs aus localStorage
+function loadUrlsFromLocalStorage() {
+    const urls = localStorage.getItem('urls');
+    return urls ? JSON.parse(urls) : [];
+}
+
+// Funktion zum Speichern der URLs in localStorage
+function saveUrlsToLocalStorage(urls) {
+    localStorage.setItem('urls', JSON.stringify(urls));
+}
+
+// Funktion zum Rendern der URLs in der Liste
+function renderUrlsList(urls) {
+    const urlsList = document.getElementById('urls-list');
+    urlsList.innerHTML = '';
+    urls.forEach(url => {
+        const listItem = document.createElement('li');
+        listItem.textContent = url;
+        listItem.addEventListener('click', function() {
+            document.getElementById('stream-url').value = url;
+        });
+        urlsList.appendChild(listItem);
     });
 }
 
+// Initial laden der URLs beim Seitenstart
+window.onload = function() {
+    const urls = loadUrlsFromLocalStorage();
+    renderUrlsList(urls);
+};
