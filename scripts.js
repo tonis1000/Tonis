@@ -545,3 +545,119 @@ function toggleContent(contentId) {
 
 
 
+// script.js
+
+document.addEventListener('DOMContentLoaded', function() {
+    const insertButton = document.getElementById('insert-button');
+    const deleteButton = document.getElementById('delete-button');
+    const playlistUrlsList = document.getElementById('playlist-urls-list');
+
+    // Eventlistener für den Einfügen-Button
+    insertButton.addEventListener('click', function() {
+        const streamUrl = document.getElementById('stream-url').value.trim(); // Wert von stream-url holen
+        if (streamUrl === '') {
+            alert('Bitte geben Sie eine URL ein.'); // Fehlermeldung, wenn kein URL eingegeben wurde
+            return;
+        }
+
+        insertUrl(streamUrl);
+    });
+
+    // Eventlistener für den Löschen-Button
+    deleteButton.addEventListener('click', function() {
+        const streamUrl = document.getElementById('stream-url').value.trim(); // Wert von stream-url holen
+        if (streamUrl === '') {
+            alert('Bitte geben Sie eine URL ein.'); // Fehlermeldung, wenn kein URL eingegeben wurde
+            return;
+        }
+
+        deleteUrl(streamUrl);
+    });
+
+    // Funktion zum Hinzufügen einer URL
+    function insertUrl(url) {
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        link.textContent = url;
+        link.href = '#';
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('stream-url').value = url; // Setze den Wert von stream-url auf die geklickte URL
+        });
+        listItem.appendChild(link);
+        playlistUrlsList.appendChild(listItem);
+
+        // Speichere die URL in der 'urls.txt' Datei in GitHub
+        updateUrlsFile();
+    }
+
+    // Funktion zum Löschen einer URL
+    function deleteUrl(url) {
+        const items = playlistUrlsList.getElementsByTagName('li');
+        for (let i = 0; i < items.length; i++) {
+            const link = items[i].getElementsByTagName('a')[0];
+            if (link.textContent === url) {
+                playlistUrlsList.removeChild(items[i]);
+                break;
+            }
+        }
+
+        // Speichere die aktualisierte Liste in der 'urls.txt' Datei in GitHub
+        updateUrlsFile();
+    }
+
+    // Funktion zum Aktualisieren der 'urls.txt' Datei in GitHub
+    async function updateUrlsFile() {
+        const urls = Array.from(playlistUrlsList.getElementsByTagName('a')).map(link => link.textContent);
+        const urlsContent = urls.join('\n');
+
+        const repo = 'tonis1000/Tonis';
+        const branch = 'main';
+        const path = 'urls.txt';
+        const commitMessage = 'Update playlist URLs';
+
+        const token = 'YOUR_GITHUB_PERSONAL_ACCESS_TOKEN'; // Dein GitHub Personal Access Token
+        const apiUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
+
+        // Fetch-Anfrage an die GitHub API für den Dateiinhalt
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                Authorization: `token ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            console.error('Fehler beim Abrufen der Datei von GitHub:', response.statusText);
+            return;
+        }
+
+        const fileData = await response.json();
+        const sha = fileData.sha;
+
+        // Daten für die PUT-Anfrage vorbereiten
+        const putData = {
+            message: commitMessage,
+            content: btoa(urlsContent), // In Base64 kodiert
+            sha: sha,
+            branch: branch,
+        };
+
+        // PUT-Anfrage zum Aktualisieren der Datei
+        const putResponse = await fetch(apiUrl, {
+            method: 'PUT',
+            headers: {
+                Authorization: `token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(putData),
+        });
+
+        if (!putResponse.ok) {
+            console.error('Fehler beim Aktualisieren der Datei auf GitHub:', putResponse.statusText);
+            return;
+        }
+
+        console.log('Datei erfolgreich aktualisiert auf GitHub.');
+    }
+});
