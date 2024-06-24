@@ -1,18 +1,38 @@
-# workflows/main.yml
-name: Update Playlist URLs
+name: Update URLs on Push
 
 on:
   push:
-    paths:
-      - 'urls.txt'
+    branches:
+      - main
 
 jobs:
-  update-urls:
+  update_urls_job:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Print updated URLs
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Update URLs file
         run: |
-          cat urls.txt
+          echo 'Updating URLs file...'
+          node updateUrlsFile.js  # Hier sollte ein Skript stehen, das die URLs in 'urls.txt' aktualisiert
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add urls.txt
+          git commit -m "Update URLs"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
