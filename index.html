@@ -101,12 +101,13 @@
             <div id="TV-Programm-content" class="content-body expandable">
                 <iframe src="https://programmatileorasis.gr" width="100%" height="100%" frameborder="0"></iframe>
             </div>
-            <div class="content-title" onclick="toggleContent('Playliste-URLs')">Playliste URLs</div>
-            <div id="Playliste-URLs" class="content-body expandable">
-                <ul id="playlist">
-                    <!-- Hier werden die URLs dynamisch eingefügt -->
-                </ul>
-            </div>
+    <div id="playlist-urls" class="content-body">
+        <h3 onclick="toggleContent('playlist-urls')">Playlist URLs</h3>
+        <div id="playlist-url-list" class="url-list"></div>
+    </div>
+
+
+            
         </div>
     </div>
 
