@@ -1,51 +1,37 @@
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
-
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/save-url', (req, res) => {
     const url = req.body.url;
-    if (!url) {
-        return res.status(400).send('URL fehlt');
-    }
-    
     fs.appendFile('urls.txt', url + '\n', (err) => {
         if (err) {
-            console.error('Fehler beim Speichern der URL:', err);
-            return res.status(500).send('Fehler beim Speichern der URL');
+            res.status(500).send('Fehler beim Speichern der URL');
+        } else {
+            res.send('URL erfolgreich gespeichert');
         }
-        console.log('URL erfolgreich gespeichert:', url);
-        res.send('URL erfolgreich gespeichert');
     });
 });
 
 app.post('/delete-url', (req, res) => {
     const url = req.body.url;
-    if (!url) {
-        return res.status(400).send('URL fehlt');
-    }
-    
     fs.readFile('urls.txt', 'utf8', (err, data) => {
         if (err) {
-            console.error('Fehler beim Lesen der Datei:', err);
-            return res.status(500).send('Fehler beim Lesen der Datei');
+            res.status(500).send('Fehler beim Lesen der Datei');
+            return;
         }
-        
         const urls = data.split('\n').filter(u => u !== url);
         fs.writeFile('urls.txt', urls.join('\n'), (err) => {
             if (err) {
-                console.error('Fehler beim Löschen der URL:', err);
-                return res.status(500).send('Fehler beim Löschen der URL');
+                res.status(500).send('Fehler beim Löschen der URL');
+            } else {
+                res.send('URL erfolgreich gelöscht');
             }
-            console.log('URL erfolgreich gelöscht:', url);
-            res.send('URL erfolgreich gelöscht');
         });
     });
 });
