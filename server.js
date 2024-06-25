@@ -3,6 +3,11 @@ const fs = require('fs');
 const app = express();
 const port = 3000;
 
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
+
 app.use(express.json());
 
 app.post('/save-url', (req, res) => {
