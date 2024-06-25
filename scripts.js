@@ -566,15 +566,17 @@ document.getElementById('delete-button').addEventListener('click', function() {
 });
 
 function addUrlToList(url) {
-    const urlList = document.getElementById('playlist-url-list');
-    const listItem = document.createElement('li');
-    listItem.textContent = url;
-    listItem.classList.add('clickable');
-    listItem.addEventListener('click', function() {
-        document.getElementById('stream-url').value = url;
-    });
-    urlList.appendChild(listItem);
-}
+            const urlList = document.getElementById('url-list');
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = '#';
+            link.textContent = url;
+            link.addEventListener('click', function() {
+                document.getElementById('stream-url').value = url;
+            });
+            listItem.appendChild(link);
+            urlList.appendChild(listItem);
+        }
 
 function removeUrlFromList(url) {
     const urlList = document.getElementById('playlist-url-list');
