@@ -43,11 +43,6 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 
 
-// Einfügen Button
-document.getElementById('insert-button').addEventListener('click', function() {
-    // Hier die Funktionalität für den Einfügen-Button implementieren
-    alert("Funktionalität für Einfügen-Button wird implementiert...");
-});
 
 
 
