@@ -1,11 +1,14 @@
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
 const app = express();
 const port = 3000;
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+
+// Eine Beispiel-Route für die Startseite
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 
 app.post('/save-url', (req, res) => {
     const url = req.body.url;
