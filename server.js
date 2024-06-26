@@ -2,9 +2,8 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const port = 3000;
+const port = 3001;  // Ändere den Port hier
 
-// Middleware to serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
