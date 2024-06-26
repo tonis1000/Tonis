@@ -574,22 +574,25 @@ function deleteUrlFromFile(url) {
       .catch(error => console.error('Fehler beim Löschen der URL:', error));
 }
 
-document.getElementById('insert-button').addEventListener('click', function() {
-    const streamUrlInput = document.getElementById('stream-url').value;
-    console.log('Stream URL:', streamUrlInput); // Logge die Stream URL, um zu sehen, ob sie korrekt abgerufen wird
-    if (streamUrlInput) {
-        addUrlToList(streamUrlInput);
-        saveUrlToFile(streamUrlInput);
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('insert-button').addEventListener('click', function() {
+        const streamUrlInput = document.getElementById('stream-url').value;
+        console.log('Stream URL:', streamUrlInput); // Logge die Stream URL, um zu sehen, ob sie korrekt abgerufen wird
+        if (streamUrlInput) {
+            addUrlToList(streamUrlInput);
+            saveUrlToFile(streamUrlInput);
+        }
+    });
+
+    document.getElementById('delete-button').addEventListener('click', function() {
+        const streamUrlInput = document.getElementById('stream-url').value;
+        if (streamUrlInput) {
+            removeUrlFromList(streamUrlInput);
+            deleteUrlFromFile(streamUrlInput);
+        }
+    });
 });
 
-document.getElementById('delete-button').addEventListener('click', function() {
-    const streamUrlInput = document.getElementById('stream-url').value;
-    if (streamUrlInput) {
-        removeUrlFromList(streamUrlInput);
-        deleteUrlFromFile(streamUrlInput);
-    }
-});
 
 function addUrlToList(url) {
     const urlList = document.getElementById('additional-content');
