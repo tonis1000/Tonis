@@ -576,6 +576,7 @@ function deleteUrlFromFile(url) {
 
 document.getElementById('insert-button').addEventListener('click', function() {
     const streamUrlInput = document.getElementById('stream-url').value;
+    console.log('Stream URL:', streamUrlInput); // Logge die Stream URL, um zu sehen, ob sie korrekt abgerufen wird
     if (streamUrlInput) {
         addUrlToList(streamUrlInput);
         saveUrlToFile(streamUrlInput);
