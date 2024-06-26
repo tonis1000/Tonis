@@ -597,6 +597,10 @@ function addUrlToList(url) {
     urlList.appendChild(listItem);
 }
 
+function setStreamUrl(url) {
+    document.getElementById('stream-url').value = url;
+}
+
 function removeUrlFromList(url) {
     const divs = document.querySelectorAll('#additional-content div');
     divs.forEach(div => {
