@@ -549,7 +549,7 @@ function toggleContent(contentId) {
 
 
 
-<script>
+
     document.getElementById('insert-button').addEventListener('click', function() {
         const streamUrlInput = document.getElementById('stream-url').value;
         if (streamUrlInput) {
@@ -611,4 +611,3 @@ function toggleContent(contentId) {
           .then(data => console.log(data))
           .catch(error => console.error('Fehler beim Löschen der URL:', error));
     }
-</script>
