@@ -543,7 +543,7 @@ function toggleContent(contentId) {
 
 
 function saveUrlToFile(url) {
-    const streamUrlInput = document.getElementById('stream-url').value;
+    const streamUrlInput = document.getElementById('stream-url').value.trim(); // Holen und trimmen Sie den Inhalt aus dem Eingabefeld
     const baseUrl = streamUrlInput; // Die Basis-URL ist die, die im Eingabefeld steht
     console.log('Basis-URL für Speichern:', baseUrl);
     
@@ -552,7 +552,7 @@ function saveUrlToFile(url) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ url: url })
+        body: JSON.stringify({ content: url }) // Statt 'url' wird jetzt 'content' gespeichert
     }).then(response => {
         console.log('Antwortstatus beim Speichern:', response.status); // Loggt den Status der Antwort
         if (!response.ok) {
@@ -563,12 +563,12 @@ function saveUrlToFile(url) {
         console.log('Antwortdaten beim Speichern:', data); // Loggt die Daten der Antwort
     }).catch(error => {
         console.error('Fehler beim Speichern der URL:', error);
-        addUrlToList(url); // Wenn der Server nicht funktioniert, füge die URL zur Liste hinzu
+        addContentToList(url); // Wenn der Server nicht funktioniert, füge den Inhalt zur Liste hinzu
     });
 }
 
-function deleteUrlFromFile(url) {
-    const streamUrlInput = document.getElementById('stream-url').value;
+function deleteContentFromFile(url) {
+    const streamUrlInput = document.getElementById('stream-url').value.trim(); // Holen und trimmen Sie den Inhalt aus dem Eingabefeld
     const baseUrl = streamUrlInput; // Die Basis-URL ist die, die im Eingabefeld steht
     console.log('Basis-URL für Löschen:', baseUrl);
     
@@ -577,7 +577,7 @@ function deleteUrlFromFile(url) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ url: url })
+        body: JSON.stringify({ content: url }) // Statt 'url' wird jetzt 'content' gelöscht
     }).then(response => {
         console.log('Antwortstatus beim Löschen:', response.status); // Loggt den Status der Antwort
         if (!response.ok) {
@@ -588,63 +588,53 @@ function deleteUrlFromFile(url) {
         console.log('Antwortdaten beim Löschen:', data); // Loggt die Daten der Antwort
     }).catch(error => {
         console.error('Fehler beim Löschen der URL:', error);
-        removeUrlFromList(url); // Wenn der Server nicht funktioniert, entferne die URL aus der Liste
+        removeContentFromList(url); // Wenn der Server nicht funktioniert, entferne den Inhalt aus der Liste
     });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('insert-button').addEventListener('click', function() {
-        const streamUrlInput = document.getElementById('stream-url').value;
-        console.log('Stream URL:', streamUrlInput); // Logge die Stream URL, um zu sehen, ob sie korrekt abgerufen wird
-        if (streamUrlInput) {
+        const contentInput = document.getElementById('stream-url').value.trim(); // Holen und trimmen Sie den Inhalt aus dem Eingabefeld
+        console.log('Inhalt zum Speichern:', contentInput); // Logge den Inhalt, um zu sehen, ob er korrekt abgerufen wird
+        if (contentInput) {
             try {
-                saveUrlToFile(streamUrlInput);
+                saveUrlToFile(contentInput);
             } catch (error) {
-                console.error('Fehler beim Speichern der URL:', error);
-                addUrlToList(streamUrlInput); // Füge die URL zur Liste hinzu, wenn ein Fehler auftritt
+                console.error('Fehler beim Speichern des Inhalts:', error);
+                addContentToList(contentInput); // Füge den Inhalt zur Liste hinzu, wenn ein Fehler auftritt
             }
         }
     });
 
     document.getElementById('delete-button').addEventListener('click', function() {
-        const streamUrlInput = document.getElementById('stream-url').value;
-        console.log('Stream URL zum Löschen:', streamUrlInput); // Logge die Stream URL zum Löschen
-        if (streamUrlInput) {
+        const contentInput = document.getElementById('stream-url').value.trim(); // Holen und trimmen Sie den Inhalt aus dem Eingabefeld
+        console.log('Inhalt zum Löschen:', contentInput); // Logge den Inhalt zum Löschen
+        if (contentInput) {
             try {
-                deleteUrlFromFile(streamUrlInput);
+                deleteContentFromFile(contentInput);
             } catch (error) {
-                console.error('Fehler beim Löschen der URL:', error);
-                removeUrlFromList(streamUrlInput); // Entferne die URL aus der Liste, wenn ein Fehler auftritt
+                console.error('Fehler beim Löschen des Inhalts:', error);
+                removeContentFromList(contentInput); // Entferne den Inhalt aus der Liste, wenn ein Fehler auftritt
             }
         }
     });
 });
 
-function addUrlToList(url) {
-    const urlList = document.getElementById('additional-content');
+function addContentToList(content) {
+    const contentList = document.getElementById('additional-content');
     const listItem = document.createElement('div');
-    listItem.innerHTML = `<a href="#" onclick="setStreamUrl('${url}')">${url}</a>`;
-    urlList.appendChild(listItem);
-    console.log('URL zur Liste hinzugefügt:', url);
+    listItem.innerHTML = `<span>${content}</span>`;
+    contentList.appendChild(listItem);
+    console.log('Inhalt zur Liste hinzugefügt:', content);
 }
 
-function setStreamUrl(url) {
-    document.getElementById('stream-url').value = url;
-    console.log('Stream URL gesetzt:', url);
-}
-
-function removeUrlFromList(url) {
-    const divs = document.querySelectorAll('#additional-content div');
-    divs.forEach(div => {
-        if (div.textContent === url) {
-            div.remove();
-            console.log('URL aus der Liste entfernt:', url);
+function removeContentFromList(content) {
+    const spans = document.querySelectorAll('#additional-content span');
+    spans.forEach(span => {
+        if (span.textContent === content) {
+            span.parentElement.remove();
+            console.log('Inhalt aus der Liste entfernt:', content);
         }
     });
 }
-
-
-
-
-
 
