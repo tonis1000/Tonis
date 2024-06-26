@@ -591,12 +591,10 @@ document.getElementById('delete-button').addEventListener('click', function() {
 });
 
 function addUrlToList(url) {
-    const div = document.createElement('div');
-    div.textContent = url;
-    div.addEventListener('click', () => {
-        document.getElementById('stream-url').value = url;
-    });
-    document.getElementById('additional-content').appendChild(div);
+    const urlList = document.getElementById('additional-content');
+    const listItem = document.createElement('div');
+    listItem.innerHTML = `<a href="#" onclick="setStreamUrl('${url}')">${url}</a>`;
+    urlList.appendChild(listItem);
 }
 
 function removeUrlFromList(url) {
