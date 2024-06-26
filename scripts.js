@@ -547,9 +547,6 @@ function toggleContent(contentId) {
 
 
 
-
-
-
 function saveUrlToFile(url) {
     fetch('/save-url', {
         method: 'POST',
@@ -557,10 +554,21 @@ function saveUrlToFile(url) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ url: url })
-    }).then(response => response.text())
-      .then(data => console.log(data))
-      .catch(error => console.error('Fehler beim Speichern der URL:', error));
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Serverantwort war nicht ok');
+        }
+        return response.text();
+    }).then(data => {
+        console.log(data);
+    }).catch(error => {
+        console.error('Fehler beim Speichern der URL:', error);
+        addUrlToList(url); // Wenn der Server nicht funktioniert, füge die URL zur Liste hinzu
+    });
 }
+
+
+
 
 function deleteUrlFromFile(url) {
     fetch('/delete-url', {
@@ -569,9 +577,17 @@ function deleteUrlFromFile(url) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ url: url })
-    }).then(response => response.text())
-      .then(data => console.log(data))
-      .catch(error => console.error('Fehler beim Löschen der URL:', error));
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Serverantwort war nicht ok');
+        }
+        return response.text();
+    }).then(data => {
+        console.log(data);
+    }).catch(error => {
+        console.error('Fehler beim Löschen der URL:', error);
+        removeUrlFromList(url); // Wenn der Server nicht funktioniert, entferne die URL aus der Liste
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -579,16 +595,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const streamUrlInput = document.getElementById('stream-url').value;
         console.log('Stream URL:', streamUrlInput); // Logge die Stream URL, um zu sehen, ob sie korrekt abgerufen wird
         if (streamUrlInput) {
-            addUrlToList(streamUrlInput);
-            saveUrlToFile(streamUrlInput);
+            try {
+                saveUrlToFile(streamUrlInput);
+            } catch (error) {
+                console.error('Fehler beim Speichern der URL:', error);
+                addUrlToList(streamUrlInput); // Füge die URL zur Liste hinzu, wenn ein Fehler auftritt
+            }
         }
     });
 
     document.getElementById('delete-button').addEventListener('click', function() {
         const streamUrlInput = document.getElementById('stream-url').value;
         if (streamUrlInput) {
-            removeUrlFromList(streamUrlInput);
-            deleteUrlFromFile(streamUrlInput);
+            try {
+                deleteUrlFromFile(streamUrlInput);
+            } catch (error) {
+                console.error('Fehler beim Löschen der URL:', error);
+                removeUrlFromList(streamUrlInput); // Entferne die URL aus der Liste, wenn ein Fehler auftritt
+            }
         }
     });
 });
