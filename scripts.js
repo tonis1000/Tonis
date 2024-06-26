@@ -549,66 +549,66 @@ function toggleContent(contentId) {
 
 
 
-document.getElementById('insert-button').addEventListener('click', function() {
-    const streamUrlInput = document.getElementById('stream-url').value;
-    if (streamUrlInput) {
-        addUrlToList(streamUrlInput);
-        saveUrlToFile(streamUrlInput);
-    }
-});
-
-document.getElementById('delete-button').addEventListener('click', function() {
-    const streamUrlInput = document.getElementById('stream-url').value;
-    if (streamUrlInput) {
-        removeUrlFromList(streamUrlInput);
-        deleteUrlFromFile(streamUrlInput);
-    }
-});
-
-function addUrlToList(url) {
-            const urlList = document.getElementById('url-list');
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = '#';
-            link.textContent = url;
-            link.addEventListener('click', function() {
-                document.getElementById('stream-url').value = url;
-            });
-            listItem.appendChild(link);
-            urlList.appendChild(listItem);
+<script>
+    document.getElementById('insert-button').addEventListener('click', function() {
+        const streamUrlInput = document.getElementById('stream-url').value;
+        if (streamUrlInput) {
+            addUrlToList(streamUrlInput);
+            saveUrlToFile(streamUrlInput);
         }
+    });
 
-function removeUrlFromList(url) {
-    const urlList = document.getElementById('playlist-url-list');
-    const listItems = urlList.getElementsByTagName('li');
-    for (let i = 0; i < listItems.length; i++) {
-        if (listItems[i].textContent === url) {
-            urlList.removeChild(listItems[i]);
-            break;
+    document.getElementById('delete-button').addEventListener('click', function() {
+        const streamUrlInput = document.getElementById('stream-url').value;
+        if (streamUrlInput) {
+            removeUrlFromList(streamUrlInput);
+            deleteUrlFromFile(streamUrlInput);
+        }
+    });
+
+    function addUrlToList(url) {
+        const urlList = document.getElementById('playlist-url-list');
+        const listItem = document.createElement('li');
+        listItem.textContent = url;
+        listItem.classList.add('clickable');
+        listItem.addEventListener('click', function() {
+            document.getElementById('stream-url').value = url;
+        });
+        urlList.appendChild(listItem);
+    }
+
+    function removeUrlFromList(url) {
+        const urlList = document.getElementById('playlist-url-list');
+        const listItems = urlList.getElementsByTagName('li');
+        for (let i = 0; i < listItems.length; i++) {
+            if (listItems[i].textContent === url) {
+                urlList.removeChild(listItems[i]);
+                break;
+            }
         }
     }
-}
 
-function saveUrlToFile(url) {
-    fetch('/save-url', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ url: url })
-    }).then(response => response.text())
-      .then(data => console.log(data))
-      .catch(error => console.error('Fehler beim Speichern der URL:', error));
-}
+    function saveUrlToFile(url) {
+        fetch('/save-url', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: url })
+        }).then(response => response.text())
+          .then(data => console.log(data))
+          .catch(error => console.error('Fehler beim Speichern der URL:', error));
+    }
 
-function deleteUrlFromFile(url) {
-    fetch('/delete-url', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ url: url })
-    }).then(response => response.text())
-      .then(data => console.log(data))
-      .catch(error => console.error('Fehler beim Löschen der URL:', error));
-}
+    function deleteUrlFromFile(url) {
+        fetch('/delete-url', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: url })
+        }).then(response => response.text())
+          .then(data => console.log(data))
+          .catch(error => console.error('Fehler beim Löschen der URL:', error));
+    }
+</script>
