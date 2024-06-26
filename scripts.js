@@ -542,14 +542,11 @@ function toggleContent(contentId) {
 
 
 
-
-
-
-
-
 function saveUrlToFile(url) {
     const streamUrlInput = document.getElementById('stream-url').value;
     const baseUrl = streamUrlInput; // Die Basis-URL ist die, die im Eingabefeld steht
+    console.log('Basis-URL für Speichern:', baseUrl);
+    
     fetch(`${baseUrl}/save-url`, {
         method: 'POST',
         headers: {
@@ -557,13 +554,13 @@ function saveUrlToFile(url) {
         },
         body: JSON.stringify({ url: url })
     }).then(response => {
-        console.log('Antwortstatus:', response.status); // Loggt den Status der Antwort
+        console.log('Antwortstatus beim Speichern:', response.status); // Loggt den Status der Antwort
         if (!response.ok) {
             throw new Error('Serverantwort war nicht ok');
         }
         return response.text();
     }).then(data => {
-        console.log('Antwortdaten:', data); // Loggt die Daten der Antwort
+        console.log('Antwortdaten beim Speichern:', data); // Loggt die Daten der Antwort
     }).catch(error => {
         console.error('Fehler beim Speichern der URL:', error);
         addUrlToList(url); // Wenn der Server nicht funktioniert, füge die URL zur Liste hinzu
@@ -573,6 +570,8 @@ function saveUrlToFile(url) {
 function deleteUrlFromFile(url) {
     const streamUrlInput = document.getElementById('stream-url').value;
     const baseUrl = streamUrlInput; // Die Basis-URL ist die, die im Eingabefeld steht
+    console.log('Basis-URL für Löschen:', baseUrl);
+    
     fetch(`${baseUrl}/delete-url`, {
         method: 'POST',
         headers: {
@@ -580,13 +579,13 @@ function deleteUrlFromFile(url) {
         },
         body: JSON.stringify({ url: url })
     }).then(response => {
-        console.log('Antwortstatus:', response.status); // Loggt den Status der Antwort
+        console.log('Antwortstatus beim Löschen:', response.status); // Loggt den Status der Antwort
         if (!response.ok) {
             throw new Error('Serverantwort war nicht ok');
         }
         return response.text();
     }).then(data => {
-        console.log('Antwortdaten:', data); // Loggt die Daten der Antwort
+        console.log('Antwortdaten beim Löschen:', data); // Loggt die Daten der Antwort
     }).catch(error => {
         console.error('Fehler beim Löschen der URL:', error);
         removeUrlFromList(url); // Wenn der Server nicht funktioniert, entferne die URL aus der Liste
@@ -609,6 +608,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('delete-button').addEventListener('click', function() {
         const streamUrlInput = document.getElementById('stream-url').value;
+        console.log('Stream URL zum Löschen:', streamUrlInput); // Logge die Stream URL zum Löschen
         if (streamUrlInput) {
             try {
                 deleteUrlFromFile(streamUrlInput);
@@ -625,10 +625,12 @@ function addUrlToList(url) {
     const listItem = document.createElement('div');
     listItem.innerHTML = `<a href="#" onclick="setStreamUrl('${url}')">${url}</a>`;
     urlList.appendChild(listItem);
+    console.log('URL zur Liste hinzugefügt:', url);
 }
 
 function setStreamUrl(url) {
     document.getElementById('stream-url').value = url;
+    console.log('Stream URL gesetzt:', url);
 }
 
 function removeUrlFromList(url) {
@@ -636,6 +638,13 @@ function removeUrlFromList(url) {
     divs.forEach(div => {
         if (div.textContent === url) {
             div.remove();
+            console.log('URL aus der Liste entfernt:', url);
         }
     });
 }
+
+
+
+
+
+
