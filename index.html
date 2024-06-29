@@ -7,9 +7,6 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
-    <style>
-        /* Hier können zusätzliche CSS-Stile definiert werden, falls erforderlich */
-    </style>
 </head>
 <body>
     <div class="main-container">
@@ -40,6 +37,7 @@
     </div>
     <div class="content-wrapper">
         <div class="player-container">
+
             <div class="player-header">
                 <div class="logo-container player-logo-container">
                     <img id="current-channel-logo" alt="Senderlogo">
@@ -48,10 +46,9 @@
                     <div class="player-info-top">
                         <span id="current-channel-name">Aktueller Sender</span>
                         <button id="clear-button">Leeren</button>
+                        <button id="insert-button">Einfügen</button>
                         <button id="copy-button">Kopieren</button>
                         <button id="playlist-button">Playlist</button>
-                        <button id="insert-button" onclick="insertUrl()">Einfügen</button>
-                        <button id="delete-button" onclick="deleteUrl()">Url Löschen</button>
                     </div>
                     <div class="player-info-bottom">
                         <input type="text" id="stream-url" placeholder="Stream URL eingeben">
@@ -61,6 +58,7 @@
                     </div>
                 </div>
             </div>
+
             <video id="video-player" controls>
                 <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
             </video>
@@ -68,8 +66,9 @@
                 <h4 id="program-title"></h4>
                 <p id="program-desc"></p>
             </div>
+
             <div id="next-programs">
-                <!-- Beispiel für nächste Programme -->
+                <!-- Container für die nächsten Programme -->
                 <div class="next-program">
                     <h4 class="next-program-title">Nächstes Programm 1 (09:00 - 10:00)</h4>
                     <p class="next-program-desc" style="display: none;">Beschreibung des nächsten Programms 1</p>
@@ -87,33 +86,33 @@
                     <p class="next-program-desc" style="display: none;">Beschreibung des nächsten Programms 4</p>
                 </div>
             </div>
+
         </div>
-        <div class="additional-content">
+
+<div class="additional-content">
+
+    
             <div class="content-title" onclick="toggleContent('foothubhd-content')">Foothubhd</div>
             <div id="foothubhd-content" class="content-body expandable">
                 <iframe src="https://foothubhd.xyz/" frameborder="0" width="100%" height="100%"></iframe>
             </div>
+
             <div class="content-title" onclick="toggleContent('wetter-content')">Wetter</div>
             <div id="wetter-content" class="content-body expandable">
                 <iframe src="https://search.ch/meteo/widget/Eching-D?days=1" width="100%" height="100%" frameborder="0"></iframe>
             </div>
+    
             <div class="content-title" onclick="toggleContent('TV-Programm-content')">TV-Programm</div>
             <div id="TV-Programm-content" class="content-body expandable">
-                <iframe src="https://programmatileorasis.gr" width="100%" height="100%" frameborder="0"></iframe>
+                <iframe src="https://programmatileorasis.gr" width="100%" height="100%"" frameborder="0"></iframe>
             </div>
 
-<div class="content-title" onclick="toggleContent('playlist-urls-content')">Playlist URLs</div>
-<div id="playlist-urls-content" class="content-body expandable">
-    <div id="playlist-url-list" class="url-list"></div>
-</div>
 
-
-            
+    
         </div>
-    </div>
 
-     <script src="playlist.js"></script>
-     <script src="scripts.js"></script>
+    </div>
+    <script src="scripts.js"></script>
 
 
 
