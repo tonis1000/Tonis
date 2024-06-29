@@ -55,25 +55,51 @@ document.getElementById('copy-button').addEventListener('click', function() {
 // Einfügen Button
 document.getElementById('insert-button').addEventListener('click', function() {
     const playlistURL = document.getElementById('stream-url').value;
-    if (playlistURL && !playlistUrls.includes(playlistURL)) {
-        playlistUrls.push(playlistURL);
-        console.log('URL hinzugefügt:', playlistUrls);
-    } else {
-        console.log('URL existiert bereits oder ist ungültig');
+    if (playlistURL) {
+        fetch(playlistURL)
+            .then(response => response.text())
+            .then(data => {
+                updateSidebarFromM3U(data);
+                
+                // Hinzufügen zur Playlist, falls noch nicht vorhanden
+                addToPlaylist(playlistURL);
+            })
+            .catch(error => console.error('Fehler beim Laden der Playlist:', error));
     }
 });
+
+// Funktion zum Hinzufügen einer URL zur Playlist
+function addToPlaylist(url) {
+    const playlistUrls = JSON.parse(localStorage.getItem('playlist-urls')) || [];
+
+    // Prüfen, ob die URL bereits in der Playlist existiert
+    if (!playlistUrls.includes(url)) {
+        playlistUrls.push(url);
+        localStorage.setItem('playlist-urls', JSON.stringify(playlistUrls));
+    }
+}
+
 
 // Löschen Button
 document.getElementById('delete-button').addEventListener('click', function() {
     const playlistURL = document.getElementById('stream-url').value;
-    const index = playlistUrls.indexOf(playlistURL);
-    if (index > -1) {
-        playlistUrls.splice(index, 1);
-        console.log('URL entfernt:', playlistUrls);
-    } else {
-        console.log('URL nicht in der Liste gefunden');
+    if (playlistURL) {
+        removeFromPlaylist(playlistURL);
     }
 });
+
+// Funktion zum Entfernen einer URL aus der Playlist
+function removeFromPlaylist(url) {
+    const playlistUrls = JSON.parse(localStorage.getItem('playlist-urls')) || [];
+
+    // Prüfen, ob die URL in der Playlist existiert
+    const index = playlistUrls.indexOf(url);
+    if (index !== -1) {
+        playlistUrls.splice(index, 1);
+        localStorage.setItem('playlist-urls', JSON.stringify(playlistUrls));
+    }
+}
+
 
 
 
