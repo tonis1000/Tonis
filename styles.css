@@ -363,52 +363,6 @@ div.next-program h4 {
     margin-bottom: 2px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#playlist {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    overflow-y: auto;
-    max-height: 200px; /* Beispielhafte Begrenzung für die Höhe der Playliste */
-}
-
-#playlist li {
-    padding: 5px;
-    cursor: pointer;
-}
-
-#playlist li.selected {
-    background-color: #555; /* Beispielhafte Hervorhebung für ausgewählte URL */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .expandable {
     max-height: 0;
     overflow: hidden;
