@@ -45,8 +45,13 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 // Einfügen Button
 document.getElementById('insert-button').addEventListener('click', function() {
-    // Hier die Funktionalität für den Einfügen-Button implementieren
-    alert("Funktionalität für Einfügen-Button wird implementiert...");
+    const playlistURL = document.getElementById('stream-url').value;
+    if (playlistURL) {
+        fetch(playlistURL)
+            .then(response => response.text())
+            .then(data => updateSidebarFromM3U(data))
+            .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+    }
 });
 
 
