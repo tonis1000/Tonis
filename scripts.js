@@ -536,3 +536,69 @@ function toggleContent(contentId) {
         }
     });
 }
+
+
+
+
+
+
+
+
+const repo = 'tonis1000/Tonis'; // Dein GitHub-Benutzername und Repository-Name
+const token = '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'; // Dein GitHub Personal Access Token (PAT)
+
+async function fetchItems() {
+    const response = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
+        headers: {
+            'Accept': 'application/vnd.github.v3.raw'
+        }
+    });
+    const items = await response.json();
+    const itemList = document.getElementById('itemList');
+    itemList.innerHTML = '';
+    items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        itemList.appendChild(li);
+    });
+}
+
+async function addItem() {
+    const textField = document.getElementById('textField');
+    const text = textField.value;
+    if (text) {
+        const response = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
+            headers: {
+                'Accept': 'application/vnd.github.v3.raw'
+            }
+        });
+        let items = await response.json();
+        items.push(text);
+        const content = btoa(JSON.stringify(items, null, 2)); // encode to base64
+        const shaResponse = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
+            headers: {
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+        const shaData = await shaResponse.json();
+        const sha = shaData.sha;
+        
+        await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: 'Add item',
+                content: content,
+                sha: sha
+            })
+        });
+        textField.value = '';
+        fetchItems();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', fetchItems);
+
