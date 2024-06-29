@@ -43,23 +43,6 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 
 
-// Einfügen Button
-document.getElementById('insert-button').addEventListener('click', function() {
-    const playlistURL = document.getElementById('stream-url').value;
-    if (playlistURL) {
-        fetch(playlistURL)
-            .then(response => response.text())
-            .then(data => updateSidebarFromM3U(data))
-            .catch(error => console.error('Fehler beim Laden der Playlist:', error));
-    }
-});
-
-
-
-
-
-
-
 
 // Kopieren Button
 document.getElementById('copy-button').addEventListener('click', function() {
@@ -67,6 +50,31 @@ document.getElementById('copy-button').addEventListener('click', function() {
     streamUrlInput.select(); // Markiert den Text im Eingabefeld
     document.execCommand('copy'); // Kopiert den markierten Text in die Zwischenablage
 });
+
+
+// Einfügen Button
+document.getElementById('insert-button').addEventListener('click', function() {
+    const playlistURL = document.getElementById('stream-url').value;
+    if (playlistURL && !playlistUrls.includes(playlistURL)) {
+        playlistUrls.push(playlistURL);
+        console.log('URL hinzugefügt:', playlistUrls);
+    } else {
+        console.log('URL existiert bereits oder ist ungültig');
+    }
+});
+
+// Löschen Button
+document.getElementById('delete-button').addEventListener('click', function() {
+    const playlistURL = document.getElementById('stream-url').value;
+    const index = playlistUrls.indexOf(playlistURL);
+    if (index > -1) {
+        playlistUrls.splice(index, 1);
+        console.log('URL entfernt:', playlistUrls);
+    } else {
+        console.log('URL nicht in der Liste gefunden');
+    }
+});
+
 
 
 // Globales Objekt für EPG-Daten
