@@ -8,7 +8,7 @@ function loadMyPlaylist() {
 
 // Funktion zum Laden der externen Playlist und Aktualisieren der Sidebar
 function loadExternalPlaylist() {
-    fetch('https://raw.githubusercontent.com/iptv-org/iptv/master/streams/de.m3u')
+    fetch('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u')
         .then(response => response.text())
         .then(data => updateSidebarFromM3U(data))
         .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
@@ -43,6 +43,11 @@ document.getElementById('clear-button').addEventListener('click', function() {
 
 
 
+// Einfügen Button
+document.getElementById('insert-button').addEventListener('click', function() {
+    // Hier die Funktionalität für den Einfügen-Button implementieren
+    alert("Funktionalität für Einfügen-Button wird implementiert...");
+});
 
 
 
@@ -526,115 +531,3 @@ function toggleContent(contentId) {
         }
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function saveUrlToFile(url) {
-    const streamUrlInput = document.getElementById('stream-url').value.trim(); // Holen und trimmen Sie den Inhalt aus dem Eingabefeld
-    const baseUrl = streamUrlInput; // Die Basis-URL ist die, die im Eingabefeld steht
-    console.log('Basis-URL für Speichern:', baseUrl);
-    
-    fetch(`${baseUrl}/save-url`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ content: url }) // Statt 'url' wird jetzt 'content' gespeichert
-    }).then(response => {
-        console.log('Antwortstatus beim Speichern:', response.status); // Loggt den Status der Antwort
-        if (!response.ok) {
-            throw new Error('Serverantwort war nicht ok');
-        }
-        return response.text();
-    }).then(data => {
-        console.log('Antwortdaten beim Speichern:', data); // Loggt die Daten der Antwort
-    }).catch(error => {
-        console.error('Fehler beim Speichern der URL:', error);
-        addContentToList(url); // Wenn der Server nicht funktioniert, füge den Inhalt zur Liste hinzu
-    });
-}
-
-function deleteContentFromFile(url) {
-    const streamUrlInput = document.getElementById('stream-url').value.trim(); // Holen und trimmen Sie den Inhalt aus dem Eingabefeld
-    const baseUrl = streamUrlInput; // Die Basis-URL ist die, die im Eingabefeld steht
-    console.log('Basis-URL für Löschen:', baseUrl);
-    
-    fetch(`${baseUrl}/delete-url`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ content: url }) // Statt 'url' wird jetzt 'content' gelöscht
-    }).then(response => {
-        console.log('Antwortstatus beim Löschen:', response.status); // Loggt den Status der Antwort
-        if (!response.ok) {
-            throw new Error('Serverantwort war nicht ok');
-        }
-        return response.text();
-    }).then(data => {
-        console.log('Antwortdaten beim Löschen:', data); // Loggt die Daten der Antwort
-    }).catch(error => {
-        console.error('Fehler beim Löschen der URL:', error);
-        removeContentFromList(url); // Wenn der Server nicht funktioniert, entferne den Inhalt aus der Liste
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('insert-button').addEventListener('click', function() {
-        const contentInput = document.getElementById('stream-url').value.trim(); // Holen und trimmen Sie den Inhalt aus dem Eingabefeld
-        console.log('Inhalt zum Speichern:', contentInput); // Logge den Inhalt, um zu sehen, ob er korrekt abgerufen wird
-        if (contentInput) {
-            try {
-                saveUrlToFile(contentInput);
-            } catch (error) {
-                console.error('Fehler beim Speichern des Inhalts:', error);
-                addContentToList(contentInput); // Füge den Inhalt zur Liste hinzu, wenn ein Fehler auftritt
-            }
-        }
-    });
-
-    document.getElementById('delete-button').addEventListener('click', function() {
-        const contentInput = document.getElementById('stream-url').value.trim(); // Holen und trimmen Sie den Inhalt aus dem Eingabefeld
-        console.log('Inhalt zum Löschen:', contentInput); // Logge den Inhalt zum Löschen
-        if (contentInput) {
-            try {
-                deleteContentFromFile(contentInput);
-            } catch (error) {
-                console.error('Fehler beim Löschen des Inhalts:', error);
-                removeContentFromList(contentInput); // Entferne den Inhalt aus der Liste, wenn ein Fehler auftritt
-            }
-        }
-    });
-});
-
-function addContentToList(content) {
-    const contentList = document.getElementById('additional-content');
-    const listItem = document.createElement('div');
-    listItem.innerHTML = `<span>${content}</span>`;
-    contentList.appendChild(listItem);
-    console.log('Inhalt zur Liste hinzugefügt:', content);
-}
-
-function removeContentFromList(content) {
-    const spans = document.querySelectorAll('#additional-content span');
-    spans.forEach(span => {
-        if (span.textContent === content) {
-            span.parentElement.remove();
-            console.log('Inhalt aus der Liste entfernt:', content);
-        }
-    });
-}
-
