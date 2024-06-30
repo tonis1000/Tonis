@@ -537,7 +537,7 @@ function toggleContent(contentId) {
 
 // GitHub-Repository-Details und persönlicher Zugriffstoken
 const repo = 'tonis1000/Tonis'; // Dein GitHub-Benutzername und Repository-Name
-const token = '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'; // Dein GitHub Personal Access Token (PAT)
+const token = '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'; // Dein GitHub Personal Access Token (PAT)
 
 let playlistUrls = [];
 
