@@ -536,10 +536,6 @@ const token = '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'; // Dein GitHub Persona
 
 
 
-// Leeren Button
-document.getElementById('clear-button').addEventListener('click', function() {
-    document.getElementById('stream-url').value = ''; // Setzt den Wert des Eingabefelds auf leer
-});
 
 // Einfügen Button
 document.getElementById('insert-button').addEventListener('click', function() {
