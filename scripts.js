@@ -535,9 +535,10 @@ function toggleContent(contentId) {
 
 
 
+
 // GitHub-Repository-Details und persönlicher Zugriffstoken
 const repo = 'tonis1000/Tonis'; // Dein GitHub-Benutzername und Repository-Name
-const token = process.env.PLAY_URLS; // Zugriff auf das GitHub Secret
+const token = '{{ secrets.PLAY_URLS }}'; // Zugriffstoken aus GitHub Secrets
 
 let playlistUrls = [];
 
