@@ -537,7 +537,7 @@ function toggleContent(contentId) {
 
 // GitHub-Repository-Details und persönlicher Zugriffstoken
 const repo = 'tonis1000/Tonis'; // Dein GitHub-Benutzername und Repository-Name
-const token = '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'; // Dein GitHub Personal Access Token (PAT)
+const token = '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'; // Dein GitHub Personal Access Token (PAT)
 
 let playlistUrls = [];
 
@@ -647,7 +647,7 @@ document.addEventListener('DOMContentLoaded', fetchItems);
 
 // Funktion zum Testen des GitHub Tokens
 async function testToken() {
-    const token = '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'; // Ersetze durch deinen Token
+    const token = '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'; // Ersetze durch deinen Token
     try {
         const response = await fetch('https://api.github.com/user', {
             headers: {
