@@ -534,19 +534,21 @@ function toggleContent(contentId) {
 const repo = 'tonis1000/Tonis'; // Dein GitHub-Benutzername und Repository-Name
 const token = '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'; // Dein GitHub Personal Access Token (PAT)
 
-
-
+// Funktion zum Anzeigen von Fehlermeldungen
+function showError(message) {
+    alert(`Fehler: ${message}`);
+}
 
 // Einfügen Button
 document.getElementById('insert-button').addEventListener('click', function() {
     const playlistURL = document.getElementById('stream-url').value;
     if (playlistURL) {
-        // Überprüfen, ob die Playlist-URL bereits in playlist-urls existiert
-        const isExisting = playlistUrls.includes(playlistURL);
-        if (!isExisting) {
-            playlistUrls.push(playlistURL); // Hinzufügen zur playlist-urls Liste
-            updatePlaylistItems(); // Aktualisierung der items.json auf GitHub
+        if (!playlistUrls.includes(playlistURL)) {
+            playlistUrls.push(playlistURL);
+            updatePlaylistItems();
         }
+    } else {
+        showError('Bitte eine gültige URL eingeben.');
     }
 });
 
@@ -554,85 +556,31 @@ document.getElementById('insert-button').addEventListener('click', function() {
 document.getElementById('delete-button').addEventListener('click', function() {
     const playlistURL = document.getElementById('stream-url').value;
     if (playlistURL) {
-        // Überprüfen, ob die Playlist-URL in playlist-urls existiert
         const index = playlistUrls.indexOf(playlistURL);
         if (index !== -1) {
-            playlistUrls.splice(index, 1); // Entfernen aus der playlist-urls Liste
-            updatePlaylistItems(); // Aktualisierung der items.json auf GitHub
+            playlistUrls.splice(index, 1);
+            updatePlaylistItems();
+        } else {
+            showError('URL nicht in der Playlist gefunden.');
         }
+    } else {
+        showError('Bitte eine gültige URL eingeben.');
     }
 });
 
 // Funktion zum Aktualisieren der items.json auf GitHub
 async function updatePlaylistItems() {
-    const content = btoa(JSON.stringify(playlistUrls, null, 2)); // Base64 Codierung der Liste
-
-    // GitHub API Aufruf für den Inhalt von items.json
-    const response = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
-        headers: {
-            'Accept': 'application/vnd.github.v3+json',
-            'Authorization': `token ${token}`
-        }
-    });
-    const data = await response.json();
-    const sha = data.sha; // SHA-Wert für die Versionskontrolle
-
-    // PUT Anfrage, um die aktualisierten Daten in items.json zu speichern
-    await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            message: 'Update playlist URLs',
-            content: content,
-            sha: sha
-        })
-    });
-
-    // Laden der aktualisierten items.json
-    fetchItems();
-}
-
-// Funktion zum Laden der Items aus items.json
-async function fetchItems() {
-    const response = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
-        headers: {
-            'Accept': 'application/vnd.github.v3.raw'
-        }
-    });
-    const items = await response.json();
-    const itemList = document.getElementById('itemList');
-    itemList.innerHTML = '';
-    items.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        itemList.appendChild(li);
-    });
-}
-
-// Funktion zum Hinzufügen eines neuen Items zu items.json
-async function addItem() {
-    const textField = document.getElementById('textField');
-    const text = textField.value;
-    if (text) {
+    try {
+        const content = btoa(JSON.stringify(playlistUrls, null, 2));
         const response = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
             headers: {
-                'Accept': 'application/vnd.github.v3.raw'
+                'Accept': 'application/vnd.github.v3+json',
+                'Authorization': `token ${token}`
             }
         });
-        let items = await response.json();
-        items.push(text);
-        const content = btoa(JSON.stringify(items, null, 2)); // encode to base64
-        const shaResponse = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
-            headers: {
-                'Accept': 'application/vnd.github.v3+json'
-            }
-        });
-        const shaData = await shaResponse.json();
-        const sha = shaData.sha;
-        
+        const data = await response.json();
+        const sha = data.sha;
+
         await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
             method: 'PUT',
             headers: {
@@ -640,15 +588,39 @@ async function addItem() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: 'Add item',
+                message: 'Update playlist URLs',
                 content: content,
                 sha: sha
             })
         });
-        textField.value = '';
+
         fetchItems();
+    } catch (error) {
+        showError('Fehler beim Aktualisieren der Playlist: ' + error.message);
+    }
+}
+
+// Funktion zum Laden der Items aus items.json
+async function fetchItems() {
+    try {
+        const response = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
+            headers: {
+                'Accept': 'application/vnd.github.v3.raw'
+            }
+        });
+        const items = await response.json();
+        const itemList = document.getElementById('playlist-url-list');
+        itemList.innerHTML = '';
+        items.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            itemList.appendChild(li);
+        });
+    } catch (error) {
+        showError('Fehler beim Laden der Playlist: ' + error.message);
     }
 }
 
 // Initialer Aufruf, um items.json beim Laden der Seite zu laden
 document.addEventListener('DOMContentLoaded', fetchItems);
+
