@@ -642,3 +642,28 @@ async function fetchItems() {
 
 // Initialer Aufruf, um items.json beim Laden der Seite zu laden
 document.addEventListener('DOMContentLoaded', fetchItems);
+
+
+
+// Funktion zum Testen des GitHub Tokens
+async function testToken() {
+    const token = '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'; // Ersetze durch deinen Token
+    try {
+        const response = await fetch('https://api.github.com/user', {
+            headers: {
+                Authorization: `token ${token}`
+            }
+        });
+        const data = await response.json();
+        if (response.ok) {
+            console.log('Token gültig. Benutzername:', data.login);
+        } else {
+            console.error('Fehler beim Überprüfen des Tokens:', data.message);
+        }
+    } catch (error) {
+        console.error('Fehler beim Überprüfen des Tokens:', error.message);
+    }
+}
+
+// Aufruf der Funktion zum Testen des Tokens
+testToken();
