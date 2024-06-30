@@ -530,9 +530,16 @@ function toggleContent(contentId) {
 
 
 
+
+
+
+
+
 // GitHub-Repository-Details und persönlicher Zugriffstoken
 const repo = 'tonis1000/Tonis'; // Dein GitHub-Benutzername und Repository-Name
 const token = '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'; // Dein GitHub Personal Access Token (PAT)
+
+let playlistUrls = [];
 
 // Funktion zum Anzeigen von Fehlermeldungen
 function showError(message) {
@@ -545,7 +552,11 @@ document.getElementById('insert-button').addEventListener('click', function() {
     if (playlistURL) {
         if (!playlistUrls.includes(playlistURL)) {
             playlistUrls.push(playlistURL);
+            console.log('Neue URL hinzugefügt:', playlistURL);
+            console.log('Aktualisierte Playlist:', playlistUrls);
             updatePlaylistItems();
+        } else {
+            console.log('URL ist bereits in der Playlist:', playlistURL);
         }
     } else {
         showError('Bitte eine gültige URL eingeben.');
@@ -559,6 +570,8 @@ document.getElementById('delete-button').addEventListener('click', function() {
         const index = playlistUrls.indexOf(playlistURL);
         if (index !== -1) {
             playlistUrls.splice(index, 1);
+            console.log('URL entfernt:', playlistURL);
+            console.log('Aktualisierte Playlist:', playlistUrls);
             updatePlaylistItems();
         } else {
             showError('URL nicht in der Playlist gefunden.');
@@ -581,7 +594,7 @@ async function updatePlaylistItems() {
         const data = await response.json();
         const sha = data.sha;
 
-        await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
+        const updateResponse = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
             method: 'PUT',
             headers: {
                 'Authorization': `token ${token}`,
@@ -594,9 +607,12 @@ async function updatePlaylistItems() {
             })
         });
 
+        const updateData = await updateResponse.json();
+        console.log('Update Response:', updateData);
         fetchItems();
     } catch (error) {
         showError('Fehler beim Aktualisieren der Playlist: ' + error.message);
+        console.error('Fehler beim Aktualisieren:', error);
     }
 }
 
@@ -609,6 +625,8 @@ async function fetchItems() {
             }
         });
         const items = await response.json();
+        console.log('Geladene Items:', items);
+        playlistUrls = items;
         const itemList = document.getElementById('playlist-url-list');
         itemList.innerHTML = '';
         items.forEach(item => {
@@ -618,9 +636,9 @@ async function fetchItems() {
         });
     } catch (error) {
         showError('Fehler beim Laden der Playlist: ' + error.message);
+        console.error('Fehler beim Laden:', error);
     }
 }
 
 // Initialer Aufruf, um items.json beim Laden der Seite zu laden
 document.addEventListener('DOMContentLoaded', fetchItems);
-
