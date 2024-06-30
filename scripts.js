@@ -538,7 +538,7 @@ function toggleContent(contentId) {
 
 // GitHub-Repository-Details und persönlicher Zugriffstoken
 const repo = 'tonis1000/Tonis'; // Dein GitHub-Benutzername und Repository-Name
-const token = process.env.GITHUB_TOKEN; // Verwende das GitHub Token aus den Secrets
+const token = '{{ secrets.PLAY_URLS }}'; // Zugriffstoken aus GitHub Secrets
 
 let playlistUrls = [];
 
@@ -555,7 +555,7 @@ document.getElementById('insert-button').addEventListener('click', function() {
             playlistUrls.push(playlistURL);
             console.log('Neue URL hinzugefügt:', playlistURL);
             console.log('Aktualisierte Playlist:', playlistUrls);
-            updatePlaylistItems(); // Aktualisiere die items.json nach dem Hinzufügen
+            updatePlaylistItems();
         } else {
             console.log('URL ist bereits in der Playlist:', playlistURL);
         }
@@ -573,7 +573,7 @@ document.getElementById('delete-button').addEventListener('click', function() {
             playlistUrls.splice(index, 1);
             console.log('URL entfernt:', playlistURL);
             console.log('Aktualisierte Playlist:', playlistUrls);
-            updatePlaylistItems(); // Aktualisiere die items.json nach dem Entfernen
+            updatePlaylistItems();
         } else {
             showError('URL nicht in der Playlist gefunden.');
         }
@@ -610,7 +610,7 @@ async function updatePlaylistItems() {
 
         const updateData = await updateResponse.json();
         console.log('Update Response:', updateData);
-        fetchItems(); // Nach dem Update die Playlist neu laden
+        fetchItems();
     } catch (error) {
         showError('Fehler beim Aktualisieren der Playlist: ' + error.message);
         console.error('Fehler beim Aktualisieren:', error);
