@@ -18,12 +18,21 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Commit and push changes
+      - name: Update playlist URLs
         env:
           PLAY_URLS: ${{ secrets.PLAY_URLS }}
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m 'Update playlist URLs'
+          # Hier kannst du die Logik zum Aktualisieren der playlist-urls.txt Datei einfügen
+          # Beispiel: Ändern oder Hinzufügen von Inhalten zur playlist-urls.txt Datei
+
+          # Beispiel: Hinzufügen von Inhalten zur playlist-urls.txt Datei
+          echo "Neuer Inhalt" > playlist-urls.txt
+
+          # Füge die Datei zum Index hinzu (Staging)
+          git add playlist-urls.txt
+
+          # Commit der Änderungen
+          git commit -m "Update playlist URLs"
+
+          # Pushen der Änderungen zum Remote-Repository
           git push
