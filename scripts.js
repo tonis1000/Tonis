@@ -539,7 +539,7 @@ function toggleContent(contentId) {
 
 const GITHUB_USERNAME = 'tonis1000';
     const REPO_NAME = 'Tonis';
-    const TOKEN = 'PLAY_URLS';
+    const TOKEN = 'PLAY_URLS'; // Ersetze dies durch den tatsächlichen Token
 
     async function getSha(path) {
       const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${path}`, {
@@ -573,10 +573,15 @@ const GITHUB_USERNAME = 'tonis1000';
           listItem.textContent = url;
           listElement.appendChild(listItem);
         });
+      } else if (response.status === 404) {
+        console.log('Datei nicht gefunden');
+      } else {
+        console.error('Fehler beim Laden der Datei', response.statusText);
       }
     }
 
     async function saveText(content) {
+      const sha = await getSha('playlist-urls.txt');
       const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/playlist-urls.txt`, {
         method: 'PUT',
         headers: {
@@ -586,7 +591,7 @@ const GITHUB_USERNAME = 'tonis1000';
         body: JSON.stringify({
           message: 'Update playlist URLs',
           content: btoa(content),
-          sha: await getSha('playlist-urls.txt')
+          sha: sha
         })
       });
 
