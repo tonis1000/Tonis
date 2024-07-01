@@ -569,6 +569,9 @@ async function loadText() {
 
 async function saveText(content) {
   try {
+    const sha = await getSha('playlist-urls.txt');  // Stelle sicher, dass der SHA-Wert korrekt abgerufen wird
+    console.log('SHA:', sha);  // Debugging-Ausgabe für den SHA-Wert
+
     const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt`, {
       method: 'PUT',
       headers: {
@@ -577,15 +580,18 @@ async function saveText(content) {
       },
       body: JSON.stringify({
         message: 'Update playlist URLs',
-        content: btoa(content),  // Base64 encode the content directly here
-        sha: await getSha('playlist-urls.txt')  // Get SHA dynamically
+        content: btoa(content),
+        sha: sha
       })
     });
+
+    console.log('API Response:', response);  // Debugging-Ausgabe für die API-Antwort
 
     if (response.ok) {
       alert('Text erfolgreich gespeichert!');
     } else {
-      console.error('Fehler beim Speichern des Textes:', response.statusText);
+      const errorData = await response.json();  // Versuche, detaillierte Fehlerinformationen zu erhalten
+      console.error('Fehler beim Speichern des Textes:', errorData.message);
       alert('Fehler beim Speichern des Textes.');
     }
   } catch (error) {
@@ -593,6 +599,7 @@ async function saveText(content) {
     alert('Fehler beim Speichern des Textes.');
   }
 }
+
 
 document.getElementById('insert-button').addEventListener('click', async () => {
   const streamUrl = document.getElementById('stream-url').value;
