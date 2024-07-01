@@ -10,29 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
       - name: Update playlist URLs
         env:
           PLAY_URLS: ${{ secrets.PLAY_URLS }}
         run: |
-          # Hier kannst du die Logik zum Aktualisieren der playlist-urls.txt Datei einfügen
-          # Beispiel: Ändern oder Hinzufügen von Inhalten zur playlist-urls.txt Datei
+          # Inhaltsaktualisierung vorbereiten
+          new_content="Neuer Inhalt"
 
-          # Beispiel: Hinzufügen von Inhalten zur playlist-urls.txt Datei
-          echo "Neuer Inhalt" > playlist-urls.txt
-
-          # Füge die Datei zum Index hinzu (Staging)
-          git add playlist-urls.txt
-
-          # Commit der Änderungen
-          git commit -m "Update playlist URLs"
-
-          # Pushen der Änderungen zum Remote-Repository
-          git push
+          # GitHub API verwenden, um Datei zu aktualisieren
+          curl -X PUT \
+            -H "Authorization: token $PLAY_URLS" \
+            -H "Content-Type: application/json" \
+            -d "{\"message\": \"Update playlist URLs\", \"content\": \"$(echo -n $new_content | base64)\"}" \
+            "https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt"
