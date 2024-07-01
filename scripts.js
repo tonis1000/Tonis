@@ -542,20 +542,26 @@ const GITHUB_USERNAME = 'tonis1000';
     const TOKEN = '${{ secrets.PLAY_URLS }}';
 
 
-    async function getSha(path) {
-      const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${path}`, {
-        headers: {
-          'Authorization': `token ${TOKEN}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data.sha;
-      } else {
-        return '';
+async function getSha(filename) {
+  try {
+    const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${filename}`, {
+      headers: {
+        'Authorization': `token ${TOKEN}`
       }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.sha;
+    } else {
+      console.error('Fehler beim Abrufen des SHA-Werts:', response.statusText);
+      return null;
     }
+  } catch (error) {
+    console.error('Fehler beim Abrufen des SHA-Werts:', error.message);
+    return null;
+  }
+}
 
     async function loadText() {
       const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/playlist-urls.txt`, {
