@@ -537,14 +537,11 @@ function toggleContent(contentId) {
 
 
 
-const GITHUB_USERNAME = 'tonis1000';
-    const REPO_NAME = 'Tonis';
-    const TOKEN = '${{ secrets.PLAY_URLS }}';
+const TOKEN = '${{ secrets.PLAY_URLS }}';
 
-
-async function getSha(filename) {
+async function loadText() {
   try {
-    const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${filename}`, {
+    const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt`, {
       headers: {
         'Authorization': `token ${TOKEN}`
       }
@@ -552,53 +549,27 @@ async function getSha(filename) {
 
     if (response.ok) {
       const data = await response.json();
-      return data.sha;
+      const urls = atob(data.content).split('\n');
+      const listElement = document.getElementById('playlist-url-list');
+      listElement.innerHTML = '';
+      urls.forEach(url => {
+        const listItem = document.createElement('li');
+        listItem.textContent = url;
+        listElement.appendChild(listItem);
+      });
+    } else if (response.status === 404) {
+      console.log('Datei nicht gefunden');
     } else {
-      console.error('Fehler beim Abrufen des SHA-Werts:', response.statusText);
-      return null;
+      console.error('Fehler beim Laden der Datei', response.statusText);
     }
   } catch (error) {
-    console.error('Fehler beim Abrufen des SHA-Werts:', error.message);
-    return null;
+    console.error('Fehler beim Laden der Datei', error.message);
   }
 }
 
-    async function loadText() {
-      const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/playlist-urls.txt`, {
-        headers: {
-          'Authorization': `token ${TOKEN}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const urls = atob(data.content).split('\n');
-        const listElement = document.getElementById('playlist-url-list');
-        listElement.innerHTML = '';
-        urls.forEach(url => {
-          const listItem = document.createElement('li');
-          listItem.textContent = url;
-          listElement.appendChild(listItem);
-        });
-      } else if (response.status === 404) {
-        console.log('Datei nicht gefunden');
-      } else {
-        console.error('Fehler beim Laden der Datei', response.statusText);
-      }
-    }
-
 async function saveText(content) {
   try {
-    const sha = await getSha('playlist-urls.txt');
-    if (!sha) {
-      console.error('SHA-Wert nicht verfügbar. Abbruch des Speichervorgangs.');
-      return;
-    }
-
-    // Base64 encode the content
-    const encodedContent = btoa(content);
-
-    const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/playlist-urls.txt`, {
+    const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt`, {
       method: 'PUT',
       headers: {
         'Authorization': `token ${TOKEN}`,
@@ -606,8 +577,8 @@ async function saveText(content) {
       },
       body: JSON.stringify({
         message: 'Update playlist URLs',
-        content: encodedContent,
-        sha: sha
+        content: btoa(content),  // Base64 encode the content directly here
+        sha: await getSha('playlist-urls.txt')  // Get SHA dynamically
       })
     });
 
@@ -623,46 +594,46 @@ async function saveText(content) {
   }
 }
 
-    document.getElementById('insert-button').addEventListener('click', async () => {
-      const streamUrl = document.getElementById('stream-url').value;
-      const listElement = document.getElementById('playlist-url-list');
-      const urls = Array.from(listElement.children).map(item => item.textContent);
+document.getElementById('insert-button').addEventListener('click', async () => {
+  const streamUrl = document.getElementById('stream-url').value;
+  const listElement = document.getElementById('playlist-url-list');
+  const urls = Array.from(listElement.children).map(item => item.textContent);
 
-      if (!urls.includes(streamUrl)) {
-        const updatedContent = urls.concat(streamUrl).join('\n');
-        await saveText(updatedContent);
+  if (!urls.includes(streamUrl)) {
+    const updatedContent = urls.concat(streamUrl).join('\n');
+    await saveText(updatedContent);
 
-        const listItem = document.createElement('li');
-        listItem.textContent = streamUrl;
-        listElement.appendChild(listItem);
-      } else {
-        alert('URL ist bereits in der Playlist.');
+    const listItem = document.createElement('li');
+    listItem.textContent = streamUrl;
+    listElement.appendChild(listItem);
+  } else {
+    alert('URL ist bereits in der Playlist.');
+  }
+});
+
+document.getElementById('delete-button').addEventListener('click', async () => {
+  const streamUrl = document.getElementById('stream-url').value;
+  const listElement = document.getElementById('playlist-url-list');
+  let urls = Array.from(listElement.children).map(item => item.textContent);
+
+  if (urls.includes(streamUrl)) {
+    urls = urls.filter(url => url !== streamUrl);
+    const updatedContent = urls.join('\n');
+    await saveText(updatedContent);
+
+    Array.from(listElement.children).forEach(item => {
+      if (item.textContent === streamUrl) {
+        listElement.removeChild(item);
       }
     });
+  } else {
+    alert('URL ist nicht in der Playlist.');
+  }
+});
 
-    document.getElementById('delete-button').addEventListener('click', async () => {
-      const streamUrl = document.getElementById('stream-url').value;
-      const listElement = document.getElementById('playlist-url-list');
-      let urls = Array.from(listElement.children).map(item => item.textContent);
+function toggleContent(id) {
+  const element = document.getElementById(id);
+  element.classList.toggle('expandable');
+}
 
-      if (urls.includes(streamUrl)) {
-        urls = urls.filter(url => url !== streamUrl);
-        const updatedContent = urls.join('\n');
-        await saveText(updatedContent);
-
-        Array.from(listElement.children).forEach(item => {
-          if (item.textContent === streamUrl) {
-            listElement.removeChild(item);
-          }
-        });
-      } else {
-        alert('URL ist nicht in der Playlist.');
-      }
-    });
-
-    function toggleContent(id) {
-      const element = document.getElementById(id);
-      element.classList.toggle('expandable');
-    }
-
-    window.onload = loadText;
+window.onload = loadText;
