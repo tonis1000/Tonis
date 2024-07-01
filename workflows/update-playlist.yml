@@ -3,25 +3,24 @@ name: Update Playlist
 on:
   push:
     branches:
-      - main  # Hier den Branch anpassen, auf dem Änderungen überwacht werden sollen
+      - main
 
 jobs:
   update-playlist:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: Update Playlist
+      - name: Update Playlist Items
+        run: node your-script.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node scripts/updatePlaylist.js  # Hier den Pfad zu deinem JavaScript-Script anpassen
+          PLAY_URLS: ${{ secrets.PLAY_URLS }}
