@@ -536,132 +536,84 @@ function toggleContent(contentId) {
 
 
 
-// GitHub-Repository-Details und persönlicher Zugriffstoken
-const repo = 'tonis1000/Tonis'; // Dein GitHub-Benutzername und Repository-Name
-const token = process.env.PLAY_URLS;
+const GITHUB_USERNAME = 'tonis1000';
+    const REPO_NAME = 'Tonis';
+    const TOKEN = 'PLAY_URLS';
 
-let playlistUrls = [];
-
-// Funktion zum Anzeigen von Fehlermeldungen
-function showError(message) {
-    alert(`Fehler: ${message}`);
-}
-
-// Einfügen Button
-document.getElementById('insert-button').addEventListener('click', function() {
-    const playlistURL = document.getElementById('stream-url').value;
-    if (playlistURL) {
-        if (!playlistUrls.includes(playlistURL)) {
-            playlistUrls.push(playlistURL);
-            console.log('Neue URL hinzugefügt:', playlistURL);
-            console.log('Aktualisierte Playlist:', playlistUrls);
-            updatePlaylistItems();
-        } else {
-            console.log('URL ist bereits in der Playlist:', playlistURL);
+    async function getSha(path) {
+      const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${path}`, {
+        headers: {
+          'Authorization': `token ${TOKEN}`
         }
-    } else {
-        showError('Bitte eine gültige URL eingeben.');
-    }
-});
+      });
 
-// Löschen Button
-document.getElementById('delete-button').addEventListener('click', function() {
-    const playlistURL = document.getElementById('stream-url').value;
-    if (playlistURL) {
-        const index = playlistUrls.indexOf(playlistURL);
-        if (index !== -1) {
-            playlistUrls.splice(index, 1);
-            console.log('URL entfernt:', playlistURL);
-            console.log('Aktualisierte Playlist:', playlistUrls);
-            updatePlaylistItems();
-        } else {
-            showError('URL nicht in der Playlist gefunden.');
-        }
-    } else {
-        showError('Bitte eine gültige URL eingeben.');
-    }
-});
-
-// Funktion zum Aktualisieren der items.json auf GitHub
-async function updatePlaylistItems() {
-    try {
-        const content = btoa(JSON.stringify(playlistUrls, null, 2));
-        const response = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
-            headers: {
-                'Accept': 'application/vnd.github.v3+json',
-                'Authorization': `token ${token}`
-            }
-        });
+      if (response.ok) {
         const data = await response.json();
-        const sha = data.sha;
-
-        const updateResponse = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: 'Update playlist URLs',
-                content: content,
-                sha: sha
-            })
-        });
-
-        const updateData = await updateResponse.json();
-        console.log('Update Response:', updateData);
-        fetchItems();
-    } catch (error) {
-        showError('Fehler beim Aktualisieren der Playlist: ' + error.message);
-        console.error('Fehler beim Aktualisieren:', error);
+        return data.sha;
+      } else {
+        return '';
+      }
     }
-}
 
-// Funktion zum Laden der Items aus items.json
-async function fetchItems() {
-    try {
-        const response = await fetch(`https://api.github.com/repos/${repo}/contents/items.json`, {
-            headers: {
-                'Accept': 'application/vnd.github.v3.raw'
-            }
-        });
-        const items = await response.json();
-        console.log('Geladene Items:', items);
-        playlistUrls = items;
-        const itemList = document.getElementById('playlist-url-list');
-        itemList.innerHTML = '';
-        items.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            itemList.appendChild(li);
-        });
-    } catch (error) {
-        showError('Fehler beim Laden der Playlist: ' + error.message);
-        console.error('Fehler beim Laden:', error);
-    }
-}
-
-// Initialer Aufruf, um items.json beim Laden der Seite zu laden
-document.addEventListener('DOMContentLoaded', fetchItems);
-
-// Funktion zum Testen des GitHub Tokens
-async function testToken() {
-    try {
-        const response = await fetch('https://api.github.com/user', {
-            headers: {
-                Authorization: `token ${token}`
-            }
-        });
-        const data = await response.json();
-        if (response.ok) {
-            console.log('Token gültig. Benutzername:', data.login);
-        } else {
-            console.error('Fehler beim Überprüfen des Tokens:', data.message);
+    async function loadText() {
+      const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/playlist-urls.txt`, {
+        headers: {
+          'Authorization': `token ${TOKEN}`
         }
-    } catch (error) {
-        console.error('Fehler beim Überprüfen des Tokens:', error.message);
-    }
-}
+      });
 
-// Aufruf der Funktion zum Testen des Tokens
-testToken();
+      if (response.ok) {
+        const data = await response.json();
+        document.getElementById('playlist-urls').value = atob(data.content);
+      }
+    }
+
+    async function saveText(content) {
+      const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/playlist-urls.txt`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: 'Update playlist URLs',
+          content: btoa(content),
+          sha: await getSha('playlist-urls.txt')
+        })
+      });
+
+      if (response.ok) {
+        alert('Text gespeichert!');
+      } else {
+        alert('Fehler beim Speichern des Textes.');
+      }
+    }
+
+    document.getElementById('insert-button').addEventListener('click', async () => {
+      const streamUrl = document.getElementById('stream-url').value;
+      const playlistUrls = document.getElementById('playlist-urls').value;
+
+      if (!playlistUrls.includes(streamUrl)) {
+        const updatedContent = playlistUrls + '\n' + streamUrl;
+        await saveText(updatedContent.trim());
+        document.getElementById('playlist-urls').value = updatedContent.trim();
+      } else {
+        alert('URL ist bereits in der Playlist.');
+      }
+    });
+
+    document.getElementById('delete-button').addEventListener('click', async () => {
+      const streamUrl = document.getElementById('stream-url').value;
+      let playlistUrls = document.getElementById('playlist-urls').value.split('\n');
+
+      if (playlistUrls.includes(streamUrl)) {
+        playlistUrls = playlistUrls.filter(url => url !== streamUrl);
+        const updatedContent = playlistUrls.join('\n');
+        await saveText(updatedContent.trim());
+        document.getElementById('playlist-urls').value = updatedContent.trim();
+      } else {
+        alert('URL ist nicht in der Playlist.');
+      }
+    });
+
+    window.onload = loadText;
