@@ -536,6 +536,7 @@ function toggleContent(contentId) {
 
 
 
+
 const GITHUB_USERNAME = 'tonis1000';
     const REPO_NAME = 'Tonis';
     const TOKEN = 'PLAY_URLS';
@@ -564,7 +565,14 @@ const GITHUB_USERNAME = 'tonis1000';
 
       if (response.ok) {
         const data = await response.json();
-        document.getElementById('playlist-urls').value = atob(data.content);
+        const urls = atob(data.content).split('\n');
+        const listElement = document.getElementById('playlist-url-list');
+        listElement.innerHTML = '';
+        urls.forEach(url => {
+          const listItem = document.createElement('li');
+          listItem.textContent = url;
+          listElement.appendChild(listItem);
+        });
       }
     }
 
@@ -591,12 +599,16 @@ const GITHUB_USERNAME = 'tonis1000';
 
     document.getElementById('insert-button').addEventListener('click', async () => {
       const streamUrl = document.getElementById('stream-url').value;
-      const playlistUrls = document.getElementById('playlist-urls').value;
+      const listElement = document.getElementById('playlist-url-list');
+      const urls = Array.from(listElement.children).map(item => item.textContent);
 
-      if (!playlistUrls.includes(streamUrl)) {
-        const updatedContent = playlistUrls + '\n' + streamUrl;
-        await saveText(updatedContent.trim());
-        document.getElementById('playlist-urls').value = updatedContent.trim();
+      if (!urls.includes(streamUrl)) {
+        const updatedContent = urls.concat(streamUrl).join('\n');
+        await saveText(updatedContent);
+
+        const listItem = document.createElement('li');
+        listItem.textContent = streamUrl;
+        listElement.appendChild(listItem);
       } else {
         alert('URL ist bereits in der Playlist.');
       }
@@ -604,16 +616,27 @@ const GITHUB_USERNAME = 'tonis1000';
 
     document.getElementById('delete-button').addEventListener('click', async () => {
       const streamUrl = document.getElementById('stream-url').value;
-      let playlistUrls = document.getElementById('playlist-urls').value.split('\n');
+      const listElement = document.getElementById('playlist-url-list');
+      let urls = Array.from(listElement.children).map(item => item.textContent);
 
-      if (playlistUrls.includes(streamUrl)) {
-        playlistUrls = playlistUrls.filter(url => url !== streamUrl);
-        const updatedContent = playlistUrls.join('\n');
-        await saveText(updatedContent.trim());
-        document.getElementById('playlist-urls').value = updatedContent.trim();
+      if (urls.includes(streamUrl)) {
+        urls = urls.filter(url => url !== streamUrl);
+        const updatedContent = urls.join('\n');
+        await saveText(updatedContent);
+
+        Array.from(listElement.children).forEach(item => {
+          if (item.textContent === streamUrl) {
+            listElement.removeChild(item);
+          }
+        });
       } else {
         alert('URL ist nicht in der Playlist.');
       }
     });
+
+    function toggleContent(id) {
+      const element = document.getElementById(id);
+      element.classList.toggle('expandable');
+    }
 
     window.onload = loadText;
