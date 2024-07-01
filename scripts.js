@@ -581,27 +581,41 @@ const GITHUB_USERNAME = 'tonis1000';
       }
     }
 
-    async function saveText(content) {
-      const sha = await getSha('playlist-urls.txt');
-      const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/playlist-urls.txt`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: 'Update playlist URLs',
-          content: btoa(content),
-          sha: sha
-        })
-      });
-
-      if (response.ok) {
-        alert('Text gespeichert!');
-      } else {
-        alert('Fehler beim Speichern des Textes.');
-      }
+async function saveText(content) {
+  try {
+    const sha = await getSha('playlist-urls.txt');
+    if (!sha) {
+      console.error('SHA-Wert nicht verfügbar. Abbruch des Speichervorgangs.');
+      return;
     }
+
+    // Base64 encode the content
+    const encodedContent = btoa(content);
+
+    const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/playlist-urls.txt`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Update playlist URLs',
+        content: encodedContent,
+        sha: sha
+      })
+    });
+
+    if (response.ok) {
+      alert('Text erfolgreich gespeichert!');
+    } else {
+      console.error('Fehler beim Speichern des Textes:', response.statusText);
+      alert('Fehler beim Speichern des Textes.');
+    }
+  } catch (error) {
+    console.error('Fehler beim Speichern des Textes:', error.message);
+    alert('Fehler beim Speichern des Textes.');
+  }
+}
 
     document.getElementById('insert-button').addEventListener('click', async () => {
       const streamUrl = document.getElementById('stream-url').value;
