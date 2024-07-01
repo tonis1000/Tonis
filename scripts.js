@@ -539,7 +539,8 @@ function toggleContent(contentId) {
 
 const GITHUB_USERNAME = 'tonis1000';
     const REPO_NAME = 'Tonis';
-    const TOKEN = 'PLAY_URLS'; // Ersetze dies durch den tatsächlichen Token
+    const TOKEN = '${{ secrets.PLAY_URLS }}';
+
 
     async function getSha(path) {
       const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${path}`, {
