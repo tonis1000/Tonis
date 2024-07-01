@@ -567,6 +567,9 @@ async function loadText() {
   }
 }
 
+async function getSha(filename) {
+  // Implementierung der Funktion
+}
 async function saveText(content) {
   try {
     const sha = await getSha('playlist-urls.txt');  // Stelle sicher, dass der SHA-Wert korrekt abgerufen wird
