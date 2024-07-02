@@ -1,25 +1,39 @@
-name: Update Playlist URLs
+name: Update Playlist
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      URL:
+        description: 'Stream URL'
+        required: true
+      ACTION:
+        description: 'Action (add or delete)'
+        required: true
 
 jobs:
-  update:
+  update-playlist:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Update playlist URLs
-        env:
-          PLAY_URLS: ${{ secrets.PLAY_URLS }}
-        run: |
-          # Inhaltsaktualisierung vorbereiten
-          new_content="Neuer Inhalt"
+    - name: Checkout repository content
+      uses: actions/checkout@v2
 
-          # GitHub API verwenden, um Datei zu aktualisieren
-          curl -X PUT \
-            -H "Authorization: token $PLAY_URLS" \
-            -H "Content-Type: application/json" \
-            -d "{\"message\": \"Update playlist URLs\", \"content\": \"$(echo -n $new_content | base64)\"}" \
-            "https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt"
+    - name: Update playlist file
+      run: |
+        FILE=playlist-urls.txt
+        NEW_URL=${{ github.event.inputs.URL }}
+        ACTION=${{ github.event.inputs.ACTION }}
+        
+        if [ "$ACTION" == "add" ]; then
+          if ! grep -Fxq "$NEW_URL" "$FILE"; then
+            echo "$NEW_URL" >> "$FILE"
+          fi
+        elif [ "$ACTION" == "delete" ]; then
+          sed -i "/$NEW_URL/d" "$FILE"
+        fi
+        
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add $FILE
+        git commit -m "Update playlist with $ACTION URL: $NEW_URL"
+        git push
