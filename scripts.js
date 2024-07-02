@@ -539,6 +539,30 @@ function toggleContent(contentId) {
 
 const TOKEN = '${{ secrets.PLAY_URLS }}';
 
+// Funktion zum Abrufen des SHA-Werts der Datei
+async function getSha(filename) {
+  try {
+    const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/${filename}`, {
+      headers: {
+        'Authorization': `token ${TOKEN}`
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.sha;
+    } else if (response.status === 404) {
+      console.log('Datei nicht gefunden');
+    } else {
+      console.error('Fehler beim Abrufen des SHA-Werts', response.statusText);
+    }
+  } catch (error) {
+    console.error('Fehler beim Abrufen des SHA-Werts', error.message);
+  }
+  return null;
+}
+
+// Funktion zum Laden des Textes aus der Datei
 async function loadText() {
   try {
     const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt`, {
@@ -567,13 +591,11 @@ async function loadText() {
   }
 }
 
-async function getSha(filename) {
-  // Implementierung der Funktion
-}
+// Funktion zum Speichern des Textes in die Datei
 async function saveText(content) {
   try {
-    const sha = await getSha('playlist-urls.txt');  // Stelle sicher, dass der SHA-Wert korrekt abgerufen wird
-    console.log('SHA:', sha);  // Debugging-Ausgabe für den SHA-Wert
+    const sha = await getSha('playlist-urls.txt');
+    console.log('SHA:', sha);
 
     const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt`, {
       method: 'PUT',
@@ -588,12 +610,12 @@ async function saveText(content) {
       })
     });
 
-    console.log('API Response:', response);  // Debugging-Ausgabe für die API-Antwort
+    console.log('API Response:', response);
 
     if (response.ok) {
       alert('Text erfolgreich gespeichert!');
     } else {
-      const errorData = await response.json();  // Versuche, detaillierte Fehlerinformationen zu erhalten
+      const errorData = await response.json();
       console.error('Fehler beim Speichern des Textes:', errorData.message);
       alert('Fehler beim Speichern des Textes.');
     }
@@ -602,7 +624,6 @@ async function saveText(content) {
     alert('Fehler beim Speichern des Textes.');
   }
 }
-
 
 document.getElementById('insert-button').addEventListener('click', async () => {
   const streamUrl = document.getElementById('stream-url').value;
@@ -647,3 +668,4 @@ function toggleContent(id) {
 }
 
 window.onload = loadText;
+
