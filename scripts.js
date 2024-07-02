@@ -539,29 +539,6 @@ function toggleContent(contentId) {
 
 const TOKEN = '${{ secrets.PLAY_URLS }}';
 
-// Funktion zum Abrufen des SHA-Werts der Datei
-async function getSha(filename) {
-  try {
-    const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/${filename}`, {
-      headers: {
-        'Authorization': `token ${TOKEN}`
-      }
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data.sha;
-    } else if (response.status === 404) {
-      console.log('Datei nicht gefunden');
-    } else {
-      console.error('Fehler beim Abrufen des SHA-Werts', response.statusText);
-    }
-  } catch (error) {
-    console.error('Fehler beim Abrufen des SHA-Werts', error.message);
-  }
-  return null;
-}
-
 // Funktion zum Laden des Textes aus der Datei
 async function loadText() {
   try {
@@ -591,37 +568,36 @@ async function loadText() {
   }
 }
 
-// Funktion zum Speichern des Textes in die Datei
-async function saveText(content) {
+// Funktion zum Aktualisieren der Playlist über GitHub Actions
+async function updatePlaylist(url, action) {
   try {
-    const sha = await getSha('playlist-urls.txt');
-    console.log('SHA:', sha);
-
-    const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt`, {
-      method: 'PUT',
+    const response = await fetch('https://api.github.com/repos/tonis1000/Tonis/actions/workflows/update-playlist.yml/dispatches', {
+      method: 'POST',
       headers: {
         'Authorization': `token ${TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        message: 'Update playlist URLs',
-        content: btoa(content),
-        sha: sha
+        ref: 'main',
+        inputs: {
+          URL: url,
+          ACTION: action
+        }
       })
     });
 
-    console.log('API Response:', response);
-
     if (response.ok) {
-      alert('Text erfolgreich gespeichert!');
+      alert('URL erfolgreich aktualisiert!');
+      loadText();
     } else {
       const errorData = await response.json();
-      console.error('Fehler beim Speichern des Textes:', errorData.message);
-      alert('Fehler beim Speichern des Textes.');
+      console.error('Fehler beim Aktualisieren der URL:', errorData.message);
+      alert('Fehler beim Aktualisieren der URL.');
     }
   } catch (error) {
-    console.error('Fehler beim Speichern des Textes:', error.message);
-    alert('Fehler beim Speichern des Textes.');
+    console.error('Fehler beim Aktualisieren der URL:', error.message);
+    alert('Fehler beim Aktualisieren der URL.');
   }
 }
 
@@ -631,12 +607,7 @@ document.getElementById('insert-button').addEventListener('click', async () => {
   const urls = Array.from(listElement.children).map(item => item.textContent);
 
   if (!urls.includes(streamUrl)) {
-    const updatedContent = urls.concat(streamUrl).join('\n');
-    await saveText(updatedContent);
-
-    const listItem = document.createElement('li');
-    listItem.textContent = streamUrl;
-    listElement.appendChild(listItem);
+    await updatePlaylist(streamUrl, 'add');
   } else {
     alert('URL ist bereits in der Playlist.');
   }
@@ -645,27 +616,19 @@ document.getElementById('insert-button').addEventListener('click', async () => {
 document.getElementById('delete-button').addEventListener('click', async () => {
   const streamUrl = document.getElementById('stream-url').value;
   const listElement = document.getElementById('playlist-url-list');
-  let urls = Array.from(listElement.children).map(item => item.textContent);
+  const urls = Array.from(listElement.children).map(item => item.textContent);
 
   if (urls.includes(streamUrl)) {
-    urls = urls.filter(url => url !== streamUrl);
-    const updatedContent = urls.join('\n');
-    await saveText(updatedContent);
-
-    Array.from(listElement.children).forEach(item => {
-      if (item.textContent === streamUrl) {
-        listElement.removeChild(item);
-      }
-    });
+    await updatePlaylist(streamUrl, 'delete');
   } else {
     alert('URL ist nicht in der Playlist.');
   }
 });
 
-function toggleContent(id) {
-  const element = document.getElementById(id);
-  element.classList.toggle('expandable');
-}
+
+
+window.onload = loadText;
+
 
 window.onload = loadText;
 
