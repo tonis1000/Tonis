@@ -591,25 +591,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Funktion zum Filtern der Senderliste
-function filterSenderliste() {
-    const input = document.getElementById('search-input');
-    const filter = input.value.toLowerCase();
-    const ul = document.getElementById('sidebar-list');
-    const li = ul.getElementsByTagName('li');
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
 
-    for (let i = 0; i < li.length; i++) {
-        const a = li[i].getElementsByTagName('a')[0];
-        if (a.textContent.toLowerCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
-}
+    searchInput.addEventListener('input', function() {
+        const filter = searchInput.value.toLowerCase();
+        const sidebarList = document.getElementById('sidebar-list');
+        const items = sidebarList.getElementsByTagName('li');
 
-// Event-Listener für das Suchfeld
-document.getElementById('search-input').addEventListener('keyup', function(event) {
-    if (event.key === 'Enter') {
-        filterSenderliste();
-    }
+        Array.from(items).forEach(item => {
+            const text = item.textContent || item.innerText;
+            if (text.toLowerCase().includes(filter)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
 });
