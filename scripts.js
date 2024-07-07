@@ -592,55 +592,70 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Funktion zum Filtern der Senderliste und Abspielen des ersten Ergebnisses bei Enter-Taste
+
+// Funktion zum Filtern der Senderliste und Abspielen des ersten sichtbaren Ergebnisses bei Enter
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
 
+    // Event-Listener für die Eingabe im Suchfeld
     searchInput.addEventListener('input', function() {
         const filter = searchInput.value.toLowerCase();
         const sidebarList = document.getElementById('sidebar-list');
         const items = sidebarList.getElementsByTagName('li');
 
-        // Array aus den sichtbaren Items erstellen
-        const visibleItems = Array.from(items).filter(item => {
-            const text = item.textContent || item.innerText;
-            return text.toLowerCase().includes(filter);
-        });
+        let firstVisibleItem = null;
 
-        // Durchsuchen der sichtbaren Items nach Enter-Taste
-        searchInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && visibleItems.length > 0) {
-                event.preventDefault(); // Verhindert, dass die Seite neu geladen wird (Standardverhalten der Enter-Taste in Formularen)
-                const firstItem = visibleItems[0];
-                const channelName = firstItem.querySelector('.sender-name').textContent;
-                const streamURL = firstItem.dataset.stream;
-
-                // Setzt den aktuellen Sender und spielt den Stream ab
-                setCurrentChannel(channelName, streamURL);
-                playStream(streamURL);
-
-                // Aktualisiert die Programmbeschreibung und nächste Programme
-                const channelId = firstItem.dataset.channelId;
-                const programInfo = getCurrentProgram(channelId);
-                updatePlayerDescription(programInfo.title, programInfo.description);
-                updateNextPrograms(channelId);
-
-                // Zeigt das Logo des ausgewählten Senders an
-                const logoContainer = document.getElementById('current-channel-logo');
-                const logoImg = firstItem.querySelector('.logo-container img').src;
-                logoContainer.src = logoImg;
-            }
-        });
-
-        // Anzeigen oder Ausblenden der Items basierend auf dem Filter
         Array.from(items).forEach(item => {
             const text = item.textContent || item.innerText;
             if (text.toLowerCase().includes(filter)) {
-                item.style.display = '';
+                item.style.display = ''; // Zeige den Eintrag
+                if (!firstVisibleItem) {
+                    firstVisibleItem = item; // Setze das erste sichtbare Element
+                }
             } else {
-                item.style.display = 'none';
+                item.style.display = 'none'; // Verstecke den Eintrag
+            }
+        });
+
+        // Event-Listener für die Enter-Taste
+        searchInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (firstVisibleItem) {
+                    const streamURL = firstVisibleItem.querySelector('.channel-info').dataset.stream;
+                    playStream(streamURL);
+                }
             }
         });
     });
 });
 
+// Funktion zum Abspielen eines Streams im Video-Player
+function playStream(streamURL) {
+    const videoPlayer = document.getElementById('video-player');
+
+    if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
+        // HLS für Safari und andere Browser, die es unterstützen
+        const hls = new Hls();
+        hls.loadSource(streamURL);
+        hls.attachMedia(videoPlayer);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            videoPlayer.play();
+        });
+    } else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
+        // MPEG-DASH für Chrome, Firefox und andere Browser, die es unterstützen
+        const dashPlayer = dashjs.MediaPlayer().create();
+        dashPlayer.initialize(videoPlayer, streamURL, true);
+    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        // Direktes HLS für Safari
+        videoPlayer.src = streamURL;
+        videoPlayer.addEventListener('loadedmetadata', function () {
+            videoPlayer.play();
+        });
+    } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
+        // Direktes MP4- oder WebM-Streaming für andere Browser
+        videoPlayer.src = streamURL;
+        videoPlayer.play();
+    } else {
+        console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
+    }
+}
