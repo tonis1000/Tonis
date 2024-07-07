@@ -565,11 +565,7 @@ async function getSha(filename) {
 // Funktion zum Laden des Textes aus der Datei
 async function loadText() {
   try {
-    const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt`, {
-      headers: {
-        'Authorization': `token ${TOKEN}`
-      }
-    });
+    const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt`);
 
     if (response.ok) {
       const data = await response.json();
@@ -577,9 +573,11 @@ async function loadText() {
       const listElement = document.getElementById('playlist-url-list');
       listElement.innerHTML = '';
       urls.forEach(url => {
-        const listItem = document.createElement('li');
-        listItem.textContent = url;
-        listElement.appendChild(listItem);
+        if (url.trim() !== '') { // Prüfen ob URL nicht leer ist
+          const listItem = document.createElement('li');
+          listItem.textContent = url;
+          listElement.appendChild(listItem);
+        }
       });
     } else if (response.status === 404) {
       console.log('Datei nicht gefunden');
