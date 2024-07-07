@@ -590,20 +590,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Funktion zum Filtern der Sidebar-Liste basierend auf der Sucheingabe
-function filterSidebarList() {
-    const searchInput = document.getElementById('search-input').value.toLowerCase();
-    const sidebarList = document.getElementById('sidebar-list');
-    const items = sidebarList.getElementsByTagName('li');
+// Funktion zum Filtern der Senderliste
+function filterSenderliste() {
+    const input = document.getElementById('search-input');
+    const filter = input.value.toLowerCase();
+    const ul = document.getElementById('sidebar-list');
+    const li = ul.getElementsByTagName('li');
 
-    for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        const text = item.textContent || item.innerText;
-
-        if (text.toLowerCase().indexOf(searchInput) > -1) {
-            item.style.display = "";
+    for (let i = 0; i < li.length; i++) {
+        const a = li[i].getElementsByTagName('a')[0];
+        if (a.textContent.toLowerCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
         } else {
-            item.style.display = "none";
+            li[i].style.display = "none";
         }
     }
 }
+
+// Event-Listener für das Suchfeld
+document.getElementById('search-input').addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        filterSenderliste();
+    }
+});
