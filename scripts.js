@@ -537,15 +537,22 @@ function toggleContent(contentId) {
 
 
 
-const TOKEN = '${{ secrets.PLAY_URLS }}';
+
+const repoOwner = 'tonis1000';  // GitHub-Benutzername
+const repoName = 'Tonis';       // Name des Repositorys
+const filename = 'playlist-urls.txt';
+const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filename}`;
+const TOKEN = '${{ secrets.PLAY_URLS }}';  // GitHub Secret für den Token
+
+const headers = {
+  'Authorization': `token ${TOKEN}`
+};
 
 // Funktion zum Abrufen des SHA-Werts der Datei
 async function getSha(filename) {
   try {
-    const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/${filename}`, {
-      headers: {
-        'Authorization': `token ${TOKEN}`
-      }
+    const response = await fetch(apiUrl, {
+      headers: headers
     });
 
     if (response.ok) {
@@ -554,60 +561,61 @@ async function getSha(filename) {
     } else if (response.status === 404) {
       console.log('Datei nicht gefunden');
     } else {
-      console.error('Fehler beim Abrufen des SHA-Werts', response.statusText);
+      console.error('Fehler beim Abrufen des SHA-Werts:', response.statusText);
     }
   } catch (error) {
-    console.error('Fehler beim Abrufen des SHA-Werts', error.message);
+    console.error('Fehler beim Abrufen des SHA-Werts:', error.message);
   }
   return null;
 }
 
-// Funktion zum Laden des Textes aus der Datei
+// Funktion zum Laden des Textinhalts aus der Datei
 async function loadText() {
   try {
-    const response = await fetch('https://raw.githubusercontent.com/tonis1000/Tonis/main/playlist-urls.txt');
+    const response = await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repoName}/main/${filename}`);
+
     if (response.ok) {
       const text = await response.text();
       const urls = text.split('\n');
       const listElement = document.getElementById('playlist-url-list');
       listElement.innerHTML = '';
+
       urls.forEach(url => {
         if (url.trim() !== '') { // Prüfen, ob URL nicht leer ist
           const listItem = document.createElement('li');
-          listItem.textContent = url;
+          listItem.textContent = url.trim(); // URL trimmen, um Leerzeichen zu entfernen
           listElement.appendChild(listItem);
         }
       });
     } else {
-      console.error('Fehler beim Laden der Datei', response.statusText);
+      console.error('Fehler beim Laden der Datei:', response.statusText);
     }
   } catch (error) {
-    console.error('Fehler beim Laden der Datei', error.message);
+    console.error('Fehler beim Laden der Datei:', error.message);
   }
 }
 
-// Funktion zum Speichern des Textes in die Datei
+// Funktion zum Speichern des Textinhalts in die Datei
 async function saveText(content) {
   try {
-    const sha = await getSha('playlist-urls.txt');
-    console.log('SHA:', sha);
+    const sha = await getSha(filename);
+    console.log('Aktueller SHA-Wert:', sha);
 
-    const response = await fetch(`https://api.github.com/repos/tonis1000/Tonis/contents/playlist-urls.txt`, {
+    const response = await fetch(apiUrl, {
       method: 'PUT',
       headers: {
-        'Authorization': `token ${TOKEN}`,
+        ...headers,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        message: 'Update playlist URLs',
-        content: btoa(content),
+        message: 'Update Playlist URLs',
+        content: btoa(content), // Inhalt als Base64 kodieren
         sha: sha
       })
     });
 
-    console.log('API Response:', response);
-
     if (response.ok) {
+      console.log('Datei erfolgreich aktualisiert.');
       alert('Text erfolgreich gespeichert!');
     } else {
       const errorData = await response.json();
@@ -620,12 +628,13 @@ async function saveText(content) {
   }
 }
 
+// Event Listener für den "Einfügen" Button
 document.getElementById('insert-button').addEventListener('click', async () => {
-  const streamUrl = document.getElementById('stream-url').value;
+  const streamUrl = document.getElementById('stream-url').value.trim(); // Eingabe trimmen
   const listElement = document.getElementById('playlist-url-list');
-  const urls = Array.from(listElement.children).map(item => item.textContent);
+  const urls = Array.from(listElement.children).map(item => item.textContent.trim());
 
-  if (!urls.includes(streamUrl)) {
+  if (streamUrl !== '' && !urls.includes(streamUrl)) {
     const updatedContent = urls.concat(streamUrl).join('\n');
     await saveText(updatedContent);
 
@@ -633,14 +642,15 @@ document.getElementById('insert-button').addEventListener('click', async () => {
     listItem.textContent = streamUrl;
     listElement.appendChild(listItem);
   } else {
-    alert('URL ist bereits in der Playlist.');
+    alert('URL ist bereits in der Playlist oder leer.');
   }
 });
 
+// Event Listener für den "Löschen" Button
 document.getElementById('delete-button').addEventListener('click', async () => {
-  const streamUrl = document.getElementById('stream-url').value;
+  const streamUrl = document.getElementById('stream-url').value.trim(); // Eingabe trimmen
   const listElement = document.getElementById('playlist-url-list');
-  let urls = Array.from(listElement.children).map(item => item.textContent);
+  let urls = Array.from(listElement.children).map(item => item.textContent.trim());
 
   if (urls.includes(streamUrl)) {
     urls = urls.filter(url => url !== streamUrl);
@@ -648,13 +658,14 @@ document.getElementById('delete-button').addEventListener('click', async () => {
     await saveText(updatedContent);
 
     Array.from(listElement.children).forEach(item => {
-      if (item.textContent === streamUrl) {
+      if (item.textContent.trim() === streamUrl) {
         listElement.removeChild(item);
       }
     });
   } else {
-    alert('URL ist nicht in der Playlist.');
+    alert('URL ist nicht in der Playlist oder leer.');
   }
 });
 
+// Seite vollständig geladen: Lade den Textinhalt der Playlist-URLs
 window.onload = loadText;
