@@ -545,8 +545,10 @@ const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/$
 const TOKEN = '${{ secrets.PLAY_URLS }}';  // GitHub Secret für den Token
 
 const headers = {
-  'Authorization': `token ${TOKEN}`
+  'Authorization': `token ${TOKEN}`,
+  'Content-Type': 'application/json'
 };
+
 
 // Funktion zum Abrufen des SHA-Werts der Datei
 async function getSha(filename) {
