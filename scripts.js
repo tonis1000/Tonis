@@ -582,3 +582,28 @@ document.addEventListener('DOMContentLoaded', function() {
     playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
 });
 
+
+
+
+
+
+
+
+
+// Funktion zum Filtern der Sidebar-Liste basierend auf der Sucheingabe
+function filterSidebarList() {
+    const searchInput = document.getElementById('search-input').value.toLowerCase();
+    const sidebarList = document.getElementById('sidebar-list');
+    const items = sidebarList.getElementsByTagName('li');
+
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const text = item.textContent || item.innerText;
+
+        if (text.toLowerCase().indexOf(searchInput) > -1) {
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
+        }
+    }
+}
