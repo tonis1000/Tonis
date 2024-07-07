@@ -661,10 +661,5 @@ function playStream(streamURL) {
 }
 
 
-// Event-Listener für den "Leeren" Button
-const clearButton = document.getElementById('clear-button');
-clearButton.addEventListener('click', function() {
-    document.getElementById('search-input').value = ''; // Leere das Suchfeld
-    filterSidebarList(''); // Filter zurücksetzen, um alle Einträge anzuzeigen
-});
+
 
