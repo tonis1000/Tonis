@@ -559,6 +559,7 @@ function loadPlaylistUrls() {
                         link.addEventListener('click', function(event) {
                             event.preventDefault(); // Verhindert, dass der Link die Seite neu lädt
                             document.getElementById('stream-url').value = url; // Setzt die URL in das Eingabefeld stream-url
+                            updateSidebarFromM3U(data); // Aktualisiert die Sidebar nach dem Setzen der URL
                         });
 
                         li.appendChild(link);
