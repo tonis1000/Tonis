@@ -15,25 +15,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository content
-      uses: actions/checkout@v2
+      - name: Checkout repository content
+        uses: actions/checkout@v2
 
-    - name: Update playlist file
-      run: |
-        FILE=playlist-urls.txt
-        NEW_URL=${{ github.event.inputs.URL }}
-        ACTION=${{ github.event.inputs.ACTION }}
-        
-        if [ "$ACTION" == "add" ]; then
-          if ! grep -Fxq "$NEW_URL" "$FILE"; then
-            echo "$NEW_URL" >> "$FILE"
+      - name: Update playlist file
+        run: |
+          FILE=playlist-urls.txt
+          NEW_URL=${{ github.event.inputs.URL }}
+          ACTION=${{ github.event.inputs.ACTION }}
+
+          # Check if the action is 'add'
+          if [ "$ACTION" == "add" ]; then
+            # Append URL if it doesn't already exist in the file
+            if ! grep -Fxq "$NEW_URL" "$FILE"; then
+              echo "$NEW_URL" >> "$FILE"
+            else
+              echo "URL $NEW_URL already exists in $FILE"
+            fi
+          elif [ "$ACTION" == "delete" ]; then
+            # Remove URL from the file
+            sed -i "/$NEW_URL/d" "$FILE"
+          else
+            echo "Unsupported action: $ACTION. Please use 'add' or 'delete'."
+            exit 1
           fi
-        elif [ "$ACTION" == "delete" ]; then
-          sed -i "/$NEW_URL/d" "$FILE"
-        fi
-        
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add $FILE
-        git commit -m "Update playlist with $ACTION URL: $NEW_URL"
-        git push
+
+          # Configure Git user for commit
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage changes
+          git add $FILE
+
+          # Commit changes
+          git commit -m "Update playlist with $ACTION URL: $NEW_URL"
+
+          # Push changes back to the repository
+          git push
