@@ -590,28 +590,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Suchfeld für die Senderliste
-const searchInput = document.getElementById('search-input');
-searchInput.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        const searchText = searchInput.value.trim().toLowerCase();
-        if (searchText !== '') {
-            const sidebarList = document.getElementById('sidebar-list');
-            const channelItems = Array.from(sidebarList.querySelectorAll('.channel-info'));
 
-            // Suche nach dem ersten Sender, der den Suchtext enthält
-            const foundChannel = channelItems.find(item => {
-                const senderName = item.querySelector('.sender-name').textContent.toLowerCase();
-                return senderName.includes(searchText);
-            });
+// Funktion zum Filtern der Senderliste
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
 
-            if (foundChannel) {
-                const streamUrl = foundChannel.dataset.stream;
-                const channelId = foundChannel.dataset.channelId;
+    // Event-Listener für die Eingabe im Suchfeld
+    searchInput.addEventListener('input', function() {
+        const filter = searchInput.value.trim().toLowerCase();
+        const sidebarList = document.getElementById('sidebar-list');
+        const items = sidebarList.getElementsByTagName('li');
+        let firstVisibleItem = null;
+
+        // Durchlaufe alle Einträge in der Sidebar
+        Array.from(items).forEach(item => {
+            const text = item.textContent || item.innerText;
+            if (text.toLowerCase().includes(filter)) {
+                item.style.display = ''; // Zeige den Eintrag, wenn er dem Filter entspricht
+                if (!firstVisibleItem) {
+                    firstVisibleItem = item; // Merke das erste sichtbare Element
+                }
+            } else {
+                item.style.display = 'none'; // Verstecke den Eintrag, wenn er nicht dem Filter entspricht
+            }
+        });
+
+        // Wenn die Enter-Taste gedrückt wird und ein erstes sichtbares Element existiert, spiele es ab
+        searchInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && firstVisibleItem) {
+                const streamURL = firstVisibleItem.dataset.stream;
+                const channelId = firstVisibleItem.dataset.channelId;
                 const programInfo = getCurrentProgram(channelId);
 
-                setCurrentChannel(foundChannel.querySelector('.sender-name').textContent, streamUrl);
-                playStream(streamUrl);
+                setCurrentChannel(firstVisibleItem.querySelector('.sender-name').textContent, streamURL);
+                playStream(streamURL);
 
                 // Aktualisieren der Programmbeschreibung
                 updatePlayerDescription(programInfo.title, programInfo.description);
@@ -619,11 +631,11 @@ searchInput.addEventListener('keydown', function(event) {
                 // Aktualisieren der nächsten Programme
                 updateNextPrograms(channelId);
 
-                // Zeigt das Logo des ausgewählten Senders an
+                // Zeige das Logo des ausgewählten Senders an
                 const logoContainer = document.getElementById('current-channel-logo');
-                const logoImg = foundChannel.querySelector('.logo-container img').src;
+                const logoImg = firstVisibleItem.querySelector('.logo-container img').src;
                 logoContainer.src = logoImg;
             }
-        }
-    }
+        });
+    });
 });
