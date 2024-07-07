@@ -591,51 +591,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Funktion zum Filtern der Senderliste
+
+// Funktion zum Filtern der Senderliste und Abspielen des ersten Ergebnisses bei Enter-Taste
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
 
-    // Event-Listener für die Eingabe im Suchfeld
     searchInput.addEventListener('input', function() {
-        const filter = searchInput.value.trim().toLowerCase();
+        const filter = searchInput.value.toLowerCase();
         const sidebarList = document.getElementById('sidebar-list');
         const items = sidebarList.getElementsByTagName('li');
-        let firstVisibleItem = null;
 
-        // Durchlaufe alle Einträge in der Sidebar
-        Array.from(items).forEach(item => {
+        // Array aus den sichtbaren Items erstellen
+        const visibleItems = Array.from(items).filter(item => {
             const text = item.textContent || item.innerText;
-            if (text.toLowerCase().includes(filter)) {
-                item.style.display = ''; // Zeige den Eintrag, wenn er dem Filter entspricht
-                if (!firstVisibleItem) {
-                    firstVisibleItem = item; // Merke das erste sichtbare Element
-                }
-            } else {
-                item.style.display = 'none'; // Verstecke den Eintrag, wenn er nicht dem Filter entspricht
+            return text.toLowerCase().includes(filter);
+        });
+
+        // Durchsuchen der sichtbaren Items nach Enter-Taste
+        searchInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && visibleItems.length > 0) {
+                event.preventDefault(); // Verhindert, dass die Seite neu geladen wird (Standardverhalten der Enter-Taste in Formularen)
+                const firstItem = visibleItems[0];
+                const channelName = firstItem.querySelector('.sender-name').textContent;
+                const streamURL = firstItem.dataset.stream;
+
+                // Setzt den aktuellen Sender und spielt den Stream ab
+                setCurrentChannel(channelName, streamURL);
+                playStream(streamURL);
+
+                // Aktualisiert die Programmbeschreibung und nächste Programme
+                const channelId = firstItem.dataset.channelId;
+                const programInfo = getCurrentProgram(channelId);
+                updatePlayerDescription(programInfo.title, programInfo.description);
+                updateNextPrograms(channelId);
+
+                // Zeigt das Logo des ausgewählten Senders an
+                const logoContainer = document.getElementById('current-channel-logo');
+                const logoImg = firstItem.querySelector('.logo-container img').src;
+                logoContainer.src = logoImg;
             }
         });
 
-        // Wenn die Enter-Taste gedrückt wird und ein erstes sichtbares Element existiert, spiele es ab
-        searchInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && firstVisibleItem) {
-                const streamURL = firstVisibleItem.dataset.stream;
-                const channelId = firstVisibleItem.dataset.channelId;
-                const programInfo = getCurrentProgram(channelId);
-
-                setCurrentChannel(firstVisibleItem.querySelector('.sender-name').textContent, streamURL);
-                playStream(streamURL);
-
-                // Aktualisieren der Programmbeschreibung
-                updatePlayerDescription(programInfo.title, programInfo.description);
-
-                // Aktualisieren der nächsten Programme
-                updateNextPrograms(channelId);
-
-                // Zeige das Logo des ausgewählten Senders an
-                const logoContainer = document.getElementById('current-channel-logo');
-                const logoImg = firstVisibleItem.querySelector('.logo-container img').src;
-                logoContainer.src = logoImg;
+        // Anzeigen oder Ausblenden der Items basierend auf dem Filter
+        Array.from(items).forEach(item => {
+            const text = item.textContent || item.innerText;
+            if (text.toLowerCase().includes(filter)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
             }
         });
     });
 });
+
