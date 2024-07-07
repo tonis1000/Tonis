@@ -662,9 +662,4 @@ document.getElementById('delete-button').addEventListener('click', async () => {
   }
 });
 
-function toggleContent(id) {
-  const element = document.getElementById(id);
-  element.classList.toggle('active');
-}
-
 window.onload = loadText;
