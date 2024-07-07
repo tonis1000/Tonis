@@ -1,2 +1,2 @@
-German:https://raw.githubusercontent.com/embreq/iptv/main/senderliste.m3u
-Greece:https://www.grland.info/vrethike-to-emvolio-pou-tha-katapolema-ton-karkino/
+German,https://raw.githubusercontent.com/embreq/iptv/main/senderliste.m3u
+Greece,https://www.grland.info/vrethike-to-emvolio-pou-tha-katapolema-ton-karkino/
