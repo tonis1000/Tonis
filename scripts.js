@@ -538,37 +538,28 @@ function toggleContent(contentId) {
 
 
 
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Pfad zur playlist-urls.txt Datei
-        var playlistUrl = 'playlist-urls.txt';
-
-        // XMLHttpRequest erstellen
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    // Erfolgreich geladenen Text in die UL-Liste einfügen
-                    var playlistList = document.getElementById('playlist-url-list');
-                    var lines = xhr.responseText.split('\n');
-                    lines.forEach(function(line) {
-                        if (line.trim() !== '') {
-                            var li = document.createElement('li');
-                            li.textContent = line.trim();
-                            playlistList.appendChild(li);
-                        }
-                    });
-                } else {
-                    console.error('Fehler beim Laden der Datei: ' + xhr.status);
+// Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
+function loadPlaylistUrls() {
+    fetch('playlist-urls.txt')
+        .then(response => response.text())
+        .then(data => {
+            const playlistList = document.getElementById('playlist-url-list');
+            const lines = data.split('\n');
+            lines.forEach(line => {
+                if (line.trim() !== '') {
+                    const li = document.createElement('li');
+                    li.textContent = line.trim();
+                    playlistList.appendChild(li);
                 }
-            }
-        };
+            });
+        })
+        .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
+}
 
-        // Anfrage öffnen und senden
-        xhr.open('GET', playlistUrl, true);
-        xhr.send();
-    });
-</script>
+// Event-Listener für den Klick auf den Playlist-URLs-Titel
+document.addEventListener('DOMContentLoaded', function() {
+    const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
+    playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
+});
+
 
