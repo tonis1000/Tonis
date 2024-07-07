@@ -559,7 +559,12 @@ function loadPlaylistUrls() {
                         link.addEventListener('click', function(event) {
                             event.preventDefault(); // Verhindert, dass der Link die Seite neu lädt
                             document.getElementById('stream-url').value = url; // Setzt die URL in das Eingabefeld stream-url
-                            updateSidebarFromM3U(data); // Aktualisiert die Sidebar nach dem Setzen der URL
+
+                            // Nach dem Setzen der URL in das Eingabefeld
+                            fetch(url)
+                                .then(response => response.text())
+                                .then(data => updateSidebarFromM3U(data))
+                                .catch(error => console.error('Fehler beim Laden der Playlist:', error));
                         });
 
                         li.appendChild(link);
@@ -576,3 +581,4 @@ document.addEventListener('DOMContentLoaded', function() {
     const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
     playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
 });
+
