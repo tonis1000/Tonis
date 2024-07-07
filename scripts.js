@@ -536,8 +536,6 @@ function toggleContent(contentId) {
 
 
 
-
-
 // Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
@@ -553,6 +551,7 @@ function loadPlaylistUrls() {
                         const url = parts[1].trim();
                         const li = document.createElement('li');
                         li.textContent = name;
+                        li.style.cursor = 'pointer'; // Ändere den Cursor auf Zeiger
                         li.addEventListener('click', function() {
                             document.getElementById('stream-url').value = url;
                             extractStreamURLs(url);
@@ -565,9 +564,20 @@ function loadPlaylistUrls() {
         .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
 }
 
-// Funktion zum Extrahieren des Stream-URLs und Weiterverarbeiten
-function extractStreamURLs(url) {
-    // Hier kannst du die Logik zur weiteren Verarbeitung der URL einfügen
-    console.log('Extrahiere Stream-URL:', url);
-    // Beispiel: Hier könnte weiterer Code zur Verarbeitung der URL folgen
-}
+
+// Event-Listener für den Klick auf den Playlist-URLs-Titel
+document.addEventListener('DOMContentLoaded', function() {
+    const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
+    playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
+});
+
+// Event-Listener für den Playlist Button (wie bereits vorhanden)
+document.getElementById('playlist-button').addEventListener('click', function() {
+    const playlistURL = document.getElementById('stream-url').value;
+    if (playlistURL) {
+        fetch(playlistURL)
+            .then(response => response.text())
+            .then(data => extractStreamURLs(data))
+            .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+    }
+});
