@@ -540,32 +540,35 @@ function toggleContent(contentId) {
 
 
 
-// Funktion zum Laden des Textinhalts aus der Datei
-async function loadText() {
-  try {
-    const response = await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repoName}/main/${filename}`);
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Pfad zur playlist-urls.txt Datei
+        var playlistUrl = 'playlist-urls.txt';
 
-    if (response.ok) {
-      const text = await response.text();
-      const urls = text.split('\n');
-      const listElement = document.getElementById('playlist-url-list');
-      listElement.innerHTML = '';
+        // XMLHttpRequest erstellen
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // Erfolgreich geladenen Text in die UL-Liste einfügen
+                    var playlistList = document.getElementById('playlist-url-list');
+                    var lines = xhr.responseText.split('\n');
+                    lines.forEach(function(line) {
+                        if (line.trim() !== '') {
+                            var li = document.createElement('li');
+                            li.textContent = line.trim();
+                            playlistList.appendChild(li);
+                        }
+                    });
+                } else {
+                    console.error('Fehler beim Laden der Datei: ' + xhr.status);
+                }
+            }
+        };
 
-      urls.forEach(url => {
-        if (url.trim() !== '') { // Prüfen, ob URL nicht leer ist
-          const listItem = document.createElement('li');
-          listItem.textContent = url.trim(); // URL trimmen, um Leerzeichen zu entfernen
-          listElement.appendChild(listItem);
-        }
-      });
-    } else {
-      console.error('Fehler beim Laden der Datei:', response.statusText);
-    }
-  } catch (error) {
-    console.error('Fehler beim Laden der Datei:', error.message);
-  }
-}
+        // Anfrage öffnen und senden
+        xhr.open('GET', playlistUrl, true);
+        xhr.send();
+    });
+</script>
 
-
-// Seite vollständig geladen: Lade den Textinhalt der Playlist-URLs
-window.onload = loadText;
