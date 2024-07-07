@@ -546,38 +546,32 @@ function loadPlaylistUrls() {
             lines.forEach(line => {
                 if (line.trim() !== '') {
                     const parts = line.split(',');
-                    if (parts.length >= 2) {
-                        const name = parts[0].trim();
-                        const url = parts[1].trim();
-                        const li = document.createElement('li');
-                        li.textContent = name;
-                        li.style.cursor = 'pointer'; // Ändere den Cursor auf Zeiger
-                        li.addEventListener('click', function() {
-                            document.getElementById('stream-url').value = url;
-                            extractStreamURLs(url);
-                        });
-                        playlistList.appendChild(li);
-                    }
+                    const text = parts[0].trim();
+                    const url = parts[1].trim();
+                    
+                    const li = document.createElement('li');
+                    li.textContent = text;
+                    li.style.cursor = 'pointer';
+                    li.addEventListener('click', function() {
+                        document.getElementById('stream-url').value = url;
+                        extractStreamURLs(url);
+                    });
+                    
+                    playlistList.appendChild(li);
                 }
             });
         })
         .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
 }
 
+// Funktion zum Extrahieren der Stream-URLs und Aktualisieren der Sidebar
+function extractStreamURLs(data) {
+    // Hier kannst du die Funktionalität zur Extraktion und Aktualisierung hinzufügen
+    console.log('Extrahiere Stream-URLs und aktualisiere die Sidebar für:', data);
+}
 
 // Event-Listener für den Klick auf den Playlist-URLs-Titel
 document.addEventListener('DOMContentLoaded', function() {
     const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
     playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
-});
-
-// Event-Listener für den Playlist Button (wie bereits vorhanden)
-document.getElementById('playlist-button').addEventListener('click', function() {
-    const playlistURL = document.getElementById('stream-url').value;
-    if (playlistURL) {
-        fetch(playlistURL)
-            .then(response => response.text())
-            .then(data => extractStreamURLs(data))
-            .catch(error => console.error('Fehler beim Laden der Playlist:', error));
-    }
 });
