@@ -373,6 +373,44 @@ div.next-program h4 {
     max-height: 600px; /* oder eine andere geeignete Höhe */
 }
 
+
+
+
+
+
+
+
+
+/* Hinzufügen von zusätzlichem Stil für den playlist-urls Container */
+#playlist-urls {
+    background-color: #444;
+    color: #fff;
+    padding: 10px;
+}
+
+#playlist-url-list {
+    list-style: none;
+    padding: 0;
+}
+
+#playlist-url-list li {
+    background-color: #555;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /* Medienabfragen für verschiedene Geräte und Bildschirmgrößen */
 
 /* Für Smartphones im Hochformat */
