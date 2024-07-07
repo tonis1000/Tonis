@@ -90,6 +90,18 @@ button:disabled {
     height: 740px;
 }
 
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+}
+
+#search-input {
+  padding-top: 1px;
+  width: 120px;
+  height: 25px;
+}
+
 .sidebar h2 {
     color: #f10d0d;
     padding-bottom: 10px;
