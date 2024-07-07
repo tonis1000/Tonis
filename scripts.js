@@ -590,22 +590,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Funktion zum Filtern der Senderliste
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search-input');
+// Suchfeld für die Senderliste
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        const searchText = searchInput.value.trim().toLowerCase();
+        if (searchText !== '') {
+            const sidebarList = document.getElementById('sidebar-list');
+            const channelItems = Array.from(sidebarList.querySelectorAll('.channel-info'));
 
-    searchInput.addEventListener('input', function() {
-        const filter = searchInput.value.toLowerCase();
-        const sidebarList = document.getElementById('sidebar-list');
-        const items = sidebarList.getElementsByTagName('li');
+            // Suche nach dem ersten Sender, der den Suchtext enthält
+            const foundChannel = channelItems.find(item => {
+                const senderName = item.querySelector('.sender-name').textContent.toLowerCase();
+                return senderName.includes(searchText);
+            });
 
-        Array.from(items).forEach(item => {
-            const text = item.textContent || item.innerText;
-            if (text.toLowerCase().includes(filter)) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
+            if (foundChannel) {
+                const streamUrl = foundChannel.dataset.stream;
+                const channelId = foundChannel.dataset.channelId;
+                const programInfo = getCurrentProgram(channelId);
+
+                setCurrentChannel(foundChannel.querySelector('.sender-name').textContent, streamUrl);
+                playStream(streamUrl);
+
+                // Aktualisieren der Programmbeschreibung
+                updatePlayerDescription(programInfo.title, programInfo.description);
+
+                // Aktualisieren der nächsten Programme
+                updateNextPrograms(channelId);
+
+                // Zeigt das Logo des ausgewählten Senders an
+                const logoContainer = document.getElementById('current-channel-logo');
+                const logoImg = foundChannel.querySelector('.logo-container img').src;
+                logoContainer.src = logoImg;
             }
-        });
-    });
+        }
+    }
 });
