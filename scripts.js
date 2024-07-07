@@ -570,8 +570,3 @@ function extractStreamURLs(data) {
     console.log('Extrahiere Stream-URLs und aktualisiere die Sidebar für:', data);
 }
 
-// Event-Listener für den Klick auf den Playlist-URLs-Titel
-document.addEventListener('DOMContentLoaded', function() {
-    const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
-    playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
-});
