@@ -547,13 +547,29 @@ function loadPlaylistUrls() {
             const lines = data.split('\n');
             lines.forEach(line => {
                 if (line.trim() !== '') {
-                    const li = document.createElement('li');
-                    li.textContent = line.trim();
-                    playlistList.appendChild(li);
+                    const parts = line.split(',');
+                    if (parts.length >= 2) {
+                        const name = parts[0].trim();
+                        const url = parts[1].trim();
+                        const li = document.createElement('li');
+                        li.textContent = name;
+                        li.addEventListener('click', function() {
+                            document.getElementById('stream-url').value = url;
+                            extractStreamURLs(url);
+                        });
+                        playlistList.appendChild(li);
+                    }
                 }
             });
         })
         .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
+}
+
+// Funktion zum Extrahieren des Stream-URLs und Weiterverarbeiten
+function extractStreamURLs(url) {
+    // Hier kannst du die Logik zur weiteren Verarbeitung der URL einfügen
+    console.log('Extrahiere Stream-URL:', url);
+    // Beispiel: Hier könnte weiterer Code zur Verarbeitung der URL folgen
 }
 
 // Event-Listener für den Klick auf den Playlist-URLs-Titel
@@ -561,5 +577,3 @@ document.addEventListener('DOMContentLoaded', function() {
     const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
     playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
 });
-
-
