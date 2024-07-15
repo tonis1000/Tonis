@@ -33,6 +33,11 @@ document.getElementById('playlist-button').addEventListener('click', function() 
 
 // Funktion, um die Ressource abzurufen
 function fetchResource(url) {
+    // Überprüfen, ob die URL HTTP verwendet und die Seite über HTTPS ausgeliefert wird
+    if (window.location.protocol === 'https:' && url.startsWith('http:')) {
+        url = url.replace('http:', 'https:');
+    }
+
     var fetchOptions = {
         method: 'GET',
         mode: 'cors',
@@ -55,6 +60,9 @@ function fetchResource(url) {
             console.error('Fehler beim Laden der Playlist:', error);
         });
 }
+
+
+
 // Leeren Button
 document.getElementById('clear-button').addEventListener('click', function() {
     document.getElementById('stream-url').value = ''; // Setzt den Wert des Eingabefelds auf leer
