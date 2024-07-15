@@ -31,11 +31,12 @@ document.getElementById('playlist-button').addEventListener('click', function() 
     }
 });
 
+
 // Funktion, um die Ressource abzurufen
 function fetchResource(url) {
-    // Überprüfen, ob die URL HTTP verwendet und die Seite über HTTPS ausgeliefert wird
-    if (window.location.protocol === 'https:' && url.startsWith('http:')) {
-        url = url.replace('http:', 'https:');
+    // Überprüfen, ob die URL HTTPS verwendet und die Seite über HTTPS ausgeliefert wird
+    if (window.location.protocol === 'https:' && url.startsWith('https:')) {
+        url = url.replace('https:', 'http:');
     }
 
     var fetchOptions = {
@@ -60,6 +61,7 @@ function fetchResource(url) {
             console.error('Fehler beim Laden der Playlist:', error);
         });
 }
+
 
 
 
