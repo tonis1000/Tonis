@@ -31,36 +31,25 @@ document.getElementById('playlist-button').addEventListener('click', function() 
     }
 });
 
-
 // Funktion, um die Ressource abzurufen
-function fetchResource(url) {
+async function fetchResource(url) {
     // Überprüfen, ob die URL HTTPS verwendet und die Seite über HTTPS ausgeliefert wird
     if (window.location.protocol === 'https:' && url.startsWith('https:')) {
         url = url.replace('https:', 'http:');
     }
 
-    var fetchOptions = {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            'Accept': 'video/webm,video/ogg,video/*;q=0.9,application/ogg;q=0.7,audio/*;q=0.6,*/*;q=0.5'
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-    };
-
-    fetch(url, fetchOptions)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            updateSidebarFromM3U(data);
-        })
-        .catch(error => {
-            console.error('Fehler beim Laden der Playlist:', error);
-        });
+        const data = await response.text();
+        updateSidebarFromM3U(data);
+    } catch (error) {
+        console.error('Fehler beim Laden der Playlist:', error);
+    }
 }
+
 
 
 
