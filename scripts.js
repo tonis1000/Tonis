@@ -25,15 +25,44 @@ function loadSportPlaylist() {
 
 
 // Playlist Button
+// Playlist Button Event Listener
 document.getElementById('playlist-button').addEventListener('click', function() {
     const playlistURL = document.getElementById('stream-url').value;
     if (playlistURL) {
-        fetch(playlistURL)
-            .then(response => response.text())
-            .then(data => updateSidebarFromM3U(data))
-            .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+        fetchResource(playlistURL);
     }
 });
+
+// Funktion, um die Ressource abzurufen
+function fetchResource(url) {
+    // Einstellungen für die Fetch-Anfrage
+    var fetchOptions = {
+        method: 'GET',
+        mode: 'cors', // Je nach CORS-Policy anpassen
+        headers: {
+            'Accept': 'video/webm,video/ogg,video/*;q=0.9,application/ogg;q=0.7,audio/*;q=0.6,*/*;q=0.5'
+        }
+    };
+
+    // Fetch-Anfrage durchführen
+    fetch(url, fetchOptions)
+        .then(function(response) {
+            // Überprüfen, ob die Anfrage erfolgreich war
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // Antwort in Text umwandeln, falls erforderlich
+            return response.text();
+        })
+        .then(function(data) {
+            // Hier können Sie mit den Daten (z.B. einer M3U-Playlist) weiterarbeiten
+            updateSidebarFromM3U(data);
+        })
+        .catch(function(error) {
+            // Fehler behandeln
+            console.error('Fehler beim Laden der Playlist:', error);
+        });
+}
 
 
 // Leeren Button
