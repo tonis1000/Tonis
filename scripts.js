@@ -8,7 +8,7 @@ function loadMyPlaylist() {
 
 // Funktion zum Laden der externen Playlist und Aktualisieren der Sidebar
 function loadExternalPlaylist() {
-    fetch('https://raw.githubusercontent.com/gluk03/iptvgluk/dd9409c9f9029f6444633267e3031741efedc381/TV.m3u')
+    fetch('http://habeto.xyz:8080/get.php?username=xxxrestream&password=fghiBrdf55&type=m3u_plus&output=ts')
         .then(response => response.text())
         .then(data => updateSidebarFromM3U(data))
         .catch(error => console.error('Fehler beim Laden der externen Playlist:', error));
