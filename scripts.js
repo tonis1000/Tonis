@@ -422,36 +422,47 @@ function playStream(streamURL, subtitleURL) {
     const videoPlayer = document.getElementById('video-player');
     const subtitleTrack = document.getElementById('subtitle-track');
 
-    if (subtitleURL) {
+    if (!videoPlayer) {
+        console.error('Video-Player-Element wurde nicht gefunden.');
+        return;
+    }
+
+    if (subtitleURL && subtitleTrack) {
         subtitleTrack.src = subtitleURL;
         subtitleTrack.track.mode = 'showing'; // Untertitel anzeigen
-    } else {
+    } else if (subtitleTrack) {
         subtitleTrack.src = '';
         subtitleTrack.track.mode = 'hidden'; // Untertitel ausblenden
     }
 
-    if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
+    if (Hls && Hls.isSupported() && streamURL.endsWith('.m3u8')) {
         // HLS für Safari und andere Browser, die es unterstützen
         const hls = new Hls();
         hls.loadSource(streamURL);
         hls.attachMedia(videoPlayer);
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            videoPlayer.play();
+            videoPlayer.play().catch(error => console.error('Fehler beim Abspielen des Videos:', error));
+        });
+        hls.on(Hls.Events.ERROR, function (event, data) {
+            console.error('HLS-Fehler:', data);
         });
     } else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
         // MPEG-DASH für Chrome, Firefox und andere Browser, die es unterstützen
         const dashPlayer = dashjs.MediaPlayer().create();
         dashPlayer.initialize(videoPlayer, streamURL, true);
+        dashPlayer.on(dashjs.MediaPlayer.events.ERROR, function (e) {
+            console.error('MPEG-DASH-Fehler:', e);
+        });
     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
         // Direktes HLS für Safari
         videoPlayer.src = streamURL;
         videoPlayer.addEventListener('loadedmetadata', function () {
-            videoPlayer.play();
+            videoPlayer.play().catch(error => console.error('Fehler beim Abspielen des Videos:', error));
         });
     } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
         // Direktes MP4- oder WebM-Streaming für andere Browser
         videoPlayer.src = streamURL;
-        videoPlayer.play();
+        videoPlayer.play().catch(error => console.error('Fehler beim Abspielen des Videos:', error));
     } else {
         console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
