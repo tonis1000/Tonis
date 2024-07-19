@@ -466,7 +466,13 @@ function playStream(streamURL, subtitleURL) {
     } else {
         console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
+
+    // Zusätzliche Fehlerbehandlung für abgebrochene Abrufe
+    videoPlayer.addEventListener('error', function (e) {
+        console.error('Fehler beim Laden der Medienressource:', e);
+    });
 }
+
 
 
 
