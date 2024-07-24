@@ -1,0 +1,11 @@
+#EXTM3U
+#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/slE8U5m.png", ERT1
+https://kontaminis.kitsopoulos.xyz/ch1/index.m3u8
+#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/slE8U5m.png", ERT1
+https://kontaminis.kitsopoulos.xyz/ch2/index.m3u8
+#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/slE8U5m.png", ERT1
+https://kontaminis.kitsopoulos.xyz/ch3/index.m3u8
+#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/slE8U5m.png", ERT1
+https://kontaminis.kitsopoulos.xyz/ch4/index.m3u8
+#EXTINF:-1 tvg-id="ert1" tvg-logo="https://i.imgur.com/slE8U5m.png", ERT1
+https://kontaminis.kitsopoulos.xyz/ch5/index.m3u8
