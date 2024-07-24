@@ -417,6 +417,8 @@ function updateClock() {
 
 
 
+
+
 // Funktion zum Abspielen eines Streams im Video-Player
 function playStream(streamURL, subtitleURL) {
     const videoPlayer = document.getElementById('video-player');
@@ -472,6 +474,7 @@ function playStream(streamURL, subtitleURL) {
         console.error('Fehler beim Laden der Medienressource:', e);
     });
 }
+
 
 
 
