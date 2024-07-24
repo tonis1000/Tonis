@@ -67,7 +67,6 @@
                 <p id="program-desc"></p>
             </div>
             <div id="next-programs">
-                <!-- Container für die nächsten Programme -->
                 <div class="next-program">
                     <h4 class="next-program-title">Nächstes Programm 1 (09:00 - 10:00)</h4>
                     <p class="next-program-desc" style="display: none;">Beschreibung des nächsten Programms 1</p>
@@ -99,25 +98,12 @@
             <div id="TV-Programm-content" class="content-body expandable">
                 <iframe src="https://programmatileorasis.gr" width="100%" height="100%" frameborder="0"></iframe>
             </div>
-            <!-- Persistent Playlist URLs -->
             <div class="content-title" onclick="toggleContent('playlist-urls')">Playlist URLs</div>
             <div id="playlist-urls" class="content-body expandable">
                 <ul id="playlist-url-list"></ul>
             </div>
         </div>
     </div>
-    <script>
-        document.getElementById('play-button').addEventListener('click', function() {
-            var url = document.getElementById('stream-url').value;
-            var videoPlayer = document.getElementById('video-player');
-            if (videoPlayer.canPlayType('application/dash+xml')) {
-                var player = dashjs.MediaPlayer().create();
-                player.initialize(videoPlayer, url, true);
-            } else {
-                alert('Ihr Browser unterstützt DASH nicht');
-            }
-        });
-    </script>
     <script src="scripts.js"></script>
 </body>
 </html>
