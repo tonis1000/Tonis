@@ -29,10 +29,10 @@
             </div>
         </div>
         <div class="sidebar" id="sidebar">
-              <div class="search-bar">
-              <h2>Senderliste</h2>
-              <input type="text" id="search-input" placeholder="Suche Sender">
-           </div>
+            <div class="search-bar">
+                <h2>Senderliste</h2>
+                <input type="text" id="search-input" placeholder="Suche Sender">
+            </div>
             <div class="sidebar-content">
                 <ul id="sidebar-list"></ul>
             </div>
@@ -40,7 +40,6 @@
     </div>
     <div class="content-wrapper">
         <div class="player-container">
-
             <div class="player-header">
                 <div class="logo-container player-logo-container">
                     <img id="current-channel-logo" alt="Senderlogo">
@@ -51,9 +50,6 @@
                         <button id="clear-button">Leeren</button>
                         <button id="copy-button">Kopieren</button>
                         <button id="playlist-button">Playlist Laden</button>
-                         <!--<button id="insert-button">Einfügen</button>-->
-                         <!--<button id="delete-button">Löschen</button>-->
-                        
                     </div>
                     <div class="player-info-bottom">
                         <input type="text" id="stream-url" placeholder="Stream URL eingeben">
@@ -63,7 +59,6 @@
                     </div>
                 </div>
             </div>
-
             <video id="video-player" controls>
                 <track id="subtitle-track" kind="subtitles" srclang="el" label="Griechisch" default>
             </video>
@@ -71,7 +66,6 @@
                 <h4 id="program-title"></h4>
                 <p id="program-desc"></p>
             </div>
-
             <div id="next-programs">
                 <!-- Container für die nächsten Programme -->
                 <div class="next-program">
@@ -91,45 +85,39 @@
                     <p class="next-program-desc" style="display: none;">Beschreibung des nächsten Programms 4</p>
                 </div>
             </div>
-
         </div>
-
-<div class="additional-content">
-
-    
+        <div class="additional-content">
             <div class="content-title" onclick="toggleContent('foothubhd-content')">Foothubhd</div>
             <div id="foothubhd-content" class="content-body expandable">
                 <iframe src="https://foothubhd.live/" frameborder="0" width="100%" height="100%"></iframe>
             </div>
-
             <div class="content-title" onclick="toggleContent('wetter-content')">Wetter</div>
             <div id="wetter-content" class="content-body expandable">
                 <iframe src="https://search.ch/meteo/widget/Eching-D?days=1" width="100%" height="100%" frameborder="0"></iframe>
             </div>
-    
             <div class="content-title" onclick="toggleContent('TV-Programm-content')">TV-Programm</div>
             <div id="TV-Programm-content" class="content-body expandable">
-                <iframe src="https://programmatileorasis.gr" width="100%" height="100%"" frameborder="0"></iframe>
+                <iframe src="https://programmatileorasis.gr" width="100%" height="100%" frameborder="0"></iframe>
             </div>
-
             <!-- Persistent Playlist URLs -->
             <div class="content-title" onclick="toggleContent('playlist-urls')">Playlist URLs</div>
             <div id="playlist-urls" class="content-body expandable">
-            <ul id="playlist-url-list"></ul>
+                <ul id="playlist-url-list"></ul>
             </div>
-
-
-    
-    
         </div>
-
     </div>
+    <script>
+        document.getElementById('play-button').addEventListener('click', function() {
+            var url = document.getElementById('stream-url').value;
+            var videoPlayer = document.getElementById('video-player');
+            if (videoPlayer.canPlayType('application/dash+xml')) {
+                var player = dashjs.MediaPlayer().create();
+                player.initialize(videoPlayer, url, true);
+            } else {
+                alert('Ihr Browser unterstützt DASH nicht');
+            }
+        });
+    </script>
     <script src="scripts.js"></script>
-
-
-
-
-
-    
 </body>
 </html>
