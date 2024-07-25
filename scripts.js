@@ -262,24 +262,28 @@ function updatePlayerDescription(title, description) {
 }
 
 
-// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
+// Funktion zum Extrahieren der Stream-URLs
 function extractStreamURLs(data) {
     const lines = data.split('\n');
-    const streamURLs = {};
-    let currentChannelId = null;
+    const urls = {};
+
+    let currentId = null;
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
-            currentChannelId = idMatch && idMatch[1];
-        } else if (currentChannelId && line.trim()) {
-            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
-            streamURLs[currentChannelId].push(line.trim());
-            currentChannelId = null;
+            currentId = idMatch ? idMatch[1] : null;
+        } else if (line && !line.startsWith('#')) {
+            if (currentId) {
+                if (!urls[currentId]) {
+                    urls[currentId] = [];
+                }
+                urls[currentId].push(line.trim());
+            }
         }
     });
-    return streamURLs;
-}
 
+    return urls;
+}
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
@@ -287,40 +291,37 @@ function updateSidebarFromM3U(data) {
     sidebarList.innerHTML = '';
 
     const streamURLs = extractStreamURLs(data);
-    const lines = data.split('\n');
 
+    // Verarbeite die M3U-Daten
+    const lines = data.split('\n');
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
-            const channelId = idMatch && idMatch[1];
-            const programInfo = getCurrentProgram(channelId);
-
+            const channelId = idMatch ? idMatch[1] : null;
             const nameMatch = line.match(/,(.*)$/);
-            if (nameMatch && nameMatch.length > 1) {
-                const name = nameMatch[1].trim();
-                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
-                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamURL = streamURLs[channelId] && streamURLs[channelId].shift(); // Nächste URL für den Channel
+            const name = nameMatch ? nameMatch[1].trim() : 'Unbekannt';
 
-                if (streamURL) {
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `
-                        <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
-                            <div class="logo-container">
-                                <img src="${imgURL}" alt="${name} Logo">
-                            </div>
-                            <span class="sender-name">${name}</span>
-                            <span class="epg-channel">
-                                <span>${programInfo.title}</span>
-                                <div class="epg-timeline">
-                                    <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
-                                    <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
-                                </div>
-                            </span>
+            const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+            const imgURL = imgMatch ? imgMatch[1] : 'default_logo.png';
+
+            // Hole die nächste URL für diesen Kanal
+            const streamURL = streamURLs[channelId] ? streamURLs[channelId].shift() : null;
+
+            if (streamURL) {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
+                        <div class="logo-container">
+                            <img src="${imgURL}" alt="${name} Logo">
                         </div>
-                    `;
-                    sidebarList.appendChild(listItem);
-                }
+                        <span class="sender-name">${name}</span>
+                        <span class="epg-channel">
+                            <!-- Placeholder für EPG-Informationen -->
+                            <span>Keine EPG-Daten verfügbar</span>
+                        </span>
+                    </div>
+                `;
+                sidebarList.appendChild(listItem);
             }
         }
     });
