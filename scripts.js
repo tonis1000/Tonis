@@ -429,50 +429,44 @@ function playStream(streamURL, subtitleURL) {
         return;
     }
 
-    if (subtitleURL && subtitleTrack) {
-        subtitleTrack.src = subtitleURL;
-        subtitleTrack.track.mode = 'showing'; // Untertitel anzeigen
+    // Funktion zum Setzen der Untertitel
+    const setSubtitle = (url) => {
+        if (subtitleTrack) {
+            subtitleTrack.src = url;
+            subtitleTrack.track.mode = 'showing'; // Untertitel anzeigen
+        }
+    };
+
+    if (subtitleURL) {
+        setSubtitle(subtitleURL);
     } else if (subtitleTrack) {
         subtitleTrack.src = '';
         subtitleTrack.track.mode = 'hidden'; // Untertitel ausblenden
     }
 
-    if (Hls && Hls.isSupported() && streamURL.endsWith('.m3u8')) {
-        // HLS für Safari und andere Browser, die es unterstützen
+    // Stream-Format prüfen und entsprechende Player verwenden
+    if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
         const hls = new Hls();
         hls.loadSource(streamURL);
         hls.attachMedia(videoPlayer);
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            videoPlayer.play().catch(error => console.error('Fehler beim Abspielen des Videos:', error));
-        });
-        hls.on(Hls.Events.ERROR, function (event, data) {
-            console.error('HLS-Fehler:', data);
-        });
-    } else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
-        // MPEG-DASH für Chrome, Firefox und andere Browser, die es unterstützen
+        hls.on(Hls.Events.MANIFEST_PARSED, () => videoPlayer.play().catch(console.error));
+        hls.on(Hls.Events.ERROR, (event, data) => console.error('HLS-Fehler:', data));
+    } else if (dashjs && dashjs.MediaPlayer && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
         const dashPlayer = dashjs.MediaPlayer().create();
         dashPlayer.initialize(videoPlayer, streamURL, true);
-        dashPlayer.on(dashjs.MediaPlayer.events.ERROR, function (e) {
-            console.error('MPEG-DASH-Fehler:', e);
-        });
+        dashPlayer.on(dashjs.MediaPlayer.events.ERROR, (e) => console.error('MPEG-DASH-Fehler:', e));
     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-        // Direktes HLS für Safari
         videoPlayer.src = streamURL;
-        videoPlayer.addEventListener('loadedmetadata', function () {
-            videoPlayer.play().catch(error => console.error('Fehler beim Abspielen des Videos:', error));
-        });
+        videoPlayer.addEventListener('loadedmetadata', () => videoPlayer.play().catch(console.error));
     } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
-        // Direktes MP4- oder WebM-Streaming für andere Browser
         videoPlayer.src = streamURL;
-        videoPlayer.play().catch(error => console.error('Fehler beim Abspielen des Videos:', error));
+        videoPlayer.play().catch(console.error);
     } else {
         console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
 
-    // Zusätzliche Fehlerbehandlung für abgebrochene Abrufe
-    videoPlayer.addEventListener('error', function (e) {
-        console.error('Fehler beim Laden der Medienressource:', e);
-    });
+    // Fehlerbehandlung für abgebrochene Abrufe
+    videoPlayer.addEventListener('error', (e) => console.error('Fehler beim Laden der Medienressource:', e));
 }
 
 
