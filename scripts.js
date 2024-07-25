@@ -33,28 +33,33 @@ document.getElementById('playlist-button').addEventListener('click', function() 
 
 // Funktion, um die Ressource abzurufen
 async function fetchResource(url) {
+    console.log('Abrufen der URL:', url);
     try {
         let response = await fetch(url);
+        console.log('Erster Versuch:', response.ok);
+
         if (!response.ok) {
-            // Falls die Antwort nicht ok ist und das Protokoll HTTP war, auf HTTPS umstellen und erneut versuchen
             if (url.startsWith('http:')) {
                 console.log('HTTP-Request fehlgeschlagen, Wechsel zu HTTPS...');
                 url = url.replace('http:', 'https:');
                 response = await fetch(url);
+                console.log('Zweiter Versuch:', response.ok);
+
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok after switching to HTTPS');
                 }
             } else {
                 throw new Error('Network response was not ok');
             }
         }
+
         const data = await response.text();
+        console.log('Daten erfolgreich abgerufen:', data);
         updateSidebarFromM3U(data);
     } catch (error) {
         console.error('Fehler beim Laden der Playlist:', error);
     }
 }
-
 
 
 
