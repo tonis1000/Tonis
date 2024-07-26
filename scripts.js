@@ -291,9 +291,8 @@ function updateSidebarFromM3U(data) {
     sidebarList.innerHTML = '';
 
     const streamURLs = extractStreamURLs(data);
-
-    // Verarbeite die M3U-Daten
     const lines = data.split('\n');
+
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
@@ -308,6 +307,8 @@ function updateSidebarFromM3U(data) {
             const streamURL = streamURLs[channelId] ? streamURLs[channelId].shift() : null;
 
             if (streamURL) {
+                const programInfo = getCurrentProgram(channelId); // EPG-Daten abrufen
+
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
                     <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
@@ -316,8 +317,11 @@ function updateSidebarFromM3U(data) {
                         </div>
                         <span class="sender-name">${name}</span>
                         <span class="epg-channel">
-                            <!-- Placeholder für EPG-Informationen -->
-                            <span>Keine EPG-Daten verfügbar</span>
+                            <span>${programInfo.title}</span>
+                            <div class="epg-timeline">
+                                <div class="epg-past" style="width: ${programInfo.pastPercentage}%"></div>
+                                <div class="epg-future" style="width: ${programInfo.futurePercentage}%"></div>
+                            </div>
                         </span>
                     </div>
                 `;
