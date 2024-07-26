@@ -610,9 +610,15 @@ function loadPlaylistUrls() {
 
                             // Nach dem Setzen der URL in das Eingabefeld
                             fetch(url)
-                                .then(response => response.text())
-                                .then(data => updateSidebarFromM3U(data))
-                                .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Netzwerk-Antwort war nicht ok');
+        }
+        return response.text();
+    })
+    .then(data => updateSidebarFromM3U(data))
+    .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+
                         });
 
                         li.appendChild(link);
