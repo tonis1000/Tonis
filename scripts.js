@@ -161,25 +161,23 @@ function getCurrentProgram(channelId) {
             const pastPercentage = (pastTime / totalTime) * 100;
             const futurePercentage = (futureTime / totalTime) * 100;
             const description = currentProgram.desc || 'Keine Beschreibung verfügbar';
-            const start = currentProgram.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Startzeit des laufenden Programms
-            const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des laufenden Programms
-            const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
+            const start = currentProgram.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, '');
 
-
-
-return {
-    title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
-    description: description,
-    pastPercentage: pastPercentage,
-    futurePercentage: futurePercentage
-};
-
+            return {
+                title: `${title} (${start} - ${end})`,
+                description: description,
+                pastPercentage: pastPercentage,
+                futurePercentage: futurePercentage
+            };
         } else {
             return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
         }
     }
     return { title: 'Keine EPG-Daten verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
+
 
 
 
