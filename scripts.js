@@ -611,6 +611,8 @@ function loadPlaylistUrls() {
 
                         li.appendChild(link);
                         playlistList.appendChild(li);
+                    } else {
+                        console.warn('Zeile hat kein Label oder keine URL:', trimmedLine); // Debugging-Log für leere Zeilen
                     }
                 }
             });
@@ -620,20 +622,6 @@ function loadPlaylistUrls() {
             alert('Fehler beim Laden der Playlist-URLs. Siehe Konsole für Details.'); // Optional: Benutzer informieren
         });
 }
-
-
-
-
-
-// Event-Listener für den Klick auf den Playlist-URLs-Titel
-document.addEventListener('DOMContentLoaded', function() {
-    const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
-    if (playlistUrlsTitle) {
-        playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
-    } else {
-        console.error('Element für Playlist-URLs-Titel nicht gefunden.');
-    }
-});
 
 
 
