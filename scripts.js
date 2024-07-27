@@ -321,6 +321,7 @@ async function updateSidebarFromM3U(data) {
         let currentChannelId = null;
 
         lines.forEach(line => {
+            line = line.trim(); // Entfernt führende und nachfolgende Leerzeichen
             if (line.startsWith('#EXTINF')) {
                 const idMatch = line.match(/tvg-id="([^"]+)"/);
                 currentChannelId = idMatch ? idMatch[1] : null;
@@ -333,6 +334,7 @@ async function updateSidebarFromM3U(data) {
             }
         });
 
+        console.log('Extrahierte Stream-URLs:', urls);
         return urls;
     }
 
@@ -340,6 +342,7 @@ async function updateSidebarFromM3U(data) {
     const lines = data.split('\n');
 
     for (let line of lines) {
+        line = line.trim(); // Entfernt führende und nachfolgende Leerzeichen
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             const channelId = idMatch ? idMatch[1] : null;
@@ -354,6 +357,9 @@ async function updateSidebarFromM3U(data) {
 
             if (streamURL) {
                 try {
+                    // Überprüfe den Kanal und die URL
+                    console.log(`Kanal-ID: ${channelId}, Name: ${name}, Logo: ${imgURL}, URL: ${streamURL}`);
+
                     const programInfo = await getCurrentProgram(channelId); // EPG-Daten abrufen
 
                     const listItem = document.createElement('li');
@@ -380,8 +386,9 @@ async function updateSidebarFromM3U(data) {
         }
     }
 
-    checkStreamStatus();
+    checkStreamStatus(); // Überprüfe den Status der Streams
 }
+
 
 
 
