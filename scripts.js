@@ -31,7 +31,7 @@ document.getElementById('playlist-button').addEventListener('click', function() 
     }
 });
 
-// Funktion zum Abrufen der Ressource und Aktualisieren der Sidebar
+// Funktion, um die Ressource abzurufen
 async function fetchResource(url) {
     // Überprüfen, ob die URL HTTPS verwendet und die Seite über HTTPS ausgeliefert wird
     if (window.location.protocol === 'https:' && url.startsWith('https:')) {
@@ -157,7 +157,7 @@ function getCurrentProgram(channelId) {
 
 
 return {
-    title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
+    title: ${title} (${start} - ${end}), // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
     description: description,
     pastPercentage: pastPercentage,
     futurePercentage: futurePercentage
@@ -192,7 +192,7 @@ function updateNextPrograms(channelId) {
             const start = program.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Startzeit des nächsten Programms
             const end = program.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des nächsten Programms
             const title = program.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
-            nextProgramTitle.textContent = `${title} (${start} - ${end})`;
+            nextProgramTitle.textContent = ${title} (${start} - ${end});
 
             const nextProgramDesc = document.createElement('p');
             nextProgramDesc.classList.add('next-program-desc'); // Korrigierte CSS-Klasse
@@ -293,7 +293,7 @@ function updateSidebarFromM3U(data) {
 
                 if (streamURL) {
                     const listItem = document.createElement('li');
-                    listItem.innerHTML = `
+                    listItem.innerHTML = 
                         <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
                             <div class="logo-container">
                                 <img src="${imgURL}" alt="${name} Logo">
@@ -307,7 +307,7 @@ function updateSidebarFromM3U(data) {
                                 </div>
                             </span>
                         </div>
-                    `;
+                    ;
                     sidebarList.appendChild(listItem);
                 }
             }
@@ -597,11 +597,9 @@ function loadPlaylistUrls() {
 // Event-Listener für den Klick auf den Playlist-URLs-Titel
 document.addEventListener('DOMContentLoaded', function() {
     const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
-    if (playlistUrlsTitle) {
-        playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
-    }
+    playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
 });
-Zusammenfassung der Änderungen
+
 
 
 
@@ -679,6 +677,3 @@ function playStream(streamURL) {
         console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
 }
-
-
-
