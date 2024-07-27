@@ -268,22 +268,28 @@ function extractStreamURLs(data) {
     const urls = {};
 
     let currentId = null;
+    let currentName = null;
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             currentId = idMatch ? idMatch[1] : null;
+
+            const nameMatch = line.match(/,(.*)$/);
+            currentName = nameMatch ? nameMatch[1].trim() : null;
         } else if (line && !line.startsWith('#')) {
-            if (currentId) {
-                if (!urls[currentId]) {
-                    urls[currentId] = [];
+            const idOrName = currentId || currentName;
+            if (idOrName) {
+                if (!urls[idOrName]) {
+                    urls[idOrName] = [];
                 }
-                urls[currentId].push(line.trim());
+                urls[idOrName].push(line.trim());
             }
         }
     });
 
     return urls;
 }
+
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
