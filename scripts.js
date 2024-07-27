@@ -33,28 +33,17 @@ document.getElementById('playlist-button').addEventListener('click', function() 
 
 // Funktion, um die Ressource abzurufen
 async function fetchResource(url) {
-    console.log('Abrufen der URL:', url);
+    // Überprüfen, ob die URL HTTPS verwendet und die Seite über HTTPS ausgeliefert wird
+    if (window.location.protocol === 'https:' && url.startsWith('https:')) {
+        url = url.replace('https:', 'http:');
+    }
+
     try {
-        let response = await fetch(url);
-        console.log('Erster Versuch:', response.ok);
-
+        const response = await fetch(url);
         if (!response.ok) {
-            if (url.startsWith('http:')) {
-                console.log('HTTP-Request fehlgeschlagen, Wechsel zu HTTPS...');
-                url = url.replace('http:', 'https:');
-                response = await fetch(url);
-                console.log('Zweiter Versuch:', response.ok);
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok after switching to HTTPS');
-                }
-            } else {
-                throw new Error('Network response was not ok');
-            }
+            throw new Error('Network response was not ok');
         }
-
         const data = await response.text();
-        console.log('Daten erfolgreich abgerufen:', data);
         updateSidebarFromM3U(data);
     } catch (error) {
         console.error('Fehler beim Laden der Playlist:', error);
@@ -81,26 +70,6 @@ document.getElementById('copy-button').addEventListener('click', function() {
 });
 
 
-// Funktion zum Laden des Videos im Player
-function loadVideoStream(url) {
-    const video = document.getElementById('video-player');
-
-    if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            video.play();
-        });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = url;
-        video.addEventListener('loadedmetadata', function () {
-            video.play();
-        });
-    } else {
-        console.error('HLS.js wird nicht unterstützt oder der Browser kann das Format nicht abspielen.');
-    }
-}
 
 
 
@@ -181,23 +150,25 @@ function getCurrentProgram(channelId) {
             const pastPercentage = (pastTime / totalTime) * 100;
             const futurePercentage = (futureTime / totalTime) * 100;
             const description = currentProgram.desc || 'Keine Beschreibung verfügbar';
-            const start = currentProgram.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, '');
+            const start = currentProgram.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Startzeit des laufenden Programms
+            const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des laufenden Programms
+            const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
 
-            return {
-                title: `${title} (${start} - ${end})`,
-                description: description,
-                pastPercentage: pastPercentage,
-                futurePercentage: futurePercentage
-            };
+
+
+return {
+    title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
+    description: description,
+    pastPercentage: pastPercentage,
+    futurePercentage: futurePercentage
+};
+
         } else {
             return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
         }
     }
     return { title: 'Keine EPG-Daten verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
 }
-
 
 
 
@@ -280,90 +251,50 @@ function updatePlayerDescription(title, description) {
 }
 
 
-// Funktion zum Extrahieren der Stream-URLs
+// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURLs(data) {
     const lines = data.split('\n');
-    const urls = {};
-
-    let currentId = null;
-    let currentName = null;
+    const streamURLs = {};
+    let currentChannelId = null;
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
-            currentId = idMatch ? idMatch[1] : null;
-
-            const nameMatch = line.match(/,(.*)$/);
-            currentName = nameMatch ? nameMatch[1].trim() : null;
-        } else if (line && !line.startsWith('#')) {
-            const idOrName = currentId || currentName;
-            if (idOrName) {
-                if (!urls[idOrName]) {
-                    urls[idOrName] = [];
-                }
-                urls[idOrName].push(line.trim());
-            }
+            currentChannelId = idMatch && idMatch[1];
+        } else if (currentChannelId && line.trim()) {
+            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
+            streamURLs[currentChannelId].push(line.trim());
+            currentChannelId = null;
         }
     });
-
-    return urls;
+    return streamURLs;
 }
 
 
-
-
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
-async function updateSidebarFromM3U(data) {
+function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
-
-    console.log('M3U-Datei Inhalt:', data);
-
-    // Funktion zum Extrahieren der Stream-URLs
-    function extractStreamURLs(data) {
-        const urls = {};
-        const lines = data.split('\n');
-        let currentChannel = null;
-
-        lines.forEach(line => {
-            line = line.trim();
-            if (line.startsWith('#EXTINF')) {
-                const nameMatch = line.match(/,(.*)$/);
-                currentChannel = nameMatch ? nameMatch[1].trim() : null;
-                if (currentChannel) {
-                    urls[currentChannel] = [];
-                }
-            } else if (line.startsWith('http') && currentChannel) {
-                urls[currentChannel].push(line);
-                currentChannel = null;
-            }
-        });
-
-        console.log('Extrahierte URLs:', urls);
-        return urls;
-    }
 
     const streamURLs = extractStreamURLs(data);
     const lines = data.split('\n');
 
-    for (let line of lines) {
+    lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
+            const idMatch = line.match(/tvg-id="([^"]+)"/);
+            const channelId = idMatch && idMatch[1];
+            const programInfo = getCurrentProgram(channelId);
+
             const nameMatch = line.match(/,(.*)$/);
-            const name = nameMatch ? nameMatch[1].trim() : 'Unbekannt';
+            if (nameMatch && nameMatch.length > 1) {
+                const name = nameMatch[1].trim();
+                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
+                const streamURL = streamURLs[channelId] && streamURLs[channelId].shift(); // Nächste URL für den Channel
 
-            const imgMatch = line.match(/tvg-logo="([^"]+)"/);
-            const imgURL = imgMatch ? imgMatch[1] : 'default_logo.png';
-
-            // Hole die nächste URL für diesen Kanal
-            const streamURL = streamURLs[name] ? streamURLs[name].shift() : null;
-
-            if (streamURL) {
-                try {
-                    // EPG-Daten abrufen - Placeholder, da getCurrentProgram nicht definiert ist
-                    const programInfo = { title: 'Program Title', pastPercentage: 50, futurePercentage: 50 };
-
+                if (streamURL) {
                     const listItem = document.createElement('li');
                     listItem.innerHTML = `
-                        <div class="channel-info" data-stream="${streamURL}">
+                        <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
                             <div class="logo-container">
                                 <img src="${imgURL}" alt="${name} Logo">
                             </div>
@@ -378,15 +309,14 @@ async function updateSidebarFromM3U(data) {
                         </div>
                     `;
                     sidebarList.appendChild(listItem);
-                } catch (error) {
-                    console.error(`Fehler beim Abrufen der EPG-Daten für Kanal ${name}:`, error);
                 }
             }
         }
-    }
+    });
 
     checkStreamStatus();
 }
+
 
 // Funktion zum Überprüfen des Status der Streams und Markieren der gesamten Sidebar-Einträge
 function checkStreamStatus() {
@@ -415,12 +345,6 @@ function checkStreamStatus() {
         }
     });
 }
-
-// Initialisiere die Playlist-URLs beim Laden der Seite
-document.addEventListener('DOMContentLoaded', loadPlaylistUrls)
-
-
-
 
 
 
@@ -493,59 +417,45 @@ function updateClock() {
 
 
 
-
-
 // Funktion zum Abspielen eines Streams im Video-Player
 function playStream(streamURL, subtitleURL) {
     const videoPlayer = document.getElementById('video-player');
     const subtitleTrack = document.getElementById('subtitle-track');
 
-    if (!videoPlayer) {
-        console.error('Video-Player-Element wurde nicht gefunden.');
-        return;
-    }
-
-    // Funktion zum Setzen der Untertitel
-    const setSubtitle = (url) => {
-        if (subtitleTrack) {
-            subtitleTrack.src = url;
-            subtitleTrack.track.mode = 'showing'; // Untertitel anzeigen
-        }
-    };
-
     if (subtitleURL) {
-        setSubtitle(subtitleURL);
-    } else if (subtitleTrack) {
+        subtitleTrack.src = subtitleURL;
+        subtitleTrack.track.mode = 'showing'; // Untertitel anzeigen
+    } else {
         subtitleTrack.src = '';
         subtitleTrack.track.mode = 'hidden'; // Untertitel ausblenden
     }
 
-    // Stream-Format prüfen und entsprechende Player verwenden
     if (Hls.isSupported() && streamURL.endsWith('.m3u8')) {
+        // HLS für Safari und andere Browser, die es unterstützen
         const hls = new Hls();
         hls.loadSource(streamURL);
         hls.attachMedia(videoPlayer);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => videoPlayer.play().catch(console.error));
-        hls.on(Hls.Events.ERROR, (event, data) => console.error('HLS-Fehler:', data));
-    } else if (dashjs && dashjs.MediaPlayer && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            videoPlayer.play();
+        });
+    } else if (typeof dashjs !== 'undefined' && typeof dashjs.MediaPlayer !== 'undefined' && typeof dashjs.MediaPlayer().isTypeSupported === 'function' && dashjs.MediaPlayer().isTypeSupported('application/dash+xml') && streamURL.endsWith('.mpd')) {
+        // MPEG-DASH für Chrome, Firefox und andere Browser, die es unterstützen
         const dashPlayer = dashjs.MediaPlayer().create();
         dashPlayer.initialize(videoPlayer, streamURL, true);
-        dashPlayer.on(dashjs.MediaPlayer.events.ERROR, (e) => console.error('MPEG-DASH-Fehler:', e));
     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        // Direktes HLS für Safari
         videoPlayer.src = streamURL;
-        videoPlayer.addEventListener('loadedmetadata', () => videoPlayer.play().catch(console.error));
+        videoPlayer.addEventListener('loadedmetadata', function () {
+            videoPlayer.play();
+        });
     } else if (videoPlayer.canPlayType('video/mp4') || videoPlayer.canPlayType('video/webm')) {
+        // Direktes MP4- oder WebM-Streaming für andere Browser
         videoPlayer.src = streamURL;
-        videoPlayer.play().catch(console.error);
+        videoPlayer.play();
     } else {
         console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
-
-    // Fehlerbehandlung für abgebrochene Abrufe
-    videoPlayer.addEventListener('error', (e) => console.error('Fehler beim Laden der Medienressource:', e));
 }
-
-
 
 
 
@@ -643,24 +553,11 @@ function toggleContent(contentId) {
 
 
 
-// Event-Listener für den Klick auf den Playlist-URLs-Titel
-document.addEventListener('DOMContentLoaded', function() {
-    const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
-    playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
-});
-
-
-
 
 // Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Netzwerk-Antwort war nicht ok: ' + response.statusText);
-            }
-            return response.text();
-        })
+        .then(response => response.text())
         .then(data => {
             const playlistList = document.getElementById('playlist-url-list');
             playlistList.innerHTML = ''; // Leert die Liste, um neue Einträge hinzuzufügen
@@ -680,20 +577,11 @@ function loadPlaylistUrls() {
                         link.addEventListener('click', function(event) {
                             event.preventDefault(); // Verhindert, dass der Link die Seite neu lädt
                             document.getElementById('stream-url').value = url; // Setzt die URL in das Eingabefeld stream-url
-                            console.log(`URL für ${label} gesetzt: ${url}`);
 
                             // Nach dem Setzen der URL in das Eingabefeld
                             fetch(url)
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error('Netzwerk-Antwort war nicht ok: ' + response.statusText);
-                                    }
-                                    return response.text();
-                                })
-                                .then(data => {
-                                    console.log('M3U-Datei erfolgreich geladen');
-                                    updateSidebarFromM3U(data);
-                                })
+                                .then(response => response.text())
+                                .then(data => updateSidebarFromM3U(data))
                                 .catch(error => console.error('Fehler beim Laden der Playlist:', error));
                         });
 
@@ -705,6 +593,17 @@ function loadPlaylistUrls() {
         })
         .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
 }
+
+// Event-Listener für den Klick auf den Playlist-URLs-Titel
+document.addEventListener('DOMContentLoaded', function() {
+    const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
+    playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
+});
+
+
+
+
+
 
 
 
@@ -778,7 +677,6 @@ function playStream(streamURL) {
         console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
 }
-
 
 
 
