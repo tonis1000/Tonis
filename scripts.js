@@ -343,6 +343,8 @@ async function updateSidebarFromM3U(data) {
 }
 
 
+
+
 // Funktion zum Überprüfen des Status der Streams und Markieren der gesamten Sidebar-Einträge
 function checkStreamStatus() {
     const sidebarChannels = document.querySelectorAll('.channel-info');
