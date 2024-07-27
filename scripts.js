@@ -626,7 +626,15 @@ function loadPlaylistUrls() {
 
 
 
-
+// Event-Listener für den Klick auf den Playlist-URLs-Titel
+document.addEventListener('DOMContentLoaded', function() {
+    const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
+    if (playlistUrlsTitle) {
+        playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
+    } else {
+        console.error('Element für den Klick-Event-Listener wurde nicht gefunden.');
+    }
+});
 
 
 
