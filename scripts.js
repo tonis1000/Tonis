@@ -31,28 +31,24 @@ document.getElementById('playlist-button').addEventListener('click', function() 
     }
 });
 
-
-
-// Funktion zum Abrufen der Ressource und Aktualisieren der Sidebar
+// Funktion, um die Ressource abzurufen
 async function fetchResource(url) {
-    try {
-        // Wenn die Seite über HTTPS geladen wird, ändern Sie HTTP auf HTTPS
-        if (window.location.protocol === 'https:' && url.startsWith('http:')) {
-            url = url.replace('http:', 'https:');
-        }
+    // Überprüfen, ob die URL HTTPS verwendet und die Seite über HTTPS ausgeliefert wird
+    if (window.location.protocol === 'https:' && url.startsWith('https:')) {
+        url = url.replace('https:', 'http:');
+    }
 
+    try {
         const response = await fetch(url);
         if (!response.ok) {
-            throw new Error(`Netzwerkantwort war nicht in Ordnung: ${response.statusText}`);
+            throw new Error('Network response was not ok');
         }
-
         const data = await response.text();
         updateSidebarFromM3U(data);
     } catch (error) {
         console.error('Fehler beim Laden der Playlist:', error);
     }
 }
-
 
 
 
@@ -161,7 +157,7 @@ function getCurrentProgram(channelId) {
 
 
 return {
-    title: ${title} (${start} - ${end}), // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
+    title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
     description: description,
     pastPercentage: pastPercentage,
     futurePercentage: futurePercentage
@@ -196,7 +192,7 @@ function updateNextPrograms(channelId) {
             const start = program.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Startzeit des nächsten Programms
             const end = program.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des nächsten Programms
             const title = program.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
-            nextProgramTitle.textContent = ${title} (${start} - ${end});
+            nextProgramTitle.textContent = `${title} (${start} - ${end})`;
 
             const nextProgramDesc = document.createElement('p');
             nextProgramDesc.classList.add('next-program-desc'); // Korrigierte CSS-Klasse
@@ -255,28 +251,24 @@ function updatePlayerDescription(title, description) {
 }
 
 
-// Funktion zum Extrahieren der Stream-URLs aus den M3U-Daten
+// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
 function extractStreamURLs(data) {
-    const streamURLs = {};
     const lines = data.split('\n');
+    const streamURLs = {};
     let currentChannelId = null;
-
     lines.forEach(line => {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
             currentChannelId = idMatch && idMatch[1];
-        } else if (line.startsWith('http://') || line.startsWith('https://')) {
-            if (currentChannelId) {
-                if (!streamURLs[currentChannelId]) {
-                    streamURLs[currentChannelId] = [];
-                }
-                streamURLs[currentChannelId].push(line.trim());
-            }
+        } else if (currentChannelId && line.trim()) {
+            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
+            streamURLs[currentChannelId].push(line.trim());
+            currentChannelId = null;
         }
     });
-
     return streamURLs;
 }
+
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 function updateSidebarFromM3U(data) {
@@ -323,12 +315,6 @@ function updateSidebarFromM3U(data) {
     });
 
     checkStreamStatus();
-}
-
-// Beispiel für eine Funktion zur Überprüfung des Stream-Status (platzhalter)
-function checkStreamStatus() {
-    // Hier sollten Sie den Code hinzufügen, um den Status der Streams zu überprüfen.
-    // Dies kann eine Überprüfung auf Erreichbarkeit der Streams oder ein ähnliches Verfahren sein.
 }
 
 
@@ -559,6 +545,15 @@ function toggleContent(contentId) {
 
 
 
+
+
+
+
+
+
+
+
+
 // Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
@@ -583,14 +578,8 @@ function loadPlaylistUrls() {
                             event.preventDefault(); // Verhindert, dass der Link die Seite neu lädt
                             document.getElementById('stream-url').value = url; // Setzt die URL in das Eingabefeld stream-url
 
-                            // URL Handling für HTTPS
-                            let fetchUrl = url;
-                            if (window.location.protocol === 'https:' && fetchUrl.startsWith('http:')) {
-                                fetchUrl = fetchUrl.replace('http:', 'https:');
-                            }
-
-                            // Abrufen und Verarbeiten der Playlist
-                            fetch(fetchUrl)
+                            // Nach dem Setzen der URL in das Eingabefeld
+                            fetch(url)
                                 .then(response => response.text())
                                 .then(data => updateSidebarFromM3U(data))
                                 .catch(error => console.error('Fehler beim Laden der Playlist:', error));
@@ -604,15 +593,6 @@ function loadPlaylistUrls() {
         })
         .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
 }
-
-
-
-
-
-
-
-
-
 
 // Event-Listener für den Klick auf den Playlist-URLs-Titel
 document.addEventListener('DOMContentLoaded', function() {
@@ -697,3 +677,5 @@ function playStream(streamURL) {
         console.error('Stream-Format wird vom aktuellen Browser nicht unterstützt.');
     }
 }
+
+
