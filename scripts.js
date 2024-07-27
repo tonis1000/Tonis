@@ -635,8 +635,6 @@ function toggleContent(contentId) {
 
 
 
-
-// Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
         .then(response => {
@@ -665,6 +663,8 @@ function loadPlaylistUrls() {
                             event.preventDefault(); // Verhindert, dass der Link die Seite neu lädt
                             document.getElementById('stream-url').value = url; // Setzt die URL in das Eingabefeld stream-url
 
+                            console.log('Lade Stream von URL:', url); // Debugging: Protokolliere die URL
+
                             // Lade den Stream von der URL
                             fetch(url)
                                 .then(response => {
@@ -673,7 +673,10 @@ function loadPlaylistUrls() {
                                     }
                                     return response.text();
                                 })
-                                .then(data => updateSidebarFromM3U(data))
+                                .then(data => {
+                                    console.log('Daten vom Stream empfangen:', data); // Debugging: Protokolliere die empfangenen Daten
+                                    updateSidebarFromM3U(data);
+                                })
                                 .catch(error => console.error('Fehler beim Laden der Playlist:', error));
                         });
 
