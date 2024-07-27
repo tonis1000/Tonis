@@ -314,27 +314,29 @@ async function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
 
+    console.log('M3U-Datei Inhalt:', data);
+
     // Funktion zum Extrahieren der Stream-URLs
     function extractStreamURLs(data) {
         const urls = {};
         const lines = data.split('\n');
-        let currentChannelId = null;
+        let currentChannel = null;
 
         lines.forEach(line => {
-            line = line.trim(); // Entfernt führende und nachfolgende Leerzeichen
+            line = line.trim();
             if (line.startsWith('#EXTINF')) {
-                const idMatch = line.match(/tvg-id="([^"]+)"/);
-                currentChannelId = idMatch ? idMatch[1] : null;
-                if (currentChannelId && !urls[currentChannelId]) {
-                    urls[currentChannelId] = [];
+                const nameMatch = line.match(/,(.*)$/);
+                currentChannel = nameMatch ? nameMatch[1].trim() : null;
+                if (currentChannel) {
+                    urls[currentChannel] = [];
                 }
-            } else if (currentChannelId && line.startsWith('http')) {
-                urls[currentChannelId].push(line);
-                currentChannelId = null;
+            } else if (line.startsWith('http') && currentChannel) {
+                urls[currentChannel].push(line);
+                currentChannel = null;
             }
         });
 
-        console.log('Extrahierte Stream-URLs:', urls);
+        console.log('Extrahierte URLs:', urls);
         return urls;
     }
 
@@ -342,10 +344,7 @@ async function updateSidebarFromM3U(data) {
     const lines = data.split('\n');
 
     for (let line of lines) {
-        line = line.trim(); // Entfernt führende und nachfolgende Leerzeichen
         if (line.startsWith('#EXTINF')) {
-            const idMatch = line.match(/tvg-id="([^"]+)"/);
-            const channelId = idMatch ? idMatch[1] : null;
             const nameMatch = line.match(/,(.*)$/);
             const name = nameMatch ? nameMatch[1].trim() : 'Unbekannt';
 
@@ -353,18 +352,16 @@ async function updateSidebarFromM3U(data) {
             const imgURL = imgMatch ? imgMatch[1] : 'default_logo.png';
 
             // Hole die nächste URL für diesen Kanal
-            const streamURL = streamURLs[channelId] ? streamURLs[channelId].shift() : null;
+            const streamURL = streamURLs[name] ? streamURLs[name].shift() : null;
 
             if (streamURL) {
                 try {
-                    // Überprüfe den Kanal und die URL
-                    console.log(`Kanal-ID: ${channelId}, Name: ${name}, Logo: ${imgURL}, URL: ${streamURL}`);
-
-                    const programInfo = await getCurrentProgram(channelId); // EPG-Daten abrufen
+                    // EPG-Daten abrufen - Placeholder, da getCurrentProgram nicht definiert ist
+                    const programInfo = { title: 'Program Title', pastPercentage: 50, futurePercentage: 50 };
 
                     const listItem = document.createElement('li');
                     listItem.innerHTML = `
-                        <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
+                        <div class="channel-info" data-stream="${streamURL}">
                             <div class="logo-container">
                                 <img src="${imgURL}" alt="${name} Logo">
                             </div>
@@ -380,14 +377,12 @@ async function updateSidebarFromM3U(data) {
                     `;
                     sidebarList.appendChild(listItem);
                 } catch (error) {
-                    console.error(`Fehler beim Abrufen der EPG-Daten für Kanal-ID ${channelId}:`, error);
+                    console.error(`Fehler beim Abrufen der EPG-Daten für Kanal ${name}:`, error);
                 }
             }
         }
     }
 
-    checkStreamStatus(); // Überprüfe den Status der Streams
-}
 
 
 
@@ -642,6 +637,16 @@ function toggleContent(contentId) {
 
 
 
+// Event-Listener für den Klick auf den Playlist-URLs-Titel
+document.addEventListener('DOMContentLoaded', function() {
+    const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
+    playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
+});
+
+
+
+
+// Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
         .then(response => {
@@ -669,10 +674,9 @@ function loadPlaylistUrls() {
                         link.addEventListener('click', function(event) {
                             event.preventDefault(); // Verhindert, dass der Link die Seite neu lädt
                             document.getElementById('stream-url').value = url; // Setzt die URL in das Eingabefeld stream-url
+                            console.log(`URL für ${label} gesetzt: ${url}`);
 
-                            console.log('Lade Stream von URL:', url); // Debugging: Protokolliere die URL
-
-                            // Lade den Stream von der URL
+                            // Nach dem Setzen der URL in das Eingabefeld
                             fetch(url)
                                 .then(response => {
                                     if (!response.ok) {
@@ -681,7 +685,7 @@ function loadPlaylistUrls() {
                                     return response.text();
                                 })
                                 .then(data => {
-                                    console.log('Daten vom Stream empfangen:', data); // Debugging: Protokolliere die empfangenen Daten
+                                    console.log('M3U-Datei erfolgreich geladen');
                                     updateSidebarFromM3U(data);
                                 })
                                 .catch(error => console.error('Fehler beim Laden der Playlist:', error));
@@ -695,18 +699,6 @@ function loadPlaylistUrls() {
         })
         .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
 }
-
-
-// Event-Listener für den Klick auf den Playlist-URLs-Titel
-document.addEventListener('DOMContentLoaded', function() {
-    const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
-    playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
-});
-
-
-
-
-
 
 
 
