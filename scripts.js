@@ -571,7 +571,12 @@ function toggleContent(contentId) {
 // Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Netzwerkantwort war nicht ok.');
+            }
+            return response.text();
+        })
         .then(data => {
             const playlistList = document.getElementById('playlist-url-list');
             playlistList.innerHTML = ''; // Leert die Liste, um neue Einträge hinzuzufügen
@@ -592,6 +597,7 @@ function loadPlaylistUrls() {
                             document.getElementById('stream-url').value = url; // Setzt die URL in das Eingabefeld stream-url
 
                             // Nach dem Setzen der URL in das Eingabefeld
+                            console.log('Versuche URL abzurufen:', url); // Debugging-Log
                             fetch(url)
                                 .then(response => {
                                     if (!response.ok) {
@@ -599,8 +605,14 @@ function loadPlaylistUrls() {
                                     }
                                     return response.text();
                                 })
-                                .then(data => updateSidebarFromM3U(data))
-                                .catch(error => console.error('Fehler beim Laden der Playlist:', error));
+                                .then(data => {
+                                    console.log('Daten erfolgreich geladen. Verarbeite M3U-Daten.'); // Debugging-Log
+                                    updateSidebarFromM3U(data);
+                                })
+                                .catch(error => {
+                                    console.error('Fehler beim Laden der Playlist:', error);
+                                    alert('Fehler beim Laden der Playlist. Siehe Konsole für Details.'); // Optional: Benutzer informieren
+                                });
                         });
 
                         li.appendChild(link);
@@ -609,7 +621,10 @@ function loadPlaylistUrls() {
                 }
             });
         })
-        .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
+        .catch(error => {
+            console.error('Fehler beim Laden der Playlist URLs:', error);
+            alert('Fehler beim Laden der Playlist-URLs. Siehe Konsole für Details.'); // Optional: Benutzer informieren
+        });
 }
 
 
