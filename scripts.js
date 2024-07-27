@@ -31,24 +31,28 @@ document.getElementById('playlist-button').addEventListener('click', function() 
     }
 });
 
-// Funktion, um die Ressource abzurufen
-async function fetchResource(url) {
-    // Überprüfen, ob die URL HTTPS verwendet und die Seite über HTTPS ausgeliefert wird
-    if (window.location.protocol === 'https:' && url.startsWith('https:')) {
-        url = url.replace('https:', 'http:');
-    }
 
+
+// Funktion zum Abrufen der Ressource und Aktualisieren der Sidebar
+async function fetchResource(url) {
     try {
+        // Wenn die Seite über HTTPS geladen wird, ändern Sie HTTP auf HTTPS
+        if (window.location.protocol === 'https:' && url.startsWith('http:')) {
+            url = url.replace('http:', 'https:');
+        }
+
         const response = await fetch(url);
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(`Netzwerkantwort war nicht in Ordnung: ${response.statusText}`);
         }
+
         const data = await response.text();
         updateSidebarFromM3U(data);
     } catch (error) {
         console.error('Fehler beim Laden der Playlist:', error);
     }
 }
+
 
 
 
