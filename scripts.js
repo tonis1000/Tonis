@@ -245,61 +245,44 @@ sidebarList.addEventListener('click', function (event) {
 
 
 // Funktion zum Aktualisieren des Players mit der Programmbeschreibung
-function updatePlayerDescription(title, description) {
-    document.getElementById('program-title').textContent = title;
-    document.getElementById('program-desc').textContent = description;
-}
-
-
-// Funktion zum Extrahieren des Stream-URLs aus der M3U-Datei
-function extractStreamURLs(data) {
-    const lines = data.split('\n');
-    const streamURLs = {};
-    let currentChannelId = null;
-    lines.forEach(line => {
-        if (line.startsWith('#EXTINF')) {
-            const idMatch = line.match(/tvg-id="([^"]+)"/);
-            currentChannelId = idMatch && idMatch[1];
-        } else if (currentChannelId && line.trim()) {
-            streamURLs[currentChannelId] = streamURLs[currentChannelId] || [];
-            streamURLs[currentChannelId].push(line.trim());
-            currentChannelId = null;
-        }
-    });
-    return streamURLs;
-}
-
-
-// Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 async function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
 
-    // Funktion zum Extrahieren der Stream-URLs
+    // Funktion zum Extrahieren der Stream-URLs und zugehörigen Metadaten
     const extractStreamURLs = (data) => {
         const urls = {};
         const lines = data.split('\n');
         let currentChannelId = null;
+        let currentChannelInfo = null;
 
         lines.forEach(line => {
             if (line.startsWith('#EXTINF')) {
-                // Versuche, channelId und andere Attribute zu extrahieren
+                // Extrahiere mögliche Attribute und Kanalname
                 const idMatch = line.match(/tvg-id="([^"]+)"/);
+                const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+                const groupTitleMatch = line.match(/group-title="([^"]+)"/);
                 const nameMatch = line.match(/,(.*)$/);
+
                 const channelId = idMatch ? idMatch[1] : null;
+                const logoUrl = logoMatch ? logoMatch[1] : 'default_logo.png';
+                const groupTitle = groupTitleMatch ? groupTitleMatch[1] : 'Unbekannt';
                 const name = nameMatch ? nameMatch[1].trim() : 'Unbekannt';
 
                 if (channelId && !urls[channelId]) {
                     urls[channelId] = {
                         name: name,
+                        logoUrl: logoUrl,
+                        groupTitle: groupTitle,
                         urls: []
                     };
                 }
                 currentChannelId = channelId;
+                currentChannelInfo = urls[channelId];
             } else if (currentChannelId && line.startsWith('http')) {
                 // Füge die URL zur aktuellen Channel-ID hinzu
-                if (urls[currentChannelId]) {
-                    urls[currentChannelId].urls.push(line);
+                if (currentChannelInfo) {
+                    currentChannelInfo.urls.push(line);
                 }
                 currentChannelId = null; // Setze die Channel-ID zurück
             }
@@ -314,6 +297,7 @@ async function updateSidebarFromM3U(data) {
     for (let channelId in streamURLs) {
         const channel = streamURLs[channelId];
         const name = channel.name;
+        const logoUrl = channel.logoUrl;
         const streamURL = channel.urls.length > 0 ? channel.urls[0] : null; // Nimm die erste URL
 
         if (streamURL) {
@@ -325,7 +309,7 @@ async function updateSidebarFromM3U(data) {
                 listItem.innerHTML = `
                     <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
                         <div class="logo-container">
-                            <img src="default_logo.png" alt="${name} Logo"> <!-- Default-Logo, falls keines vorhanden ist -->
+                            <img src="${logoUrl}" alt="${name} Logo">
                         </div>
                         <span class="sender-name">${name}</span>
                         <span class="epg-channel">
@@ -348,6 +332,7 @@ async function updateSidebarFromM3U(data) {
 
     checkStreamStatus();
 }
+
 
 
 
