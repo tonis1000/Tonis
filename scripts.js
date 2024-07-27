@@ -31,7 +31,7 @@ document.getElementById('playlist-button').addEventListener('click', function() 
     }
 });
 
-// Funktion, um die Ressource abzurufen
+// Funktion zum Abrufen der Ressource und Aktualisieren der Sidebar
 async function fetchResource(url) {
     // Überprüfen, ob die URL HTTPS verwendet und die Seite über HTTPS ausgeliefert wird
     if (window.location.protocol === 'https:' && url.startsWith('https:')) {
