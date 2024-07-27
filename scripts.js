@@ -81,21 +81,25 @@ document.getElementById('copy-button').addEventListener('click', function() {
 });
 
 
-var video = document.getElementById('video-player');
-var videoSrc = 'your-stream-url.m3u8'; // Setze hier deine URL ein
+// Funktion zum Laden des Videos im Player
+function loadVideoStream(url) {
+    const video = document.getElementById('video-player');
 
-if (Hls.isSupported()) {
-    var hls = new Hls();
-    hls.loadSource(videoSrc);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-        video.play();
-    });
-} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = videoSrc;
-    video.addEventListener('loadedmetadata', function() {
-        video.play();
-    });
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            video.play();
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.addEventListener('loadedmetadata', function () {
+            video.play();
+        });
+    } else {
+        console.error('HLS.js wird nicht unterstützt oder der Browser kann das Format nicht abspielen.');
+    }
 }
 
 
