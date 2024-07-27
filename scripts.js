@@ -639,7 +639,12 @@ function toggleContent(contentId) {
 // Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Netzwerk-Antwort war nicht ok: ' + response.statusText);
+            }
+            return response.text();
+        })
         .then(data => {
             const playlistList = document.getElementById('playlist-url-list');
             playlistList.innerHTML = ''; // Leert die Liste, um neue Einträge hinzuzufügen
@@ -660,17 +665,16 @@ function loadPlaylistUrls() {
                             event.preventDefault(); // Verhindert, dass der Link die Seite neu lädt
                             document.getElementById('stream-url').value = url; // Setzt die URL in das Eingabefeld stream-url
 
-                            // Nach dem Setzen der URL in das Eingabefeld
+                            // Lade den Stream von der URL
                             fetch(url)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Netzwerk-Antwort war nicht ok');
-        }
-        return response.text();
-    })
-    .then(data => updateSidebarFromM3U(data))
-    .catch(error => console.error('Fehler beim Laden der Playlist:', error));
-
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Netzwerk-Antwort war nicht ok: ' + response.statusText);
+                                    }
+                                    return response.text();
+                                })
+                                .then(data => updateSidebarFromM3U(data))
+                                .catch(error => console.error('Fehler beim Laden der Playlist:', error));
                         });
 
                         li.appendChild(link);
@@ -681,6 +685,7 @@ function loadPlaylistUrls() {
         })
         .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
 }
+
 
 // Event-Listener für den Klick auf den Playlist-URLs-Titel
 document.addEventListener('DOMContentLoaded', function() {
