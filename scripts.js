@@ -559,15 +559,6 @@ function toggleContent(contentId) {
 
 
 
-
-
-
-
-
-
-
-
-
 // Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
@@ -592,8 +583,14 @@ function loadPlaylistUrls() {
                             event.preventDefault(); // Verhindert, dass der Link die Seite neu lädt
                             document.getElementById('stream-url').value = url; // Setzt die URL in das Eingabefeld stream-url
 
-                            // Nach dem Setzen der URL in das Eingabefeld
-                            fetch(url)
+                            // URL Handling für HTTPS
+                            let fetchUrl = url;
+                            if (window.location.protocol === 'https:' && fetchUrl.startsWith('http:')) {
+                                fetchUrl = fetchUrl.replace('http:', 'https:');
+                            }
+
+                            // Abrufen und Verarbeiten der Playlist
+                            fetch(fetchUrl)
                                 .then(response => response.text())
                                 .then(data => updateSidebarFromM3U(data))
                                 .catch(error => console.error('Fehler beim Laden der Playlist:', error));
@@ -607,6 +604,15 @@ function loadPlaylistUrls() {
         })
         .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
 }
+
+
+
+
+
+
+
+
+
 
 // Event-Listener für den Klick auf den Playlist-URLs-Titel
 document.addEventListener('DOMContentLoaded', function() {
