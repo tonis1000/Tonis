@@ -568,10 +568,6 @@ function toggleContent(contentId) {
 
 
 
-
-
-
-
 // Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
@@ -615,6 +611,10 @@ function loadPlaylistUrls() {
         })
         .catch(error => console.error('Fehler beim Laden der Playlist URLs:', error));
 }
+
+
+
+
 
 // Event-Listener für den Klick auf den Playlist-URLs-Titel
 document.addEventListener('DOMContentLoaded', function() {
