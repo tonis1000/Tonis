@@ -297,7 +297,7 @@ function updateSidebarFromM3U(data) {
 
                 if (streamURL) {
                     const listItem = document.createElement('li');
-                    listItem.innerHTML = 
+                    listItem.innerHTML = `
                         <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
                             <div class="logo-container">
                                 <img src="${imgURL}" alt="${name} Logo">
@@ -311,7 +311,7 @@ function updateSidebarFromM3U(data) {
                                 </div>
                             </span>
                         </div>
-                    ;
+                    `;
                     sidebarList.appendChild(listItem);
                 }
             }
@@ -319,6 +319,12 @@ function updateSidebarFromM3U(data) {
     });
 
     checkStreamStatus();
+}
+
+// Beispiel für eine Funktion zur Überprüfung des Stream-Status (platzhalter)
+function checkStreamStatus() {
+    // Hier sollten Sie den Code hinzufügen, um den Status der Streams zu überprüfen.
+    // Dies kann eine Überprüfung auf Erreichbarkeit der Streams oder ein ähnliches Verfahren sein.
 }
 
 
