@@ -383,7 +383,15 @@ async function updateSidebarFromM3U(data) {
         }
     }
 
+    // Funktion zum Überprüfen des Stream-Status - Placeholder, da checkStreamStatus nicht definiert ist
+    function checkStreamStatus() {
+        console.log('Checking stream status...');
+    }
+    checkStreamStatus();
+}
 
+// Initialisiere die Playlist-URLs beim Laden der Seite
+document.addEventListener('DOMContentLoaded', loadPlaylistUrls);
 
 
 
