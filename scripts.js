@@ -309,6 +309,8 @@ function extractStreamURLs(data) {
 }
 
 
+
+
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 async function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
@@ -383,18 +385,8 @@ async function updateSidebarFromM3U(data) {
         }
     }
 
-    // Funktion zum Überprüfen des Stream-Status - Placeholder, da checkStreamStatus nicht definiert ist
-    function checkStreamStatus() {
-        console.log('Checking stream status...');
-    }
     checkStreamStatus();
 }
-
-// Initialisiere die Playlist-URLs beim Laden der Seite
-document.addEventListener('DOMContentLoaded', loadPlaylistUrls);
-
-
-
 
 // Funktion zum Überprüfen des Status der Streams und Markieren der gesamten Sidebar-Einträge
 function checkStreamStatus() {
@@ -423,6 +415,12 @@ function checkStreamStatus() {
         }
     });
 }
+
+// Initialisiere die Playlist-URLs beim Laden der Seite
+document.addEventListener('DOMContentLoaded', loadPlaylistUrls)
+
+
+
 
 
 
