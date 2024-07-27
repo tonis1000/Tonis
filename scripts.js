@@ -271,27 +271,50 @@ function extractStreamURLs(data) {
 
 
 // Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
-function updateSidebarFromM3U(data) {
+async function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
+
+    const extractStreamURLs = (data) => {
+        const urls = {};
+        const lines = data.split('\n');
+        let currentChannelId = null;
+
+        lines.forEach(line => {
+            if (line.startsWith('#EXTINF')) {
+                const idMatch = line.match(/tvg-id="([^"]+)"/);
+                currentChannelId = idMatch ? idMatch[1] : null;
+                if (currentChannelId && !urls[currentChannelId]) {
+                    urls[currentChannelId] = [];
+                }
+            } else if (currentChannelId && line.startsWith('http')) {
+                urls[currentChannelId].push(line);
+                currentChannelId = null;
+            }
+        });
+
+        return urls;
+    };
 
     const streamURLs = extractStreamURLs(data);
     const lines = data.split('\n');
 
-    lines.forEach(line => {
+    for (let line of lines) {
         if (line.startsWith('#EXTINF')) {
             const idMatch = line.match(/tvg-id="([^"]+)"/);
-            const channelId = idMatch && idMatch[1];
-            const programInfo = getCurrentProgram(channelId);
-
+            const channelId = idMatch ? idMatch[1] : null;
             const nameMatch = line.match(/,(.*)$/);
-            if (nameMatch && nameMatch.length > 1) {
-                const name = nameMatch[1].trim();
-                const imgMatch = line.match(/tvg-logo="([^"]+)"/);
-                let imgURL = imgMatch && imgMatch[1] || 'default_logo.png';
-                const streamURL = streamURLs[channelId] && streamURLs[channelId].shift(); // Nächste URL für den Channel
+            const name = nameMatch ? nameMatch[1].trim() : 'Unbekannt';
 
-                if (streamURL) {
+            const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+            const imgURL = imgMatch ? imgMatch[1] : 'default_logo.png';
+
+            const streamURL = streamURLs[channelId] ? streamURLs[channelId].shift() : null;
+
+            if (streamURL) {
+                try {
+                    const programInfo = await getCurrentProgram(channelId);
+
                     const listItem = document.createElement('li');
                     listItem.innerHTML = `
                         <div class="channel-info" data-stream="${streamURL}" data-channel-id="${channelId}">
@@ -309,10 +332,12 @@ function updateSidebarFromM3U(data) {
                         </div>
                     `;
                     sidebarList.appendChild(listItem);
+                } catch (error) {
+                    console.error(`Fehler beim Abrufen der EPG-Daten für Kanal-ID ${channelId}:`, error);
                 }
             }
         }
-    });
+    }
 
     checkStreamStatus();
 }
@@ -547,13 +572,6 @@ function toggleContent(contentId) {
 
 
 
-
-
-
-
-
-
-
 // Funktion zum Laden der Playlist-URLs aus playlist-urls.txt und Aktualisieren der Sidebar
 function loadPlaylistUrls() {
     fetch('playlist-urls.txt')
@@ -564,12 +582,11 @@ function loadPlaylistUrls() {
 
             const lines = data.split('\n');
             lines.forEach(line => {
-                if (line.trim() !== '') {
-                    const parts = line.split(',');
-                    if (parts.length >= 2) {
-                        const label = parts[0].trim();
-                        const url = parts[1].trim();
+                const trimmedLine = line.trim();
+                if (trimmedLine) {
+                    const [label, url] = trimmedLine.split(',').map(part => part.trim());
 
+                    if (label && url) {
                         const li = document.createElement('li');
                         const link = document.createElement('a');
                         link.textContent = label;
@@ -580,7 +597,12 @@ function loadPlaylistUrls() {
 
                             // Nach dem Setzen der URL in das Eingabefeld
                             fetch(url)
-                                .then(response => response.text())
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Netzwerkantwort war nicht ok.');
+                                    }
+                                    return response.text();
+                                })
                                 .then(data => updateSidebarFromM3U(data))
                                 .catch(error => console.error('Fehler beim Laden der Playlist:', error));
                         });
@@ -597,8 +619,13 @@ function loadPlaylistUrls() {
 // Event-Listener für den Klick auf den Playlist-URLs-Titel
 document.addEventListener('DOMContentLoaded', function() {
     const playlistUrlsTitle = document.querySelector('.content-title[onclick="toggleContent(\'playlist-urls\')"]');
-    playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
+    if (playlistUrlsTitle) {
+        playlistUrlsTitle.addEventListener('click', loadPlaylistUrls);
+    } else {
+        console.error('Element für Playlist-URLs-Titel nicht gefunden.');
+    }
 });
+
 
 
 
