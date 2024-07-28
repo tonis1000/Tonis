@@ -178,43 +178,48 @@ function updatePlayerDescription(title, description) {
 
 
 // Funktion zum Aktualisieren der nächsten Programme
-function updateNextPrograms(channelId) {
-    console.log('Updating next programs for channel:', channelId);
-    const nextProgramsContainer = document.getElementById('next-programs');
-    nextProgramsContainer.innerHTML = '';
+        function updateNextPrograms(channelId) {
+            console.log('Updating next programs for channel:', channelId);
+            const nextProgramsContainer = document.getElementById('next-programs');
+            nextProgramsContainer.innerHTML = '';
 
-    if (epgData[channelId]) {
-        const now = new Date();
-        const upcomingPrograms = epgData[channelId]
-            .filter(prog => prog.start > now)
-            .slice(0, 4);
+            if (epgData[channelId]) {
+                const now = new Date();
+                const upcomingPrograms = epgData[channelId]
+                    .filter(prog => prog.start > now)
+                    .slice(0, 4);
 
-        upcomingPrograms.forEach(program => {
-            const nextProgramDiv = document.createElement('div');
-            nextProgramDiv.classList.add('next-program');
+                upcomingPrograms.forEach(program => {
+                    const nextProgramDiv = document.createElement('div');
+                    nextProgramDiv.classList.add('next-program');
 
-            const nextProgramTitle = document.createElement('h4');
-            nextProgramTitle.classList.add('next-program-title');
-            const start = program.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const end = program.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const title = program.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, '');
-            nextProgramTitle.textContent = `${title} (${start} - ${end})`;
+                    const nextProgramTitle = document.createElement('h4');
+                    nextProgramTitle.classList.add('next-program-title');
+                    const start = program.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const end = program.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const title = program.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, '');
+                    nextProgramTitle.textContent = `${title} (${start} - ${end})`;
 
-            const nextProgramDesc = document.createElement('p');
-            nextProgramDesc.classList.add('next-program-desc');
-            nextProgramDesc.textContent = program.desc || 'Keine Beschreibung verfügbar';
+                    const nextProgramDesc = document.createElement('p');
+                    nextProgramDesc.classList.add('next-program-desc');
+                    nextProgramDesc.textContent = program.desc || 'Keine Beschreibung verfügbar';
+                    nextProgramDesc.style.display = 'none'; // Standardmäßig ausgeblendet
 
-            nextProgramDiv.appendChild(nextProgramTitle);
-            nextProgramDiv.appendChild(nextProgramDesc);
+                    nextProgramDiv.appendChild(nextProgramTitle);
+                    nextProgramDiv.appendChild(nextProgramDesc);
 
-            nextProgramTitle.addEventListener('click', function() {
-                nextProgramDesc.classList.toggle('expanded');
-            });
+                    nextProgramTitle.addEventListener('click', function() {
+                        if (nextProgramDesc.style.display === 'none') {
+                            nextProgramDesc.style.display = 'block';
+                        } else {
+                            nextProgramDesc.style.display = 'none';
+                        }
+                    });
 
-            nextProgramsContainer.appendChild(nextProgramDiv);
-        });
-    }
-}
+                    nextProgramsContainer.appendChild(nextProgramDiv);
+                });
+            }
+        }
 
 
 
