@@ -176,6 +176,9 @@ function updatePlayerDescription(title, description) {
     document.getElementById('program-desc').textContent = description;
 }
 
+function updateProgramInfo(info) {
+            console.log('Updating program info:', info);
+            document.getElementById('program-info-details').textContent = info;
 
 // Funktion zum Aktualisieren der nächsten Programme
         function updateNextPrograms(channelId) {
