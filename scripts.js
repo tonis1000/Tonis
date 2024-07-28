@@ -154,14 +154,12 @@ function getCurrentProgram(channelId) {
             const end = currentProgram.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des laufenden Programms
             const title = currentProgram.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
 
-
-
-return {
-    title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
-    description: description,
-    pastPercentage: pastPercentage,
-    futurePercentage: futurePercentage
-};
+            return {
+                title: `${title} (${start} - ${end})`, // Verwende den bereinigten Titel ohne den Teil in eckigen Klammern
+                description: description,
+                pastPercentage: pastPercentage,
+                futurePercentage: futurePercentage
+            };
 
         } else {
             return { title: 'Keine aktuelle Sendung verfügbar', description: 'Keine Beschreibung verfügbar', pastPercentage: 0, futurePercentage: 0 };
@@ -244,7 +242,7 @@ sidebarList.addEventListener('click', function (event) {
 
 
 
-// Funktion zum Aktualisieren des Players mit der Programmbeschreibung
+// Funktion zum Aktualisieren der Sidebar von einer M3U-Datei
 async function updateSidebarFromM3U(data) {
     const sidebarList = document.getElementById('sidebar-list');
     sidebarList.innerHTML = '';
@@ -253,35 +251,17 @@ async function updateSidebarFromM3U(data) {
         const urls = {};
         const lines = data.split('\n');
         let currentChannelId = null;
-        let currentChannelName = null;
 
         lines.forEach(line => {
             if (line.startsWith('#EXTINF')) {
                 const idMatch = line.match(/tvg-id="([^"]+)"/);
                 currentChannelId = idMatch ? idMatch[1] : null;
-                
-                if (!currentChannelId) {
-                    const nameMatch = line.match(/,(.*)$/);
-                    currentChannelName = nameMatch ? nameMatch[1].trim() : 'Unbekannt';
+                if (currentChannelId && !urls[currentChannelId]) {
+                    urls[currentChannelId] = [];
                 }
-
-                if (currentChannelId) {
-                    if (!urls[currentChannelId]) {
-                        urls[currentChannelId] = [];
-                    }
-                } else if (currentChannelName) {
-                    if (!urls[currentChannelName]) {
-                        urls[currentChannelName] = [];
-                    }
-                }
-            } else if (line.startsWith('http')) {
-                if (currentChannelId) {
-                    urls[currentChannelId].push(line);
-                    currentChannelId = null;
-                } else if (currentChannelName) {
-                    urls[currentChannelName].push(line);
-                    currentChannelName = null;
-                }
+            } else if (currentChannelId && line.startsWith('http')) {
+                urls[currentChannelId].push(line);
+                currentChannelId = null;
             }
         });
 
@@ -291,17 +271,17 @@ async function updateSidebarFromM3U(data) {
     const streamURLs = extractStreamURLs(data);
     const lines = data.split('\n');
 
-    for (let line of lines) {
-        if (line.startsWith('#EXTINF')) {
-            const idMatch = line.match(/tvg-id="([^"]+)"/);
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('#EXTINF')) {
+            const idMatch = lines[i].match(/tvg-id="([^"]+)"/);
             const channelId = idMatch ? idMatch[1] : null;
-            const nameMatch = line.match(/,(.*)$/);
+            const nameMatch = lines[i].match(/,(.*)$/);
             const name = nameMatch ? nameMatch[1].trim() : 'Unbekannt';
 
-            const imgMatch = line.match(/tvg-logo="([^"]+)"/);
+            const imgMatch = lines[i].match(/tvg-logo="([^"]+)"/);
             const imgURL = imgMatch ? imgMatch[1] : 'default_logo.png';
 
-            const streamURL = streamURLs[channelId] ? streamURLs[channelId].shift() : null;
+            const streamURL = lines[i + 1].startsWith('http') ? lines[i + 1].trim() : null;
 
             if (streamURL) {
                 try {
@@ -334,6 +314,16 @@ async function updateSidebarFromM3U(data) {
     checkStreamStatus();
 }
 
+// Beispiel für eine einfache Methode zum Abrufen von Programm-Informationen
+async function getCurrentProgram(channelId) {
+    // Hier sollte deine Implementierung zum Abrufen der Programm-Informationen stehen
+    // Das Beispiel hier gibt Dummy-Daten zurück
+    return {
+        title: 'Aktuelles Programm',
+        pastPercentage: 50, // Beispielwert
+        futurePercentage: 50 // Beispielwert
+    };
+}
 
 
 
