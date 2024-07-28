@@ -170,39 +170,44 @@ function findCurrentProgram(channelId) {
 }
 
 
+function updatePlayerDescription(title, description) {
+    console.log('Updating player description:', title, description);
+    document.getElementById('program-title').textContent = title;
+    document.getElementById('program-desc').textContent = description;
+}
+
 
 // Funktion zum Aktualisieren der nächsten Programme
 function updateNextPrograms(channelId) {
+    console.log('Updating next programs for channel:', channelId);
     const nextProgramsContainer = document.getElementById('next-programs');
-    nextProgramsContainer.innerHTML = ''; // Leert den Container, um die neuen Programme einzufügen
+    nextProgramsContainer.innerHTML = '';
 
     if (epgData[channelId]) {
         const now = new Date();
         const upcomingPrograms = epgData[channelId]
-            .filter(prog => prog.start > now) // Filtert nur Programme, die in der Zukunft liegen
-            .slice(0, 4); // Begrenzt auf die nächsten 4 Programme
+            .filter(prog => prog.start > now)
+            .slice(0, 4);
 
         upcomingPrograms.forEach(program => {
             const nextProgramDiv = document.createElement('div');
             nextProgramDiv.classList.add('next-program');
 
             const nextProgramTitle = document.createElement('h4');
-            nextProgramTitle.classList.add('next-program-title'); // Korrigierte CSS-Klasse
-            const start = program.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Startzeit des nächsten Programms
-            const end = program.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Endzeit des nächsten Programms
-            const title = program.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, ''); // Titel ohne den Teil in eckigen Klammern
+            nextProgramTitle.classList.add('next-program-title');
+            const start = program.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const end = program.stop.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const title = program.title.replace(/\s*\[.*?\]\s*/g, '').replace(/[\[\]]/g, '');
             nextProgramTitle.textContent = `${title} (${start} - ${end})`;
 
             const nextProgramDesc = document.createElement('p');
-            nextProgramDesc.classList.add('next-program-desc'); // Korrigierte CSS-Klasse
-            nextProgramDesc.classList.add('expandable'); // Fügt die Klasse für das Aufklappen hinzu
+            nextProgramDesc.classList.add('next-program-desc');
             nextProgramDesc.textContent = program.desc || 'Keine Beschreibung verfügbar';
 
             nextProgramDiv.appendChild(nextProgramTitle);
             nextProgramDiv.appendChild(nextProgramDesc);
 
             nextProgramTitle.addEventListener('click', function() {
-                // Toggle für das Aufklappen der Beschreibung
                 nextProgramDesc.classList.toggle('expanded');
             });
 
@@ -210,7 +215,6 @@ function updateNextPrograms(channelId) {
         });
     }
 }
-
 
 
 
