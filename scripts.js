@@ -215,6 +215,7 @@ function updateProgramInfo(info) {
                     nextProgramTitle.addEventListener('click', function() {
                         if (nextProgramDesc.style.display === 'none') {
                             nextProgramDesc.style.display = 'block';
+                            updateProgramInfo(title, nextProgramDesc.textContent);
                         } else {
                             nextProgramDesc.style.display = 'none';
                         }
