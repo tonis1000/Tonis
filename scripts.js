@@ -138,8 +138,9 @@ function parseDateTime(epgTime) {
     return date;
 }
 
+
 // Funktion zum Finden des aktuellen Programms basierend auf der Uhrzeit
-function getCurrentProgram(channelId) {
+function findCurrentProgram(channelId) {
     const now = new Date();
     if (epgData[channelId]) {
         const currentProgram = epgData[channelId].find(prog => now >= prog.start && now < prog.stop);
@@ -316,13 +317,9 @@ async function updateSidebarFromM3U(data) {
 
 // Beispiel für eine einfache Methode zum Abrufen von Programm-Informationen
 async function getCurrentProgram(channelId) {
-    // Hier sollte deine Implementierung zum Abrufen der Programm-Informationen stehen
-    // Das Beispiel hier gibt Dummy-Daten zurück
-    return {
-        title: 'Aktuelles Programm',
-        pastPercentage: 50, // Beispielwert
-        futurePercentage: 50 // Beispielwert
-    };
+    // Beispiel-Daten, diese Funktion sollte durch einen echten Abruf der EPG-Daten ersetzt werden
+    // Es wird davon ausgegangen, dass `epgData` global verfügbar ist
+    return findCurrentProgram(channelId);
 }
 
 
@@ -613,9 +610,6 @@ function loadPlaylistUrls() {
             alert('Fehler beim Laden der Playlist-URLs. Siehe Konsole für Details.'); // Optional: Benutzer informieren
         });
 }
-
-
-
 
 // Event-Listener für den Klick auf den Playlist-URLs-Titel
 document.addEventListener('DOMContentLoaded', function() {
