@@ -2,4 +2,4 @@ German,https://raw.githubusercontent.com/embreq/iptv/main/senderliste.m3u
 Greece ERT,https://raw.githubusercontent.com/tonis1000/Tonis/main/Playlist2
 Greece,https://raw.githubusercontent.com/hitnickgr/iptv/main/GreekChannels
 Greece SP,https://pastebin.com/raw/a6WeqNUG
-Alles,http://habeto.xyz:8080/get.php?username=xxxrestream&password=fghiBrdf55&type=m3u_plus&output=ts
+Alles,https://habeto.xyz:8080/get.php?username=xxxrestream&password=fghiBrdf55&type=m3u_plus&output=ts
