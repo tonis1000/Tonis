@@ -170,22 +170,18 @@ function findCurrentProgram(channelId) {
 }
 
 
- // Beispielhafte EPG-Daten
-        const epgData = {
-            'channel1': [
-                { title: 'Program 1', start: new Date('2024-07-27T10:00:00'), stop: new Date('2024-07-27T11:00:00'), desc: 'Beschreibung von Program 1' },
-                { title: 'Program 2', start: new Date('2024-07-27T11:00:00'), stop: new Date('2024-07-27T12:00:00'), desc: 'Beschreibung von Program 2' },
-                // Weitere Programme hier
-            ],
-            // Weitere Kanäle hier
-        };
+function updatePlayerDescription(title, description) {
+    console.log('Updating player description:', title, description);
+    document.getElementById('program-title').textContent = title;
+    document.getElementById('program-desc').textContent = description;
+}
 
-        function updatePlayerDescription(title, description) {
-            console.log('Updating player description:', title, description);
-            document.getElementById('program-title').textContent = title;
-            document.getElementById('program-desc').textContent = description;
-        }
+function updateProgramInfo(info) {
+            console.log('Updating program info:', info);
+            document.getElementById('program-info-details').textContent = info;
+}
 
+// Funktion zum Aktualisieren der nächsten Programme
         function updateNextPrograms(channelId) {
             console.log('Updating next programs for channel:', channelId);
             const nextProgramsContainer = document.getElementById('next-programs');
@@ -193,13 +189,6 @@ function findCurrentProgram(channelId) {
 
             if (epgData[channelId]) {
                 const now = new Date();
-                const currentProgram = epgData[channelId].find(prog => prog.start <= now && prog.stop > now);
-                
-                // Aktualisiert den Player mit dem aktuellen Programm
-                if (currentProgram) {
-                    updatePlayerDescription(currentProgram.title, currentProgram.desc);
-                }
-
                 const upcomingPrograms = epgData[channelId]
                     .filter(prog => prog.start > now)
                     .slice(0, 4);
@@ -226,6 +215,7 @@ function findCurrentProgram(channelId) {
                     nextProgramTitle.addEventListener('click', function() {
                         if (nextProgramDesc.style.display === 'none') {
                             nextProgramDesc.style.display = 'block';
+                            updateProgramInfo(title, nextProgramDesc.textContent);
                         } else {
                             nextProgramDesc.style.display = 'none';
                         }
@@ -235,9 +225,6 @@ function findCurrentProgram(channelId) {
                 });
             }
         }
-
-        // Beispielhaftes Aufrufen der Funktionen
-        updateNextPrograms('channel1');
 
 
 
